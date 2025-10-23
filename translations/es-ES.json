@@ -1,0 +1,40 @@
+{
+	"Loading...": "Loading... ES",
+	"Cancel": "Cancel ES",
+	"Warning": "Warning ES",
+	"Confirm": "Confirm ES",
+	"Continue": "Continue ES",
+
+	"Welcome to the autofill plugin!": "Welcome to the autofill plugin! ES",
+	"An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms?": "An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms? ES",
+	"Autofill": "Autofill ES",
+	"Analyzing form fields with AI": "Analyzing form fields with AI ES",
+	"Fetching data": "Fetching data ES",
+	"Checking AI availability": "Checking AI availability ES",
+	"Mapping fields with AI": "Mapping fields with AI ES",
+	"Loading form": "Loading form ES",
+
+	"Set the values for each parameter. If it's not necessary, uncheck the checkbox. Then press the Apply button.": "Set the values for each parameter. If it's not necessary, uncheck the checkbox. Then press the Apply button. ES",
+	"Select All": "Select All ES",
+	"Apply": "Apply ES",
+	"Restart": "Restart ES",
+	"Find field location": "Find field location ES",
+	"Processing form data": "Processing form data ES",
+	"Processing form data...": "Processing form data... ES",
+	"Restarting AI mapping": "Restarting AI mapping ES",
+	"Restarting AI mapping...": "Restarting AI mapping... ES",
+	"Detecting form fields...": "Detecting form fields... ES",
+	"Fetching data...": "Fetching data... ES",
+	"Checking AI availability...": "Checking AI availability... ES",
+	"Mapping fields with AI...": "Mapping fields with AI... ES",
+	"AI is not available. Please ensure AI features are enabled.": "AI is not available. Please ensure AI features are enabled. ES",
+
+	"The fields have been filled in automatically! You can either continue entering data manually or cancel the automatic filling.": "The fields have been filled in automatically! You can either continue entering data manually or cancel the automatic filling. ES",
+	"Cancel autofill": "Cancel autofill ES",
+	"Redirecting...": "Redirecting... ES",
+	"Reverting changes...": "Reverting changes... ES",
+	"Done!": "Done! ES",
+
+	"All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed?": "All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed? ES",
+	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "An unrecorded data in the document will be deleted. Are you sure you want to continue? ES"
+}

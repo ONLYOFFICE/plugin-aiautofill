@@ -1,0 +1,40 @@
+{
+	"Loading...": "Loading... ZH",
+	"Cancel": "Cancel ZH",
+	"Warning": "Warning ZH",
+	"Confirm": "Confirm ZH",
+	"Continue": "Continue ZH",
+
+	"Welcome to the autofill plugin!": "Welcome to the autofill plugin! ZH",
+	"An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms?": "An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms? ZH",
+	"Autofill": "Autofill ZH",
+	"Analyzing form fields with AI": "Analyzing form fields with AI ZH",
+	"Fetching data": "Fetching data ZH",
+	"Checking AI availability": "Checking AI availability ZH",
+	"Mapping fields with AI": "Mapping fields with AI ZH",
+	"Loading form": "Loading form ZH",
+
+	"Set the values for each parameter. If it's not necessary, uncheck the checkbox. Then press the Apply button.": "Set the values for each parameter. If it's not necessary, uncheck the checkbox. Then press the Apply button. ZH",
+	"Select All": "Select All ZH",
+	"Apply": "Apply ZH",
+	"Restart": "Restart ZH",
+	"Find field location": "Find field location ZH",
+	"Processing form data": "Processing form data ZH",
+	"Processing form data...": "Processing form data... ZH",
+	"Restarting AI mapping": "Restarting AI mapping ZH",
+	"Restarting AI mapping...": "Restarting AI mapping... ZH",
+	"Detecting form fields...": "Detecting form fields... ZH",
+	"Fetching data...": "Fetching data... ZH",
+	"Checking AI availability...": "Checking AI availability... ZH",
+	"Mapping fields with AI...": "Mapping fields with AI... ZH",
+	"AI is not available. Please ensure AI features are enabled.": "AI is not available. Please ensure AI features are enabled. ZH",
+
+	"The fields have been filled in automatically! You can either continue entering data manually or cancel the automatic filling.": "The fields have been filled in automatically! You can either continue entering data manually or cancel the automatic filling. ZH",
+	"Cancel autofill": "Cancel autofill ZH",
+	"Redirecting...": "Redirecting... ZH",
+	"Reverting changes...": "Reverting changes... ZH",
+	"Done!": "Done! ZH",
+
+	"All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed?": "All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed? ZH",
+	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "An unrecorded data in the document will be deleted. Are you sure you want to continue? ZH"
+}

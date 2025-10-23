@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Confirm Revert</title>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <style>
+        body,
+        body.theme-light {
+            --border-color: #e0e0e0;
+            --text-color: #000000;
+            --muted-color: #666666;
+            --background-white: #ffffff;
+        }
+
+        body.theme-dark {
+            --border-color: #3e3e3e;
+            --text-color: #e8e8e8;
+            --muted-color: #b0b0b0;
+            --background-white: #252525;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+            color: var(--text-color);
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal {
+            background: var(--background-white);
+            width: 320px;
+            height: 158px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+
+        .modal-content {
+            width: 288px;
+            min-height: 44px;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 0;
+        }
+
+        .warning-icon {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+        }
+
+        .warning-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .message {
+            flex: 1;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            font-weight: 400;
+            font-size: 11px;
+            line-height: 16px;
+            letter-spacing: 0.02em;
+            color: var(--text-color);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="modal" role="dialog" aria-describedby="modal-message">
+        <div class="modal-content">
+            <div class="warning-icon" aria-hidden="true">
+                <img src="resources/img/warning.png" alt="Warning" />
+            </div>
+            <p id="modal-message" class="message i18n">An unrecorded data in the document will be deleted. Are you sure you want to continue?</p>
+        </div>
+    </div>
+
+    <script src="scripts/utils/theme.js"></script>
+    <script src="scripts/utils.js"></script>
+    <script src="scripts/storage.js"></script>
+    <script src="scripts/event.js"></script>
+    <script>
+        function onThemeChanged(theme) {
+            window.Asc.plugin.onThemeChangedBase(theme);
+            updateBodyThemeClasses(theme.type, theme.name);
+            updateThemeVariables(theme);
+        }
+
+        window.Asc.plugin.onThemeChanged = onThemeChanged;
+
+        window.Asc.plugin.init = function() {
+            if (window.Asc.plugin.info.theme)
+                onThemeChanged(window.Asc.plugin.info.theme);
+            window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
+        };
+
+        window.Asc.plugin.onTranslate = function() {
+            let elements = document.querySelectorAll('.i18n');
+            elements.forEach(function(element) {
+                element.innerText = window.Asc.plugin.tr(element.innerText);
+            });
+        };
+        
+        function setMessage(text) {
+            const el = document.getElementById('modal-message');
+            if (el && text?.trim())
+                el.textContent = text;
+        }
+        
+        const message = window.Autofiller.Utils.getDecodedURLParam('message');
+        if (message)
+            setMessage(message);
+        
+        window.Autofiller.EventBus.attachPluginEvent('onSetMessage', (data) => {
+            if (data?.message)
+                setMessage(data.message);
+        });
+
+        function handleConfirm() {
+            window.Autofiller.EventBus.sendAndClose({
+                source: 'rconfirm.html',
+                action: 'confirm',
+                eventName: 'onRevertConfirmAction',
+                beforeClose: cleanup
+            });
+        }
+
+        function handleCancel() {
+            window.Autofiller.EventBus.sendAndClose({
+                source: 'rconfirm.html',
+                action: 'cancel',
+                eventName: 'onRevertConfirmAction',
+                beforeClose: cleanup
+            });
+        }
+
+        const messageHandler = (action) => {
+            if (action === 'confirm') handleConfirm();
+            else if (action === 'cancel') handleCancel();
+        };
+        
+        const buttonHandler = ({ id }) => {
+            const isConfirm = [0, '0', 'ok'].includes(id);
+            if (isConfirm) handleConfirm();
+            else handleCancel();
+        };
+        
+        function cleanup() {
+            window.Autofiller.EventBus.off('message', messageHandler);
+            window.Autofiller.EventBus.off('button', buttonHandler);
+        }
+        
+        window.Autofiller.EventBus.on('message', messageHandler);
+        window.Autofiller.EventBus.on('button', buttonHandler);
+        
+        window.addEventListener('beforeunload', cleanup);
+        
+        window.Autofiller.handleConfirm = handleConfirm;
+        window.Autofiller.handleCancel = handleCancel;
+    </script>
+</body>
+</html>
+

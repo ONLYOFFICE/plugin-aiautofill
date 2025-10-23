@@ -1,0 +1,40 @@
+{
+	"Loading...": "Loading... AR",
+	"Cancel": "Cancel AR",
+	"Warning": "Warning AR",
+	"Confirm": "Confirm AR",
+	"Continue": "Continue AR",
+
+	"Welcome to the autofill plugin!": "Welcome to the autofill plugin! AR",
+	"An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms?": "An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms? AR",
+	"Autofill": "Autofill AR",
+	"Analyzing form fields with AI": "Analyzing form fields with AI AR",
+	"Fetching data": "Fetching data AR",
+	"Checking AI availability": "Checking AI availability AR",
+	"Mapping fields with AI": "Mapping fields with AI AR",
+	"Loading form": "Loading form AR",
+
+	"Set the values for each parameter. If it's not necessary, uncheck the checkbox. Then press the Apply button.": "Set the values for each parameter. If it's not necessary, uncheck the checkbox. Then press the Apply button. AR",
+	"Select All": "Select All AR",
+	"Apply": "Apply AR",
+	"Restart": "Restart AR",
+	"Find field location": "Find field location AR",
+	"Processing form data": "Processing form data AR",
+	"Processing form data...": "Processing form data... AR",
+	"Restarting AI mapping": "Restarting AI mapping AR",
+	"Restarting AI mapping...": "Restarting AI mapping... AR",
+	"Detecting form fields...": "Detecting form fields... AR",
+	"Fetching data...": "Fetching data... AR",
+	"Checking AI availability...": "Checking AI availability... AR",
+	"Mapping fields with AI...": "Mapping fields with AI... AR",
+	"AI is not available. Please ensure AI features are enabled.": "AI is not available. Please ensure AI features are enabled. AR",
+
+	"The fields have been filled in automatically! You can either continue entering data manually or cancel the automatic filling.": "The fields have been filled in automatically! You can either continue entering data manually or cancel the automatic filling. AR",
+	"Cancel autofill": "Cancel autofill AR",
+	"Redirecting...": "Redirecting... AR",
+	"Reverting changes...": "Reverting changes... AR",
+	"Done!": "Done! AR",
+
+	"All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed?": "All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed? AR",
+	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "An unrecorded data in the document will be deleted. Are you sure you want to continue? AR"
+}

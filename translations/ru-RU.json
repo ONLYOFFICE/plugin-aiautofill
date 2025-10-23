@@ -1,0 +1,40 @@
+{
+	"Loading...": "Loading... RU",
+	"Cancel": "Cancel RU",
+	"Warning": "Warning RU",
+	"Confirm": "Confirm RU",
+	"Continue": "Continue RU",
+
+	"Welcome to the autofill plugin!": "Welcome to the autofill plugin! RU",
+	"An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms?": "An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms? RU",
+	"Autofill": "Autofill RU",
+	"Analyzing form fields with AI": "Analyzing form fields with AI RU",
+	"Fetching data": "Fetching data RU",
+	"Checking AI availability": "Checking AI availability RU",
+	"Mapping fields with AI": "Mapping fields with AI RU",
+	"Loading form": "Loading form RU",
+
+	"Set the values for each parameter. If it's not necessary, uncheck the checkbox. Then press the Apply button.": "Set the values for each parameter. If it's not necessary, uncheck the checkbox. Then press the Apply button. RU",
+	"Select All": "Select All RU",
+	"Apply": "Apply RU",
+	"Restart": "Restart RU",
+	"Find field location": "Find field location RU",
+	"Processing form data": "Processing form data RU",
+	"Processing form data...": "Processing form data... RU",
+	"Restarting AI mapping": "Restarting AI mapping RU",
+	"Restarting AI mapping...": "Restarting AI mapping... RU",
+	"Detecting form fields...": "Detecting form fields... RU",
+	"Fetching data...": "Fetching data... RU",
+	"Checking AI availability...": "Checking AI availability... RU",
+	"Mapping fields with AI...": "Mapping fields with AI... RU",
+	"AI is not available. Please ensure AI features are enabled.": "AI is not available. Please ensure AI features are enabled. RU",
+
+	"The fields have been filled in automatically! You can either continue entering data manually or cancel the automatic filling.": "The fields have been filled in automatically! You can either continue entering data manually or cancel the automatic filling. RU",
+	"Cancel autofill": "Cancel autofill RU",
+	"Redirecting...": "Redirecting... RU",
+	"Reverting changes...": "Reverting changes... RU",
+	"Done!": "Done! RU",
+
+	"All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed?": "All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed? RU",
+	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "An unrecorded data in the document will be deleted. Are you sure you want to continue? RU"
+}
