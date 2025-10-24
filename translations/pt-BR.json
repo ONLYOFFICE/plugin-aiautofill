@@ -36,5 +36,8 @@
 	"Done!": "Done! PT",
 
 	"All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed?": "All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed? PT",
-	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "An unrecorded data in the document will be deleted. Are you sure you want to continue? PT"
+	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "An unrecorded data in the document will be deleted. Are you sure you want to continue? PT",
+
+	"No Data Available": "No Data Available PT",
+	"No form fields were found or no data is available to fill. Please check your data source and try again.": "No form fields were found or no data is available to fill. Please check your data source and try again. PT"
 }

@@ -628,6 +628,46 @@
             box-sizing: border-box;
             overflow: hidden;
         }
+
+        .empty-state {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .empty-state-content {
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .empty-state-icon {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+
+        .empty-state-title {
+            font-family: Arial;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 20px;
+            color: var(--color-text);
+            margin: 0 0 12px 0;
+        }
+
+        .empty-state-message {
+            font-family: Arial;
+            font-weight: 400;
+            font-size: 11px;
+            line-height: 16px;
+            color: var(--color-text-secondary);
+            margin: 0 0 24px 0;
+        }
     </style>
 </head>
 <body>
@@ -635,7 +675,7 @@
         <div class="loader"><span class="i18n">Loading...</span></div>
     </div>
     <div class="panel-content" id="mainWindow">
-        <div class="content-area">
+        <div class="content-area" id="formContent">
             <div class="form-instructions i18n">
                 Set the values for each parameter. If it's not necessary, uncheck the checkbox. Then press the Apply button.
             </div>
@@ -656,6 +696,15 @@
             <div class="button-group">
                 <button class="btn-primary i18n" id="applyBtn">Apply</button>
                 <button class="btn-secondary i18n" id="restartBtn">Restart</button>
+            </div>
+        </div>
+        
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <div class="empty-state-content">
+                <img src="resources/img/warning.png" alt="Warning" class="empty-state-icon">
+                <h2 class="empty-state-title i18n">No Data Available</h2>
+                <p class="empty-state-message i18n">No form fields were found or no data is available to fill. Please check your data source and try again.</p>
+                <button class="btn-secondary i18n" id="restartBtnEmpty">Restart</button>
             </div>
         </div>
     </div>

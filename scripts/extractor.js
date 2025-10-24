@@ -43,7 +43,9 @@
                 const response = await fetch(address);
                 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    const error = new Error(`HTTP error! status: ${response.status}`);
+                    error.status = response.status;
+                    throw error;
                 }
                 
                 const result = await response.json();
@@ -52,6 +54,8 @@
                 _nextCode = result.code;
                 return result.data;
             } catch (error) {
+                if (error.status)
+                    throw error;
                 throw new Error(`Failed to fetch data: ${error.message}`);
             }
         }

@@ -525,87 +525,111 @@
             try {
                 FormOperationsController._setButtonsEnabled(false);
                 FormOperationsController._setCheckboxesEnabled(false);
-
-                if (FormStateManager.loader)
-                    FormStateManager.loader.show(window.Asc.plugin.tr('Restarting AI mapping...'));
-                else
-                    await FormService.startBlockingAction(window.Asc.plugin.tr('Restarting AI mapping'));
+                this._showLoader('Restarting AI mapping...');
 
                 const storage = window.Autofiller.StorageManager('autofiller');
                 storage.remove('form_fields');
                 storage.remove('selected_data');
 
                 await this._redetectAndMapForms();
-
                 FormStateManager.loadFromStorage();
-                FormStateManager.formUI.populateFormFields();
 
-                if (FormStateManager.loader)
-                    FormStateManager.loader.hide();
-                else
-                    await FormService.endBlockingAction(window.Asc.plugin.tr('Restarting AI mapping'));
+                const hasData = FormStateManager.formFieldsData && FormStateManager.formFieldsData.length > 0;
+                
+                if (hasData) {
+                    this._initializeFormUI();
+                    FormStateManager.formUI.populateFormFields();
+                }
 
-                FormOperationsController._setButtonsEnabled(true);
-                FormOperationsController._setCheckboxesEnabled(true);
+                this._toggleView(hasData);
+                this._hideLoader();
+                
+                if (hasData) {
+                    FormOperationsController._setButtonsEnabled(true);
+                    FormOperationsController._setCheckboxesEnabled(true);
+                }
             } catch (error) {
                 console.error('Error restarting AI mapping:', error);
-                
-                if (FormStateManager.loader)
-                    FormStateManager.loader.hide();
-                else
-                    await FormService.endBlockingAction(window.Asc.plugin.tr('Restarting AI mapping'));
-
+                this._hideLoader();
                 FormOperationsController._setButtonsEnabled(true);
                 FormOperationsController._setCheckboxesEnabled(true);
             }
         },
 
-        async _redetectAndMapForms() {
+        _showLoader(message) {
             if (FormStateManager.loader)
-                FormStateManager.loader.updateMessage(window.Asc.plugin.tr('Detecting form fields...'));
-            const formFields = await FormDetectionService.detectAllForms();
+                FormStateManager.loader.show(window.Asc.plugin.tr(message));
+            else if (window.Autofiller?.Editor?.callMethod)
+                FormService.startBlockingAction(window.Asc.plugin.tr(message));
+        },
 
+        _hideLoader() {
             if (FormStateManager.loader)
-                FormStateManager.loader.updateMessage(window.Asc.plugin.tr('Fetching data...'));
+                FormStateManager.loader.hide();
+            else if (window.Autofiller?.Editor?.callMethod)
+                FormService.endBlockingAction(window.Asc.plugin.tr('Restarting AI mapping'));
+        },
 
-            const realData = await window.Autofiller.Utils.withTimeout(
-                window.Autofiller.DataExtractor.fetch(),
-                3500,
-                'Data Fetching'
-            );
-
-            if (FormStateManager.loader)
-                FormStateManager.loader.updateMessage(window.Asc.plugin.tr('Checking AI availability...'));
-
-            const isAvailable = await new Promise((resolve) => {
-                this._checkAI(
-                    () => resolve(true),
-                    () => resolve(false),
-                    0
+        _initializeFormUI() {
+            if (!FormStateManager.formUI) {
+                FormStateManager.formUI = new window.Autofiller.Form(
+                    FormStateManager.formFieldsData, 
+                    {
+                        containerSelector: '#formFields',
+                        selectAllSelector: '#selectAll'
+                    }
                 );
+            }
+        },
+
+        async _redetectAndMapForms() {
+            const storage = window.Autofiller.StorageManager('autofiller');
+            const updateMsg = (msg) => FormStateManager.loader?.updateMessage(window.Asc.plugin.tr(msg));
+
+            updateMsg('Detecting form fields...');
+            const formFields = await FormDetectionService.detectAllForms();
+            if (!formFields?.length) return this._saveAndReturnEmpty(storage);
+
+            updateMsg('Fetching data...');
+            let realData;
+            try {
+                realData = await window.Autofiller.Utils.withTimeout(
+                    window.Autofiller.DataExtractor.fetch(),
+                    3500,
+                    'Data Fetching'
+                );
+            } catch (fetchError) {
+                if (fetchError.status && fetchError.status >= 500 && fetchError.status < 600)
+                    return this._saveAndReturnEmpty(storage);
+                throw fetchError;
+            }
+
+            if (!realData || (typeof realData === 'object' && Object.keys(realData).length === 0))
+                return this._saveAndReturnEmpty(storage);
+
+            updateMsg('Checking AI availability...');
+            const isAvailable = await new Promise((resolve) => {
+                this._checkAI(() => resolve(true), () => resolve(false), 0);
             });
 
-            if (!isAvailable)
+            if (!isAvailable) {
                 throw new Error(window.Asc.plugin.tr('AI is not available. Please ensure AI features are enabled.'));
+            }
 
-            if (FormStateManager.loader)
-                FormStateManager.loader.updateMessage(window.Asc.plugin.tr('Mapping fields with AI...'));
+            updateMsg('Mapping fields with AI...');
             const dataKeys = window.Autofiller.DataMappingService.extractAllKeys(realData);
             const prompt = window.Autofiller.Prompts.getFieldMappingPrompt(dataKeys, formFields);
-
             const aiResult = await FormService.executeAI(prompt);
             const aiResponse = window.Autofiller.DataMappingService.parseAIResponse(aiResult.text);
+            const fieldsWithOptions = FormDetectionService.enrichFieldsWithOptions(formFields, aiResponse.mapping, realData);
 
-            const fieldsWithOptions = FormDetectionService.enrichFieldsWithOptions(
-                formFields, 
-                aiResponse.mapping, 
-                realData
-            );
-
-            const storage = window.Autofiller.StorageManager('autofiller');
             storage.set('form_fields', fieldsWithOptions);
-
             return fieldsWithOptions;
+        },
+
+        _saveAndReturnEmpty(storage) {
+            storage.set('form_fields', []);
+            return [];
         },
 
         _checkAI(onSuccess, onError, retryDelay = 1500) {
@@ -631,22 +655,16 @@
             }
         },
 
+        _toggleView(showForm) {
+            const formContent = document.getElementById('formContent');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (formContent) formContent.style.display = showForm ? 'flex' : 'none';
+            if (emptyState) emptyState.style.display = showForm ? 'none' : 'flex';
+        },
+
         initialize() {
-            FormStateManager.loadFromStorage();
-
-            FormStateManager.formUI = new window.Autofiller.Form(
-                FormStateManager.formFieldsData, 
-                {
-                    containerSelector: '#formFields',
-                    selectAllSelector: '#selectAll'
-                }
-            );
-
-            FormStateManager.confirmModal = new window.Autofiller.ConfirmModal({
-                translate: FormService.translate
-            });
-
-            if (typeof window.Autofiller.Loader !== 'undefined')
+            if (typeof window.Autofiller.Loader !== 'undefined') {
                 FormStateManager.loader = new window.Autofiller.Loader(
                     '#loaderContainer', 
                     '#mainWindow', 
@@ -655,24 +673,28 @@
                         defaultMessage: 'Loading...'
                     }
                 );
+            }
 
-            FormStateManager.formUI.populateFormFields();
+            FormStateManager.loadFromStorage();
+            const hasData = FormStateManager.formFieldsData && FormStateManager.formFieldsData.length > 0;
 
-            this._attachEventListeners();
+            if (hasData) {
+                this._initializeFormUI();
+                FormStateManager.confirmModal = new window.Autofiller.ConfirmModal({
+                    translate: FormService.translate
+                });
+                FormStateManager.formUI.populateFormFields();
+                this._attachEventListeners();
+            } else {
+                const restartBtnEmpty = document.getElementById('restartBtnEmpty');
+                if (restartBtnEmpty) {
+                    restartBtnEmpty.addEventListener('click', () => this._handleRestart());
+                }
+            }
+
+            this._toggleView(hasData);
 
             if (window.Autofiller?.Utils?.isPluginAvailable()) {
-                window.Asc.plugin.onThemeChanged = function(theme) {
-                    window.Asc.plugin.onThemeChangedBase(theme);
-                    updateBodyThemeClasses(theme.type, theme.name);
-                    updateThemeVariables(theme);
-                };
-                
-                window.Asc.plugin.init = function() {
-                    if (window.Asc.plugin.info.theme) {
-                        window.Asc.plugin.onThemeChanged(window.Asc.plugin.info.theme);
-                    }
-                    window.Asc.plugin.attachEvent("onThemeChanged", window.Asc.plugin.onThemeChanged);
-                };
                 FormEventBusHandler.initialize();
             }
             
@@ -684,6 +706,26 @@
     window.Autofiller = window.Autofiller || {};
     window.Autofiller.FormService = FormService;
     window.Autofiller.FormDetectionService = FormDetectionService;
+    
+    if (window.Autofiller?.Utils?.isPluginAvailable()) {
+        window.Asc.plugin.onThemeChanged = function(theme) {
+            window.Asc.plugin.onThemeChangedBase(theme);
+            if (typeof updateBodyThemeClasses === 'function') {
+                updateBodyThemeClasses(theme.type, theme.name);
+            }
+            if (typeof updateThemeVariables === 'function') {
+                updateThemeVariables(theme);
+            }
+        };
+        
+        window.Asc.plugin.init = function() {
+            if (window.Asc.plugin.info.theme) {
+                window.Asc.plugin.onThemeChanged(window.Asc.plugin.info.theme);
+            }
+            window.Asc.plugin.attachEvent("onThemeChanged", window.Asc.plugin.onThemeChanged);
+        };
+    }
+    
     if (document.getElementById('formFields')) {
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => FormInitializer.initialize());

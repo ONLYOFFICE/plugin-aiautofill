@@ -289,15 +289,24 @@
 <body>
     <div class="loader-container hidden" id="loaderContainer"></div>
     <div class="panel-content" id="mainWindow">
-        <div class="text-content i18n">
-            Welcome to the autofill plugin!
+        <div id="welcomeContent">
+            <div class="text-content i18n">
+                Welcome to the autofill plugin!
+            </div>
+            <div class="text-content description i18n">
+                An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms?
+            </div>
+            <div class="button-group">
+                <button class="btn btn-primary i18n" id="autofillBtn">Autofill</button>
+                <button class="btn btn-secondary i18n" id="cancelBtn">Cancel</button>
+            </div>
         </div>
-        <div class="text-content description i18n">
-            An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms?
-        </div>
-        <div class="button-group">
-            <button class="btn btn-primary i18n" id="autofillBtn">Autofill</button>
-            <button class="btn btn-secondary i18n" id="cancelBtn">Cancel</button>
+        
+        <div id="emptyState" style="display: none; text-align: center; padding: 40px 20px;">
+            <img src="resources/img/warning.png" alt="Warning" style="width: 64px; height: 64px; margin-bottom: 20px; opacity: 0.7;">
+            <h2 class="i18n" style="font-weight: 600; font-size: 16px; margin: 0 0 12px 0;">No Data Available</h2>
+            <p class="i18n" style="font-size: 11px; color: var(--color-text-secondary); margin: 0 0 24px 0; line-height: 16px;">No form fields were found or no data is available to fill. Please check your data source and try again.</p>
+            <button class="btn btn-secondary i18n" id="retryBtn" style="max-width: 200px; margin: 0 auto;">Restart</button>
         </div>
     </div>
     <script>
@@ -311,6 +320,32 @@
             if (cancelBtn) cancelBtn.disabled = !enabled;
         }
 
+        function showEmptyState() {
+            const welcomeContent = document.getElementById('welcomeContent');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (welcomeContent) welcomeContent.style.display = 'none';
+            if (emptyState) emptyState.style.display = 'block';
+            
+            const retryBtn = document.getElementById('retryBtn');
+            if (retryBtn) {
+                retryBtn.onclick = null;
+                retryBtn.addEventListener('click', () => {
+                    handleRestart();
+                });
+            }
+        }
+
+        function handleRestart() {
+            const welcomeContent = document.getElementById('welcomeContent');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (emptyState) emptyState.style.display = 'none';
+            if (welcomeContent) welcomeContent.style.display = 'block';
+            
+            handleDetection();
+        }
+
         async function handleDetection() {
             try {
                 setButtonsEnabled(false);
@@ -319,14 +354,36 @@
 
                 const formFields = await window.Autofiller.FormDetectionService.detectAllForms();
                 
+                if (!formFields || formFields.length === 0) {
+                    if (loader) loader.hide();
+                    showEmptyState();
+                    return;
+                }
+                
                 if (loader)
                     loader.updateMessage(window.Asc.plugin.tr('Fetching data'));
 
-                const realData = await window.Autofiller.Utils.withTimeout(
-                    window.Autofiller.DataExtractor.fetch(),
-                    3500,
-                    'Data Fetching'
-                );
+                let realData;
+                try {
+                    realData = await window.Autofiller.Utils.withTimeout(
+                        window.Autofiller.DataExtractor.fetch(),
+                        3500,
+                        'Data Fetching'
+                    );
+                } catch (fetchError) {
+                    if (fetchError.status && fetchError.status >= 500 && fetchError.status < 600) {
+                        if (loader) loader.hide();
+                        showEmptyState();
+                        return;
+                    }
+                    throw fetchError;
+                }
+
+                if (!realData || (typeof realData === 'object' && Object.keys(realData).length === 0)) {
+                    if (loader) loader.hide();
+                    showEmptyState();
+                    return;
+                }
 
                 if (loader)
                     loader.updateMessage(window.Asc.plugin.tr('Checking AI availability'));

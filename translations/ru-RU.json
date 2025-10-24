@@ -36,5 +36,8 @@
 	"Done!": "Done! RU",
 
 	"All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed?": "All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed? RU",
-	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "An unrecorded data in the document will be deleted. Are you sure you want to continue? RU"
+	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "An unrecorded data in the document will be deleted. Are you sure you want to continue? RU",
+
+	"No Data Available": "No Data Available RU",
+	"No form fields were found or no data is available to fill. Please check your data source and try again.": "No form fields were found or no data is available to fill. Please check your data source and try again. RU"
 }
