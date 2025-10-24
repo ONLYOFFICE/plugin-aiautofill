@@ -301,7 +301,11 @@
 
             for (const field of selectedData) {
                 try {
-                    const currentValue = await FormService.getFieldValue(field.fieldId);
+                    const currentValue = await window.Autofiller.Utils.withTimeout(
+                        FormService.getFieldValue(field.fieldId),
+                        2000,
+                        'Get field value'
+                    );
                     originalValues.push({
                         fieldId: field.fieldId,
                         label: field.label,
@@ -326,7 +330,11 @@
         async _setFormValues(selectedData) {
             for (const field of selectedData) {
                 try {
-                    await FormService.setFieldValue(field.fieldId, field.value);
+                    await window.Autofiller.Utils.withTimeout(
+                        FormService.setFieldValue(field.fieldId, field.value),
+                        2000,
+                        `Set field ${field.fieldId}`
+                    );
                 } catch (error) {
                     console.error(`Error setting field ${field.fieldId}:`, error);
                 }
@@ -350,20 +358,28 @@
         },
 
         async _hideLoader() {
-            if (window.Autofiller?.Editor?.callMethod)
-                await FormService.endBlockingAction(window.Asc.plugin.tr('Processing form data'));
-            else if (FormStateManager.loader)
-                FormStateManager.loader.hide();
+            try {
+                if (window.Autofiller?.Editor?.callMethod)
+                    await FormService.endBlockingAction(window.Asc.plugin.tr('Processing form data'));
+                else if (FormStateManager.loader)
+                    FormStateManager.loader.hide();
+            } catch (error) {
+                if (FormStateManager.loader)
+                    FormStateManager.loader.hide();
+            }
         },
 
         _setButtonsEnabled(enabled) {
             const applyButton = document.getElementById('applyBtn');
-            const restartButton = document.querySelector('.btn-secondary');
+            const restartButton = document.getElementById('restartBtn');
+            const restartBtnEmpty = document.getElementById('restartBtnEmpty');
             
             if (applyButton)
                 applyButton.disabled = !enabled;
             if (restartButton)
                 restartButton.disabled = !enabled;
+            if (restartBtnEmpty)
+                restartBtnEmpty.disabled = !enabled;
         },
 
         _setCheckboxesEnabled(enabled) {
@@ -408,7 +424,12 @@
                 if (shouldStoreOriginal)
                     this._showRevertModal();
             } catch (error) {
-                await this._hideLoader();
+                try {
+                    await this._hideLoader();
+                } catch (loaderError) {
+                    if (FormStateManager.loader)
+                        FormStateManager.loader.hide();
+                }
             } finally {
                 this._setButtonsEnabled(true);
             }
@@ -426,13 +447,13 @@
 
                 await new Promise(resolve => setTimeout(resolve, 1500));
 
+                await this._hideLoader();
+
                 if (window.Asc?.PluginWindow)
                     this._showConfirmModal(selectedData);
                 else
                     this._showBrowserConfirm(selectedData);
             } catch (error) {
-                console.error('Error processing form data:', error);
-            } finally {
                 this._setButtonsEnabled(true);
                 this._setCheckboxesEnabled(true);
                 await this._hideLoader();
@@ -469,8 +490,9 @@
             if (isConfirm) {
                 const selectedData = FormStateManager.formUI.collectSelectedData();
                 FormOperationsController.applyFormData(selectedData);
-            } else
+            } else {
                 FormOperationsController._setButtonsEnabled(true);
+            }
 
             FormStateManager.confirmModal.close();
         },
@@ -547,6 +569,8 @@
                 if (hasData) {
                     FormOperationsController._setButtonsEnabled(true);
                     FormOperationsController._setCheckboxesEnabled(true);
+                } else {
+                    FormOperationsController._setButtonsEnabled(true);
                 }
             } catch (error) {
                 console.error('Error restarting AI mapping:', error);
@@ -601,7 +625,6 @@
             } catch (fetchError) {
                 if (fetchError.status && fetchError.status >= 500 && fetchError.status < 600)
                     return this._saveAndReturnEmpty(storage);
-                throw fetchError;
             }
 
             if (!realData || (typeof realData === 'object' && Object.keys(realData).length === 0))
