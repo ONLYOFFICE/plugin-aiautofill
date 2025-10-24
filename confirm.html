@@ -6,6 +6,17 @@
     <title>Confirm Action</title>
     <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
     <style>
+        html {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.1s ease-in;
+        }
+        
+        html.theme-ready {
+            visibility: visible;
+            opacity: 1;
+        }
+        
         body,
         body.theme-light {
             --border-color: #e0e0e0;
@@ -107,6 +118,9 @@
         window.Asc.plugin.init = function() {
             if (window.Asc.plugin.info.theme)
                 onThemeChanged(window.Asc.plugin.info.theme);
+            
+            document.documentElement.classList.add('theme-ready');
+            
             window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
         };
 

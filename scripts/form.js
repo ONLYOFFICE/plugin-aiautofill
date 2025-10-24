@@ -745,6 +745,9 @@
             if (window.Asc.plugin.info.theme) {
                 window.Asc.plugin.onThemeChanged(window.Asc.plugin.info.theme);
             }
+            
+            document.documentElement.classList.add('theme-ready');
+            
             window.Asc.plugin.attachEvent("onThemeChanged", window.Asc.plugin.onThemeChanged);
         };
     }

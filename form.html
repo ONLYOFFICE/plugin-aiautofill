@@ -10,6 +10,17 @@
     <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
     <link rel="stylesheet" href="vendor/select2-4.0.6-rc.1/dist/css/select2.min.css">
     <style>
+        html {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.15s ease-in;
+        }
+        
+        html.theme-ready {
+            visibility: visible;
+            opacity: 1;
+        }
+        
         body,
         body.theme-light {
             --color-text: #000000;

@@ -9,6 +9,17 @@
     <script type="text/javascript" src="vendor/jquery/jquery-3.7.1.min.js"></script>
     <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
     <style>
+        html {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.1s ease-in;
+        }
+        
+        html.theme-ready {
+            visibility: visible;
+            opacity: 1;
+        }
+        
         * {
             box-sizing: border-box;
         }
@@ -366,6 +377,8 @@
             if (window.Asc.plugin.info.theme) {
                 onThemeChanged(window.Asc.plugin.info.theme);
             }
+            
+            document.documentElement.classList.add('theme-ready');
 
             if (typeof window.Autofiller.Loader !== 'undefined') {
                 loader = new window.Autofiller.Loader('#loaderContainer', '.panel-content', {

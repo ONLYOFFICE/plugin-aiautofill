@@ -3,19 +3,6 @@
 <head>
     <meta charset="UTF-8" />
     <title>Form filling</title>
-    <script>
-        (function() {
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            if (prefersDark)
-                document.documentElement.classList.add('theme-dark-init');
-            document.addEventListener('DOMContentLoaded', () => {
-                if (prefersDark && (!document.body.className || document.body.className === ''))
-                    document.body.className = 'theme-dark';
-                document.documentElement.style.visibility = 'visible';
-                document.documentElement.style.opacity = '1';
-            });
-        })();
-    </script>
     <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
     <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
     <script type="text/javascript" src="vendor/jquery/jquery-3.7.1.min.js"></script>
@@ -35,6 +22,11 @@
             visibility: hidden;
             opacity: 0;
             transition: opacity 0.1s ease-in;
+        }
+        
+        html.theme-ready {
+            visibility: visible;
+            opacity: 1;
         }
         
         * {
@@ -469,6 +461,9 @@
         window.Asc.plugin.init = function() {
             if (window.Asc.plugin.info.theme)
                 onThemeChanged(window.Asc.plugin.info.theme);
+            
+            document.documentElement.classList.add('theme-ready');
+            
             if (typeof window.Autofiller.Loader !== 'undefined')
                 loader = new window.Autofiller.Loader('#loaderContainer', '#mainWindow', {
                     translate: function(t) { return window.Asc && window.Asc.plugin && window.Asc.plugin.tr ? window.Asc.plugin.tr(t) : t; },
@@ -490,7 +485,7 @@
                     setButtonsEnabled(true);
                 }, () => {
                     if (attempts < maxAttempts) {
-                        const delay = 1250 + Math.random() * 250;
+                        const delay = 1500 + Math.random() * 500;
                         setTimeout(runCheckAI, delay);
                     } else {
                         setButtonsEnabled(false);
