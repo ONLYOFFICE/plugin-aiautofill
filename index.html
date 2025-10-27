@@ -359,7 +359,7 @@
                 try {
                     realData = await window.Autofiller.Utils.withTimeout(
                         window.Autofiller.DataExtractor.fetch(),
-                        3500,
+                        5000,
                         'Data Fetching'
                     );
                 } catch (fetchError) {
