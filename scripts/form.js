@@ -345,9 +345,7 @@
             if (this.loader)
                 this.loader.show(window.Asc.plugin.tr('Loading...'));
             
-            setTimeout(() => {
-                window.location.href = 'revert.html' + (window.Autofiller.getThemeURLParams ? window.Autofiller.getThemeURLParams() : '');
-            }, 300);
+            window.location.href = 'revert.html' + (window.Autofiller.getThemeURLParams ? window.Autofiller.getThemeURLParams() : '');
         },
 
         async _showLoader() {

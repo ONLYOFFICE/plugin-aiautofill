@@ -21,7 +21,6 @@
         html {
             visibility: hidden;
             opacity: 0;
-            transition: opacity 0.1s ease-in;
         }
         
         html.theme-ready {
@@ -410,9 +409,7 @@
                 if (loader)
                     loader.updateMessage(window.Asc.plugin.tr('Loading form'));
                 
-                setTimeout(() => {
-                    window.location.href = 'form.html' + (window.Autofiller.getThemeURLParams ? window.Autofiller.getThemeURLParams() : '');
-                }, 300);
+                window.location.href = 'form.html' + (window.Autofiller.getThemeURLParams ? window.Autofiller.getThemeURLParams() : '');
             } catch (error) {
                 console.error("Error detecting form fields", error);
                 // TODO: Error state rendering (notification)
