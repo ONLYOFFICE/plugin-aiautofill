@@ -41,7 +41,7 @@
 
             "url"                 : "index.html",
 
-            "icons"               : ["resources/img/icon.png", "resources/img/icon@2x.png"],
+			"icons": "resources/%theme-type%(light|dark)/icon%scale%(default).%extension%(png)",
 
             "isViewer"            : false,
             "EditorsSupport"      : ["word", "pdf"],
