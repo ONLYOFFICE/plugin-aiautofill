@@ -1,6 +1,7 @@
 (function(window, undefined) {
     let _nextCode = null;
-    const STORAGE_KEY = 'refresh_code';
+    const REFRESH_CODE_KEY = 'refresh_code';
+    const ORIGINAL_CODE_KEY = 'original_code';
 
     const DataExtractor = {
         _isValidCallback() {
@@ -19,16 +20,36 @@
                 return _nextCode;
 
             const storage = this._getStorage();
-            if (storage) {
-                const storedCode = storage.get(STORAGE_KEY);
-                if (storedCode) {
-                    _nextCode = storedCode;
-                    return _nextCode;
-                }
+            const optionsCode = window.Asc?.plugin?.info?.options?.code;
+
+            if (!storage) {
+                if (optionsCode)
+                    _nextCode = optionsCode;
+                return _nextCode;
             }
 
-            if (window.Asc?.plugin?.info?.options?.code)
-                _nextCode = window.Asc.plugin.info.options.code;
+            const storedOriginalCode = storage.get(ORIGINAL_CODE_KEY);
+            const storedRefreshCode = storage.get(REFRESH_CODE_KEY);
+
+            if (optionsCode && storedOriginalCode && optionsCode !== storedOriginalCode) {
+                storage.remove(REFRESH_CODE_KEY);
+                storage.remove(ORIGINAL_CODE_KEY);
+                storage.set(ORIGINAL_CODE_KEY, optionsCode);
+                _nextCode = optionsCode;
+                return _nextCode;
+            }
+
+            if (storedRefreshCode) {
+                _nextCode = storedRefreshCode;
+                storage.remove(REFRESH_CODE_KEY);
+                return _nextCode;
+            }
+
+            if (optionsCode) {
+                _nextCode = optionsCode;
+                storage.set(ORIGINAL_CODE_KEY, optionsCode);
+                return _nextCode;
+            }
 
             return _nextCode;
         },
@@ -37,7 +58,7 @@
             _nextCode = code;
             const storage = this._getStorage();
             if (storage && code)
-                storage.set(STORAGE_KEY, code);
+                storage.set(REFRESH_CODE_KEY, code);
         },
 
         _updateNextCode() {
