@@ -6,28 +6,29 @@
             return aiResponse;
         },
 
+        _removeComments(jsonString) {
+            return jsonString
+                .replace(/\/\/[^\n]*/g, '')
+                .replace(/\/\*[\s\S]*?\*\//g, '');
+        },
+
+        _wrapInMappingObject(content) {
+            return `{"mapping":${content}}`;
+        },
+
         _sanitizeJSON(content) {
             if (typeof content !== 'string')
                 return content;
             
-            content = content.replace(/```(?:json)?\s*/g, '').trim();
+            const cleanedContent = content.replace(/```(?:json)?\s*/g, '').trim();
+            const mappingContent = cleanedContent.match(/\{\s*"mapping"\s*:\s*\{[\s\S]*?\}\s*\}/);
+            if (mappingContent)
+                return this._removeComments(mappingContent[0]);
             
-            let match = content.match(/\{\s*"mapping"\s*:\s*\{[\s\S]*?\}\s*\}/);
-            if (match)
-                return match[0];
-            
-            match = content.match(/"mapping"\s*:\s*(\{[\s\S]*?\})/);
-            if (match)
-                return `{"mapping":${match[1]}}`;
-            
-            match = content.match(/\{[\s\S]*?\}/);
-            if (match) {
-                try {
-                    const parsed = JSON.parse(match[0]);
-                    if (parsed.mapping) return match[0];
-                    return `{"mapping":${match[0]}}`;
-                } catch (e) {
-                }
+            const partialMappingContent = cleanedContent.match(/"mapping"\s*:\s*(\{[\s\S]*?\})/);
+            if (partialMappingContent) {
+                const wrappedMapping = this._wrapInMappingObject(partialMappingContent[1]);
+                return this._removeComments(wrappedMapping);
             }
             
             return content;
