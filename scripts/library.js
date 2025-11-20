@@ -36,7 +36,9 @@ RULES:
 5. Multiple matches: "identifier":["dataKey1","dataKey2"]
 6. Prefer complete names over split first/last
 
-Return ONLY valid JSON: {"mapping":{"identifier":"dataKey",...}}`;
+IMPORTANT: Return ONLY valid JSON without any comments, explanations, or markdown formatting.
+No // comments, no /* */ comments, no text before or after the JSON.
+Format: {"mapping":{"identifier":"dataKey",...}}`;
         }
     };
 
