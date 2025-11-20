@@ -20,24 +20,23 @@
     const Prompts = {
         getFieldMappingPrompt(dataKeys, formFields) {
             const fieldIdentifiers = formFields
-                .filter(f => {
-                    const identifier = f.identifier || f.key || f.tag;
-                    return identifier && identifier.trim();
-                })
-                .map(f => f.identifier || f.key || f.tag);
+                .filter(f => f.identifier && f.identifier.trim())
+                .map(f => f.identifier);
             
-            return `Complete this mapping by filling empty values:
-Identifiers: ${fieldIdentifiers.join(',')}
-Keys: ${dataKeys.join(',')}
+            return `Map form field identifiers to data keys.
 
-CRITICAL: Use ONLY keys from the Keys list above. DO NOT create new keys.
-Rules:
-- Match identifier to best key from list
-- Single key: "identifier":"key"
-- Multiple options: "identifier":["key1","key2"]
-- Prefer full name over first/last name split
-- No match: leave "" empty
-Return only JSON: {"mapping":{"identifier":"key"}}`;
+Form Field Identifiers: ${fieldIdentifiers.join(', ')}
+Available Data Keys: ${dataKeys.join(', ')}
+
+RULES:
+1. Use ONLY keys from "Available Data Keys" - DO NOT create new keys
+2. Match identifiers to keys with at least 75% confidence
+3. If confidence < 75%, skip that field (don't include in mapping)
+4. Single match: "identifier":"dataKey"
+5. Multiple matches: "identifier":["dataKey1","dataKey2"]
+6. Prefer complete names over split first/last
+
+Return ONLY valid JSON: {"mapping":{"identifier":"dataKey",...}}`;
         }
     };
 

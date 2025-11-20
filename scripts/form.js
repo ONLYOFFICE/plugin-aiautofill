@@ -64,11 +64,14 @@
         },
 
         _mapFormField(formMeta) {
+            const tag = formMeta.Tag || '';
+            const key = formMeta.Key || null;
+            const identifier = key || tag;
             return {
                 internalId: formMeta.InternalId,
-                key: formMeta.Key || null,
-                tag: formMeta.Tag || '',
-                identifier: formMeta.Tag || '',
+                key: key,
+                tag: tag,
+                identifier: identifier,
                 type: formMeta.Type || 'unknown',
                 lock: typeof formMeta.Lock === 'number' ? formMeta.Lock : null
             };
@@ -144,8 +147,7 @@
         },
 
         _enrichField(field, mapping, sourceData) {
-            const fieldIdentifier = field.identifier || field.key || field.tag;
-            const dataKeys = mapping[fieldIdentifier];
+            const dataKeys = mapping[field.identifier];
             let generatedOptions = [];
 
             if (dataKeys)
@@ -209,7 +211,27 @@
         async detectAllForms() {
             return new Promise((resolve, reject) => {
                 try {
-                    window.Asc.plugin.executeMethod('GetAllForms', null, (formsMeta) => {
+                    window.Asc.plugin.callCommand(function() {
+                        const doc = Api.GetDocument();
+                        const forms = doc.GetAllForms();
+                        const formData = [];
+                        
+                        for (let i = 0; i < forms.length; i++) {
+                            const form = forms[i];
+                            formData.push({
+                                InternalId: form.GetInternalId ? form.GetInternalId() : null,
+                                Key: form.GetFormKey ? form.GetFormKey() : null,
+                                Tag: form.GetTag ? form.GetTag() : '',
+                                Placeholder: form.GetPlaceholder ? form.GetPlaceholder() : '',
+                                Tip: form.GetTip ? form.GetTip() : '',
+                                Type: form.GetFormType ? form.GetFormType() : 'unknown',
+                                Text: form.GetText ? form.GetText() : '',
+                                Lock: form.IsFixed ? (form.IsFixed() ? 0 : null) : null
+                            });
+                        }
+                        
+                        return formData;
+                    }, false, true, (formsMeta) => {
                         if (!formsMeta || formsMeta.length === 0)
                             return resolve([]);
 
