@@ -447,6 +447,21 @@
             }
         }
 
+        function startAICheck() {
+            let lastState = false;
+            setInterval(() => {
+                if (!window.Asc?.plugin?.executeMethod) return;
+                
+                window.Asc.plugin.executeMethod("AI", [{ type: "Actions" }], (data) => {
+                    const hasChat = data?.Actions?.some(action => action?.Chat);
+                    if (hasChat !== lastState) {
+                        lastState = hasChat;
+                        setButtonsEnabled(hasChat);
+                    }
+                });
+            }, 1000);
+        }
+
         function onThemeChanged(theme) {
             window.Asc.plugin.onThemeChangedBase(theme);
             updateBodyThemeClasses(theme.type, theme.name);
@@ -474,23 +489,7 @@
             
             window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
 
-            let attempts = 0;
-            const maxAttempts = 3;
-            const runCheckAI = () => {
-                attempts++;
-                checkAI(() => {
-                    setButtonsEnabled(true);
-                }, () => {
-                    if (attempts < maxAttempts) {
-                        const delay = 1500 + Math.random() * 500;
-                        setTimeout(runCheckAI, delay);
-                    } else {
-                        setButtonsEnabled(false);
-                    }
-                }, 0);
-            };
-
-            runCheckAI();
+            startAICheck();
         };
 
         window.Asc.plugin.onTranslate = function() {
