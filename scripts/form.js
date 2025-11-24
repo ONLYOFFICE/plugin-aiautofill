@@ -579,8 +579,14 @@
                 const hasData = FormStateManager.formFieldsData && FormStateManager.formFieldsData.length > 0;
                 
                 if (hasData) {
+                    FormStateManager.formUI = null;
+                    FormStateManager.confirmModal = null;
                     this._initializeFormUI();
+                    FormStateManager.confirmModal = new window.Autofiller.ConfirmModal({
+                        translate: FormService.translate
+                    });
                     FormStateManager.formUI.populateFormFields();
+                    this._attachEventListeners();
                 }
 
                 this._toggleView(hasData);
