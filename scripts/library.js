@@ -22,23 +22,42 @@
             const fieldIdentifiers = formFields
                 .filter(f => f.identifier && f.identifier.trim())
                 .map(f => f.identifier);
-            
-            return `Map form field identifiers to data keys.
 
-Form Field Identifiers: ${fieldIdentifiers.join(', ')}
-Available Data Keys: ${dataKeys.join(', ')}
+            return `You are an expert in data mapping and structure analysis.
 
-RULES:
-1. Use ONLY keys from "Available Data Keys" - DO NOT create new keys
-2. Match identifiers to keys with at least 75% confidence
-3. If confidence < 75%, skip that field (don't include in mapping)
-4. Single match: "identifier":"dataKey"
-5. Multiple matches: "identifier":["dataKey1","dataKey2"]
-6. Prefer complete names over split first/last
+## TASK
+Analyze two arrays of keys and create a mapping between available data and form fields.
 
-IMPORTANT: Return ONLY valid JSON without any comments, explanations, or markdown formatting.
-No // comments, no /* */ comments, no text before or after the JSON.
-Format: {"mapping":{"identifier":"dataKey",...}}`;
+## INPUT DATA
+
+### Form field keys:
+${fieldIdentifiers.join(', ')}
+
+### Available data keys:
+${dataKeys.join(', ')}
+
+## MAPPING RULES
+
+1. **Use what exists**: Use ONLY existing keys from "INPUT DATA" - DO NOT create new keys
+2. **Exact match**: Key should match exactly or be very similar (considering case, underscores, camelCase)
+3. **Full names preferred**: Prefer using complete names where possible over split first/last
+4. **Partial match**: Part of data key corresponds to form field (e.g., "user_first_name" → "firstName")
+5. **Data type**: Respect data types (e.g., use strings for text fields, numbers for salary, etc.)
+6. **One-to-many**: One data key can fill multiple form fields, include all possible matching keys in the mapping as an array ("form_field":["data_key1","data_key2"])
+7. **Priority**: If there are multiple candidates for the same form field, select the most appropriate one first, but if all are valid, include all of them
+
+## CONFIDENCE THRESHOLD
+**Only include mappings with confidence ≥ 75%**
+
+## RESPONSE FORMAT
+
+Return **ONLY** valid JSON:
+\`\`\`json
+{"mapping":{"form_field_name":"data_key_name",...}}
+\`\`\`
+
+CRITICAL: Return **ONLY** valid JSON without any additional explanations, comments, no additional text or markdown formatting!
+No // comments, no /* */ comments, no text before or after the JSON.`;
         }
     };
 
