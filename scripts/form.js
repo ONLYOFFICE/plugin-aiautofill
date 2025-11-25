@@ -432,6 +432,7 @@
 
         async applyFormData(selectedData, shouldStoreOriginal = true) {
             try {
+                this._setCheckboxesEnabled(false);
                 await this._showLoader();
                 
                 if (shouldStoreOriginal)
@@ -452,6 +453,7 @@
                 }
             } finally {
                 this._setButtonsEnabled(true);
+                this._setCheckboxesEnabled(true);
             }
         },
 
@@ -462,12 +464,6 @@
                 storage.set('selected_data', selectedData);
 
                 this._setButtonsEnabled(false);
-                this._setCheckboxesEnabled(false);
-                await this._showLoader();
-
-                await new Promise(resolve => setTimeout(resolve, 1500));
-
-                await this._hideLoader();
 
                 if (window.Asc?.PluginWindow)
                     this._showConfirmModal(selectedData);
@@ -475,8 +471,6 @@
                     this._showBrowserConfirm(selectedData);
             } catch (error) {
                 this._setButtonsEnabled(true);
-                this._setCheckboxesEnabled(true);
-                await this._hideLoader();
             }
         },
     };
