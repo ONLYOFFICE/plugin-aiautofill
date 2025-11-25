@@ -52,7 +52,9 @@
                     isModal: true,
                     EditorsSupport: ['word', 'pdf'],
                     size: [320, 158],
-                    variation: { message }
+                    variation: { message },
+                    isDisplayedInViewer: true,
+                    isViewer: true
                 };
 
                 this.window = new window.Asc.PluginWindow();
