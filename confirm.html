@@ -6,6 +6,10 @@
     <title>Confirm Action</title>
     <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
     <style>
+        :root {
+            --font-size-base: 12px;
+        }
+
         html {
             visibility: hidden;
             opacity: 0;
@@ -31,38 +35,48 @@
             --background-white: #252525;
         }
 
+        body.theme-classic-light,
+        body.theme-contrast-dark {
+            --font-size-base: 11px;
+        }
+
         html,
         body {
             height: 100%;
             margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-            color: var(--text-color);
-            background: transparent;
             display: flex;
             align-items: center;
             justify-content: center;
+
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+
+            color: var(--text-color);
+            background: transparent;
         }
 
         .modal {
-            background: var(--background-white);
+            box-sizing: border-box;
             width: 320px;
             height: 158px;
-            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
+
             padding: 16px;
-            box-sizing: border-box;
+
+            background: var(--background-white);
+            overflow: hidden;
         }
 
         .modal-content {
             width: 288px;
             min-height: 44px;
-            border-radius: 2px;
             display: flex;
             align-items: center;
+            
             gap: 16px;
             padding: 0;
+            border-radius: 2px;
         }
 
         .warning-icon {
@@ -79,15 +93,18 @@
 
         .message {
             flex: 1;
+            
             margin: 0;
+            
             font-family: Arial, sans-serif;
             font-weight: 400;
-            font-size: 11px;
+            font-size: var(--font-size-base);
             line-height: 16px;
             letter-spacing: 0.02em;
-            color: var(--text-color);
             white-space: pre-wrap;
             word-wrap: break-word;
+
+            color: var(--text-color);
         }
     </style>
 </head>

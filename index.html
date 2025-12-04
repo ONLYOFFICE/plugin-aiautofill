@@ -18,6 +18,20 @@
     <script src="scripts/mapper.js"></script>
     <script src="scripts/form.js"></script>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --font-family: Arial, sans-serif;
+            --font-size: 12px;
+            --font-size-base: 12px;
+            --line-height: 14px;
+            --letter-spacing: 0.02em;
+            --button-width: 236px;
+            --button-height: 24px;
+        }
+
         html {
             visibility: hidden;
             opacity: 0;
@@ -28,23 +42,9 @@
             opacity: 1;
         }
         
-        * {
-            box-sizing: border-box;
-        }
-
-        :root {
-            --font-family: Arial, sans-serif;
-            --font-size: 11px;
-            --line-height: 14px;
-            --letter-spacing: 0.02em;
-            --button-width: 236px;
-            --button-height: 24px;
-        }
-        
         body,
         body.theme-light,
-        body.theme-classic-light,
-        body.theme-gray {
+        body.theme-classic-light {
             --color-text: #000000;
             --color-text-secondary: #666666;
             --color-bg-primary: #f5f5f5;
@@ -88,49 +88,67 @@
             --color-button-secondary-hover: #2c2c2c;
             --color-button-secondary-active: #343434;
         }
+
+        body.theme-classic-light,
+        body.theme-contrast-dark {
+            --font-size: 11px;
+            --font-size-base: 11px;
+        }
         
         body {
-            margin: 0;
-            padding: 0;
-            font-family: var(--font-family);
-            font-size: var(--font-size);
-            line-height: var(--line-height);
-            letter-spacing: var(--letter-spacing);
-            background-color: var(--color-bg-primary);
             height: 100vh;
             width: 100vw;
             display: flex;
             flex-direction: column;
+
+            margin: 0;
+            padding: 0;
+
+            font-family: var(--font-family);
+            font-size: var(--font-size);
+            line-height: var(--line-height);
+            letter-spacing: var(--letter-spacing);
+
+            background-color: var(--color-bg-primary);
         }
         
         .panel-header {
-            background-color: var(--color-bg-secondary);
-            padding: 15px 20px;
-            border-bottom: 1px solid var(--color-border);
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
             flex-shrink: 0;
+
+            padding: 15px 20px;
+
+            border-bottom: 1px solid var(--color-border);
+
+            background-color: var(--color-bg-secondary);
         }
         
         .panel-title {
-            font-weight: 400;
-            color: var(--color-text);
             margin: 0;
+
+            font-weight: 400;
+
+            color: var(--color-text);
         }
         
         .panel-close {
-            background: none;
-            border: none;
-            font-size: 18px;
-            cursor: pointer;
-            color: var(--color-text-secondary);
-            padding: 0;
             width: 24px;
             height: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
+
+            padding: 0;
+
+            border: none;
+
+            font-size: 18px;
+
+            background: none;
+            cursor: pointer;
+            color: var(--color-text-secondary);
         }
         
         .panel-close:hover {
@@ -138,63 +156,74 @@
         }
         
         .panel-content {
-            flex: 1;
-            padding: 12px;
-            background-color: var(--color-bg-primary);
+            box-sizing: border-box;
+            max-width: 100%;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
             align-items: stretch;
+            flex: 1;
+
+            padding: 12px;
+
             overflow-y: auto;
-            max-width: 100%;
-            box-sizing: border-box;
+            background-color: var(--color-bg-primary);
         }
         
         .text-content {
-            color: var(--color-text);
-            margin-bottom: 15px;
-            text-align: left;
             width: 100%;
+            margin-bottom: 15px;
+
+            text-align: left;
             word-wrap: break-word;
+
+            color: var(--color-text);
         }
         
         .description {
-            margin-bottom: 20px;
             width: 100%;
+
+            margin-bottom: 20px;
+
             word-wrap: break-word;
         }
         
         .button-group {
+            width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 10px;
             align-items: stretch;
-            width: 100%;
+            gap: 10px;
         }
         
         .btn {
-            border-radius: 1px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            text-align: center;
             width: 100%;
             height: var(--button-height);
             min-width: 120px;
-            padding: 11px 32px;
+            box-sizing: border-box;
             display: flex;
             align-items: center;
             justify-content: center;
+
+            padding: 11px 32px;
+
+            border-radius: 1px;
+            
             font-weight: 400;
             font-size: var(--font-size);
             line-height: var(--line-height);
             letter-spacing: var(--letter-spacing);
-            box-sizing: border-box;
+            text-align: center;
+            
+            transition: background-color 0.2s;
+            cursor: pointer;
         }
         
         .btn-primary {
+            border: none;
+
             background-color: var(--color-button-primary);
             color: var(--color-bg-primary);
-            border: none;
         }
         
         .btn-primary:hover {
@@ -207,14 +236,15 @@
         }
         
         .btn-secondary {
+            border: 1px solid var(--color-button-secondary-border);
+
             background-color: var(--color-button-secondary-bg);
             color: var(--color-text);
-            border: 1px solid var(--color-button-secondary-border);
         }
         
         .btn-secondary:hover {
-            background-color: var(--color-button-secondary-hover);
             border-color: var(--color-text-secondary);
+            background-color: var(--color-button-secondary-hover);
         }
         
         .btn-secondary:active {
@@ -223,15 +253,17 @@
         }
         
         .loader-container {
+            width: 100vw;
+            height: 100vh;
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: var(--color-bg-primary);
             display: flex;
             align-items: center;
             justify-content: center;
+
+            background-color: var(--color-bg-primary);
+            
             z-index: 10000;
         }
         
@@ -242,25 +274,30 @@
         .loader {
             text-align: center;
             font-family: Arial;
-            font-size: 11px;
+            font-size: var(--font-size);
+
             color: var(--color-text);
         }
         
         .loader span {
             display: block;
+
             margin-top: 10px;
         }
         
         .loader:before {
-            content: '';
             display: block;
             width: 20px;
             height: 20px;
+
+            margin: 0 auto;
+
+            content: '';
+
             border: 2px solid var(--color-border);
             border-top: 2px solid var(--color-text-secondary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto;
         }
         
         @keyframes spin {
@@ -296,7 +333,7 @@
         <div id="emptyState" style="display: none; text-align: center; padding: 40px 20px;">
             <img src="resources/icons/warning.png" alt="Warning" style="width: 64px; height: 64px; margin-bottom: 20px; opacity: 0.7;">
             <h2 class="i18n" style="font-weight: 600; font-size: 16px; margin: 0 0 12px 0;">No Data Available</h2>
-            <p class="i18n" style="font-size: 11px; color: var(--color-text-secondary); margin: 0 0 24px 0; line-height: 16px;">No form fields were found or no data is available to fill. Please check your data source and try again.</p>
+            <p class="i18n" style="font-size: var(--font-size); color: var(--color-text-secondary); margin: 0 0 24px 0; line-height: 16px;">No form fields were found or no data is available to fill. Please check your data source and try again.</p>
             <button class="btn btn-secondary i18n" id="retryBtn" style="max-width: 200px; margin: 0 auto;">Restart</button>
         </div>
     </div>
