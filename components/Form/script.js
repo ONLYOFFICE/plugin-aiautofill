@@ -80,6 +80,14 @@
             });
         };
 
+        this._updateApplyButtonState = function() {
+            let $allCheckboxes = $('.field-checkbox');
+            let checkedCount = $allCheckboxes.filter(':checked').length;
+            let $applyBtn = $('#applyBtn');
+            
+            if ($applyBtn.length) $applyBtn.prop('disabled', checkedCount === 0);
+        };
+
         this._attachEventListeners = function() {
             let me = this;
 
@@ -87,6 +95,7 @@
                 this.$selectAll.off('change').on('change', function() {
                     let isChecked = $(this).prop('checked');
                     $('.field-checkbox').prop('checked', isChecked);
+                    me._updateApplyButtonState();
                 });
             }
 
@@ -102,6 +111,8 @@
                 } else {
                     $selectAll.prop('checked', false).prop('indeterminate', true);
                 }
+                
+                me._updateApplyButtonState();
             });
 
             $('.field-icon').off('click').on('click', function() {
@@ -154,6 +165,7 @@
 
             this._initializeSelect();
             this._attachEventListeners();
+            this._updateApplyButtonState();
         };
 
         this.collectSelectedData = function() {

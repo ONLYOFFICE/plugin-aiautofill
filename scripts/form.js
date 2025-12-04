@@ -394,8 +394,15 @@
             const restartButton = document.getElementById('restartBtn');
             const restartBtnEmpty = document.getElementById('restartBtnEmpty');
             
-            if (applyButton)
-                applyButton.disabled = !enabled;
+            if (applyButton) {
+                if (enabled) {
+                    const checkedCount = document.querySelectorAll('.field-checkbox:checked').length;
+                    applyButton.disabled = checkedCount === 0;
+                } else {
+                    applyButton.disabled = true;
+                }
+            }
+
             if (restartButton)
                 restartButton.disabled = !enabled;
             if (restartBtnEmpty)
