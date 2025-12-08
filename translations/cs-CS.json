@@ -30,7 +30,8 @@
 	"Mapping fields with AI...": "Mapping fields with AI... CS",
 	"AI is not available. Please ensure AI features are enabled.": "AI is not available. Please ensure AI features are enabled. CS",
 
-	"The fields have been filled in automatically! You can either continue entering data manually or cancel the automatic filling.": "The fields have been filled in automatically! You can either continue entering data manually or cancel the automatic filling. CS",
+	"The fields have been filled in automatically!": "The fields have been filled in automatically! CS",
+	"You can either continue entering data manually or cancel the automatic filling.": "You can either continue entering data manually or cancel the automatic filling. CS",
 	"Cancel autofill": "Cancel autofill CS",
 	"Redirecting...": "Redirecting... CS",
 	"Reverting changes...": "Reverting changes... CS",

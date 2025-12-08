@@ -163,9 +163,26 @@
         
         .text-content {
             width: 100%;
+            
             margin-bottom: 15px;
 
             text-align: left;
+            word-wrap: break-word;
+
+            color: var(--color-text);
+        }
+
+        .content-title {
+            width: 100%;
+
+            margin-bottom: 10px;
+
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-weight: 700;
+            font-size: 11px;
+            line-height: 16px;
+            letter-spacing: 0.02em;
+
             word-wrap: break-word;
 
             color: var(--color-text);
@@ -175,6 +192,12 @@
             width: 100%;
 
             margin-bottom: 20px;
+
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-weight: 400;
+            font-size: 11px;
+            line-height: 14px;
+            letter-spacing: 0.02em;
 
             word-wrap: break-word;
         }
@@ -200,11 +223,11 @@
             
             padding: 11px 32px;
             
-            font-weight: 400;
-            text-align: center;
-            font-size: var(--font-size);
-            line-height: var(--line-height);
-            letter-spacing: var(--letter-spacing);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-weight: 700;
+            font-size: 11px;
+            line-height: 16px;
+            letter-spacing: 0.02em;
             
             cursor: pointer;
             transition: background-color 0.2s;
@@ -313,7 +336,8 @@
         <div class="loader"><span class="i18n">Loading...</span></div>
     </div>
     <div class="panel-content">
-        <div class="text-content description i18n" id="message">The fields have been filled in automatically! You can either continue entering data manually or cancel the automatic filling.</div>
+        <div class="content-title i18n" id="title">The fields have been filled in automatically!</div>
+        <div class="text-content description i18n" id="message">You can either continue entering data manually or cancel the automatic filling.</div>
         <div class="button-group">
             <button class="btn btn-primary i18n" id="closeTabBtn">Close Tab</button>
             <button class="btn btn-secondary i18n" id="revertBtn">Cancel autofill</button>
