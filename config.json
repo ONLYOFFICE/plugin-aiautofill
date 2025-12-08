@@ -44,7 +44,7 @@
             "icons": "resources/%theme-type%(light|dark)/icon%scale%(default).%extension%(png)",
 
             "isViewer"            : false,
-            "EditorsSupport"      : ["word", "pdf"],
+            "EditorsSupport"      : ["word"],
             "type"                : "panel",
             "initDataType"        : "none",
             "buttons"             : [],
