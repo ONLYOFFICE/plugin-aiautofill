@@ -43,6 +43,7 @@ function updateBodyThemeClasses(themeType, themeName) {
             
             var classes = element.className.split(' ');
             classes.forEach(function(className) {
+                if (className === 'theme-ready') return;
                 if (className.indexOf('theme-') !== -1 && themeClasses.indexOf(className) === -1) {
                     element.classList.remove(className);
                 }
