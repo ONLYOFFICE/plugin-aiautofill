@@ -602,9 +602,29 @@
             } catch (error) {
                 console.error('Error restarting AI mapping:', error);
                 this._hideLoader();
-                FormOperationsController._setButtonsEnabled(true);
-                FormOperationsController._setCheckboxesEnabled(true);
+                
+                const errorReason = (error?.message || error?.error || String(error)).toLowerCase();
+                if (errorReason.includes('ai is not available') || errorReason.includes('timed out') || errorReason.includes('no chat')) {
+                    this._showView('error');
+                } else {
+                    FormOperationsController._setButtonsEnabled(true);
+                    FormOperationsController._setCheckboxesEnabled(true);
+                }
             }
+        },
+
+        _showView(view) {
+            const views = {
+                form: document.getElementById('formContent'),
+                empty: document.getElementById('emptyState'),
+                error: document.getElementById('errorModel')
+            };
+
+            Object.entries(views).forEach(([key, el]) => {
+                if (!el) return;
+                if (key === 'form') el.style.display = view === 'form' ? 'flex' : 'none';
+                else el.classList.toggle('error--visible', view === key);
+            });
         },
 
         _showLoader(message) {
@@ -658,11 +678,9 @@
                 return this._saveAndReturnEmpty(storage);
 
             updateMsg('Checking AI availability...');
-            const isAvailable = await new Promise((resolve) => {
-                this._checkAI(() => resolve(true), () => resolve(false), 0);
-            });
 
-            if (!isAvailable) {
+            const aiCheckResult = await this._checkAI(5000);
+            if (!aiCheckResult.available) {
                 throw new Error(window.Asc.plugin.tr('AI is not available. Please ensure AI features are enabled.'));
             }
 
@@ -682,35 +700,30 @@
             return [];
         },
 
-        _checkAI(onSuccess, onError, retryDelay = 1500) {
-            const performCheck = () => {
-                if (!window.Asc?.plugin?.executeMethod)
-                    return false;
+        _checkAI(timeout = 5000) {
+            return new Promise((resolve) => {
+                const timer = setTimeout(() => resolve({ available: false, error: "AI check timed out" }), timeout);
+                
+                if (!window.Asc?.plugin?.executeMethod) {
+                    clearTimeout(timer);
+                    return resolve({ available: false, error: "Plugin API not available" });
+                }
 
-                window.Asc.plugin.executeMethod("AI", [{ type: "Actions" }], (data) => {
-                    const hasChat = data?.Actions?.some(action => action?.Chat);
-                    if (hasChat)
-                        if (onSuccess) onSuccess(data);
-                    else
-                        if (onError) onError({ error: "No Chat action available" });
-                });
-                return true;
-            };
-
-            if (!performCheck() && retryDelay > 0) {
-                setTimeout(() => {
-                    if (!performCheck() && onError)
-                        onError({ error: "Plugin API not available" });
-                }, retryDelay);
-            }
+                try {
+                    window.Asc.plugin.executeMethod("AI", [{ type: "Actions" }], (data) => {
+                        clearTimeout(timer);
+                        const hasChat = data?.Actions?.some(a => a?.Chat);
+                        resolve(hasChat ? { available: true, data } : { available: false, error: "No AI model configured" });
+                    });
+                } catch (e) {
+                    clearTimeout(timer);
+                    resolve({ available: false, error: e.message });
+                }
+            });
         },
 
         _toggleView(showForm) {
-            const formContent = document.getElementById('formContent');
-            const emptyState = document.getElementById('emptyState');
-            
-            if (formContent) formContent.style.display = showForm ? 'flex' : 'none';
-            if (emptyState) emptyState.style.display = showForm ? 'none' : 'flex';
+            this._showView(showForm ? 'form' : 'empty');
         },
 
         initialize() {
@@ -735,11 +748,11 @@
                 });
                 FormStateManager.formUI.populateFormFields();
                 this._attachEventListeners();
-            } else {
-                const restartBtnEmpty = document.getElementById('restartBtnEmpty');
-                if (restartBtnEmpty) {
-                    restartBtnEmpty.addEventListener('click', () => this._handleRestart());
-                }
+            }
+
+            const restartBtnEmpty = document.getElementById('restartBtnEmpty');
+            if (restartBtnEmpty) {
+                restartBtnEmpty.addEventListener('click', () => this._handleRestart());
             }
 
             this._toggleView(hasData);

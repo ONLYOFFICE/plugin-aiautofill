@@ -41,5 +41,8 @@
 	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "An unrecorded data in the document will be deleted. Are you sure you want to continue? JA",
 
 	"No Data Available": "No Data Available JA",
-	"No form fields were found or no data is available to fill. Please check your data source and try again.": "No form fields were found or no data is available to fill. Please check your data source and try again. JA"
+	"No form fields were found or no data is available to fill. Please check your data source and try again.": "No form fields were found or no data is available to fill. Please check your data source and try again. JA",
+
+	"Plugin unavailable now": "Plugin unavailable now JA",
+	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category. JA"
 }
