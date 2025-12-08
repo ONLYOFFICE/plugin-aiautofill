@@ -43,7 +43,7 @@
                 const themeParams = window.Autofiller.getThemeURLParams ? window.Autofiller.getThemeURLParams() : '';
                 const variation = {
                     url: 'confirm.html' + themeParams,
-                    description: this.options.translate('Warning'),
+                    description: this.options.translate('Note'),
                     isVisual: true,
                     buttons: [
                         { text: this.options.translate('Confirm'), primary: true },
@@ -51,7 +51,7 @@
                     ],
                     isModal: true,
                     EditorsSupport: ['word', 'pdf'],
-                    size: [320, 158],
+                    size: [320, 76],
                     variation: { message },
                     isDisplayedInViewer: true,
                     isViewer: true,

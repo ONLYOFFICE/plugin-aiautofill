@@ -44,20 +44,16 @@
         body {
             height: 100%;
             margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
 
             color: var(--text-color);
-            background: transparent;
+            background: var(--background-white);
         }
 
         .modal {
             box-sizing: border-box;
-            width: 320px;
-            height: 158px;
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -69,14 +65,10 @@
         }
 
         .modal-content {
-            width: 288px;
-            min-height: 44px;
             display: flex;
             align-items: center;
             
             gap: 16px;
-            padding: 0;
-            border-radius: 2px;
         }
 
         .warning-icon {
@@ -112,7 +104,7 @@
     <div class="modal" role="dialog" aria-describedby="modal-message">
         <div class="modal-content">
             <div class="warning-icon" aria-hidden="true">
-                <img src="resources/icons/warning.png" alt="Warning" />
+                <img src="resources/icons/info.svg" alt="Info" />
             </div>
             <p id="modal-message" class="message i18n">All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed?</p>
         </div>
