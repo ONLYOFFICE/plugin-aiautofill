@@ -4,6 +4,7 @@
 	"Warning": "Warning RS",
 	"Confirm": "Confirm RS",
 	"Continue": "Continue RS",
+	"Close Tab": "Close Tab RS",
 
 	"Welcome to the autofill plugin!": "Welcome to the autofill plugin! RS",
 	"An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms?": "An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms? RS",

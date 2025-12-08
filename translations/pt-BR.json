@@ -4,6 +4,7 @@
 	"Warning": "Warning PT",
 	"Confirm": "Confirm PT",
 	"Continue": "Continue PT",
+	"Close Tab": "Close Tab PT",
 
 	"Welcome to the autofill plugin!": "Welcome to the autofill plugin! PT",
 	"An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms?": "An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms? PT",

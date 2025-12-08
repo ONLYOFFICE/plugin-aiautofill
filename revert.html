@@ -284,6 +284,28 @@
             cursor: not-allowed;
             pointer-events: none;
         }
+
+        .btn-secondary {
+            border: 1px solid var(--color-button-secondary-border);
+            
+            color: var(--color-text);
+            background-color: var(--color-button-secondary-bg);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--color-button-secondary-hover);
+            border-color: var(--color-text-secondary);
+        }
+        
+        .btn-secondary:active {
+            background-color: var(--color-button-secondary-active);
+        }
+
+        .btn-secondary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
@@ -293,7 +315,8 @@
     <div class="panel-content">
         <div class="text-content description i18n" id="message">The fields have been filled in automatically! You can either continue entering data manually or cancel the automatic filling.</div>
         <div class="button-group">
-            <button class="btn btn-primary i18n" id="revertBtn">Cancel autofill</button>
+            <button class="btn btn-primary i18n" id="closeTabBtn">Close Tab</button>
+            <button class="btn btn-secondary i18n" id="revertBtn">Cancel autofill</button>
         </div>
     </div>
 
@@ -430,6 +453,11 @@
                 console.error('RevertModal not available');
             }
             
+            const closeTabBtn = document.getElementById('closeTabBtn');
+            if (closeTabBtn) {
+                closeTabBtn.addEventListener('click', close);
+            }
+
             const revertBtn = document.getElementById('revertBtn');
             if (revertBtn) {
                 revertBtn.addEventListener('click', showConfirmModal);
