@@ -31,7 +31,7 @@
                         </select>
                     </div>
                     <div class="field-icon" data-tooltip="${tr('Find field location')}" data-field-id="${field.internalId}">
-                        <img src="resources/icons/button.png" alt="Find field location" />
+                        <img src="resources/icons/button.svg" alt="Find field location" />
                     </div>
                 </div>`;
             }
