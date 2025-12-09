@@ -119,3 +119,64 @@ Extracted as: `user.name.first`, `user.name.last`
 }
 ```
 Extracted as: `employees.name`, `employees.role`
+
+## Real-world use case: ONLYOFFICE Docs & Pipedrive integration
+
+This section details how the AI Auto Fill plugin can be used to automatically populate ONLYOFFICE PDF forms with data from Pipedrive.
+
+### Connecting and configuring the plugin
+
+* Navigate to the [ONLYOFFICE app](https://github.com/ONLYOFFICE/onlyoffice-pipedrive) settings within Pipedrive.
+* Locate and enable the corresponding checkbox.
+
+The configuration settings for the AI Auto Fill plugin are inherited from the main [AI plugin](https://www.onlyoffice.com/app-directory/ai) in ONLYOFFICE Docs. To learn how to install and connect various AI models, please refer to the [relevant documentation](https://helpcenter.onlyoffice.com/docs/userguides/ai/configuration.aspx).
+
+### How the value matching works
+
+The plugin intelligently matches Pipedrive data with the fields in your ONLYOFFICE PDF form without sending sensitive user data to the AI.
+
+1. **Data request:** The plugin requests available data from Pipedrive. It can retrieve information related to customers, sellers, deals, organizations, and products.
+2. **Field analysis:** It then retrieves the key data (or tag) for all fields within the PDF form.
+3. **AI-powered matching:** The plugin sends only the data keys and field keys to the AI model. The AI then determines the best matches between Pipedrive data points and your form fields.
+4. **Recommendations:** Finally, the plugin displays the AI's recommendations for you to review and apply.
+
+### Usage
+
+**1. Opening a PDF form**
+
+To begin, open a PDF form within Pipedrive from the ONLYOFFICE Documents section.
+
+Please note: It's important that a PDF form must be created in ONLYOFFICE.
+
+**2. Initiating autofill**
+
+When the editor opens, the AI Auto Fill plugin will appear automatically on the side panel.
+
+To proceed with populating the form, click the Autofill button. If you prefer to fill the form manually, simply click Cancel or close the plugin panel.
+
+**3. Reviewing suggestions**
+
+After clicking Autofill, a new window will open, displaying each form field alongside the corresponding value suggested by the AI.
+
+* If the AI identifies multiple potential values for a single field, you can choose the correct one from a drop-down list.
+* To skip filling a specific field, uncheck the checkbox next to it.
+* To locate a field within the document, click the Open file location button next to it.
+
+**4. Applying the data**
+
+Once you have reviewed the suggestions, click the Apply button. A confirmation prompt will appear, warning you that the form fields will be filled automatically. If you confirm, the selected values will be inserted into the form.
+
+**5. Post-fill options**
+
+After the process completes, the plugin will display a success message.
+
+The Cancel autofill button will become active, allowing you to undo the changes and revert the form to its previous state.
+
+If you have closed the plugin at any point, you can always reopen it from the Plugins tab in the top toolbar of the editor.
+
+## Need help? Feedback & Support 💡
+
+* **🐞 Found a bug?** Please report it by creating an [issue](https://github.com/ONLYOFFICE/plugin-aiautofill/issues).  
+* **👨‍💻 Want to browse the code?** Check out the [source code](https://github.com/ONLYOFFICE/plugin-aiautofill).
+* **❓ Have a question?** Ask our community and developers via [community.onlyoffice.com](https://community.onlyoffice.com/). 
+* **💡 Want to suggest a feature?** Share your ideas on our [feedback platform](https://feedback.onlyoffice.com/forums/966080-your-voice-matters).
