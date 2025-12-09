@@ -24,7 +24,10 @@ function buildThemeClasses(themeType, themeName) {
         classes.push('theme-type-' + themeType);
     }
     
-    classes.push(isDark ? 'theme-dark' : 'theme-light');
+    if (!themeName) {
+        classes.push(isDark ? 'theme-dark' : 'theme-light');
+    }
+
     return classes;
 }
 

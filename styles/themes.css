@@ -349,8 +349,8 @@ body.theme-contrast-dark.theme-type-dark {
     --color-error-icon: #F97066;
 }
 
-body.theme-light.theme-type-light,
-body.theme-dark.theme-type-dark {
+body.theme-white.theme-type-light,
+body.theme-night.theme-type-dark {
     --font-size: 12px;
     --font-size-base: 12px;
 }
