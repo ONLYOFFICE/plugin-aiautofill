@@ -318,7 +318,7 @@
 <body>
     <div class="loader-container hidden" id="loaderContainer"></div>
     <div class="panel-content" id="mainWindow">
-        <div id="welcomeContent">
+        <div id="welcomeContent" style="display: none;">
             <div class="text-content i18n">
                 Welcome to the autofill plugin!
             </div>
@@ -340,6 +340,18 @@
                     <h3 class="error__title i18n">Plugin unavailable now</h3>
                 </div>
                 <p class="error__message i18n">This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.</p>
+            </div>
+        </div>
+
+        <div id="errorFields" class="error">
+            <div class="error__box">
+                <div class="error__header">
+                    <div class="error__icon">
+                        <img src="resources/icons/alert.svg" alt="Alert">
+                    </div>
+                    <h3 class="error__title i18n">No form fields detected</h3>
+                </div>
+                <p class="error__message i18n">Autofill cannot be performed until form fields are added. Go to Forms Tab to add some fields.</p>
             </div>
         </div>
 
@@ -372,7 +384,8 @@
             const views = {
                 welcome: document.getElementById('welcomeContent'),
                 empty: document.getElementById('emptyState'),
-                errorModel: document.getElementById('errorModel')
+                errorModel: document.getElementById('errorModel'),
+                errorFields: document.getElementById('errorFields')
             };
 
             Object.entries(views).forEach(([key, el]) => {
@@ -518,6 +531,28 @@
             }, 1000);
         }
 
+        async function initializePlugin() {
+            try {
+                const formFields = await window.Autofiller.FormDetectionService.detectAllForms();
+                
+                document.documentElement.classList.add('theme-ready');
+                
+                if (!formFields || formFields.length === 0) {
+                    if (loader) loader.hide();
+                    showView('errorFields');
+                    return;
+                }
+                
+                showView('welcome');
+                startAICheck();
+            } catch (error) {
+                console.error('Error checking form fields on init:', error);
+                document.documentElement.classList.add('theme-ready');
+                showView('welcome');
+                startAICheck();
+            }
+        }
+
         function onThemeChanged(theme) {
             window.Asc.plugin.onThemeChangedBase(theme);
             updateBodyThemeClasses(theme.type, theme.name);
@@ -529,8 +564,6 @@
         window.Asc.plugin.init = function() {
             if (window.Asc.plugin.info.theme)
                 onThemeChanged(window.Asc.plugin.info.theme);
-            
-            document.documentElement.classList.add('theme-ready');
             
             if (typeof window.Autofiller.Loader !== 'undefined')
                 loader = new window.Autofiller.Loader('#loaderContainer', '#mainWindow', {
@@ -546,7 +579,7 @@
             
             window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
 
-            startAICheck();
+            initializePlugin();
         };
 
         window.Asc.plugin.onTranslate = function() {

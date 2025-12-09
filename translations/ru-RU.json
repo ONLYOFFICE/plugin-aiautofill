@@ -44,6 +44,9 @@
 	"No Data Available": "No Data Available RU",
 	"No form fields were found or no data is available to fill. Please check your data source and try again.": "No form fields were found or no data is available to fill. Please check your data source and try again. RU",
 
+	"No form fields detected": "No form fields detected RU",
+	"Autofill cannot be performed until form fields are added. Go to Forms Tab to add some fields.": "Autofill cannot be performed until form fields are added. Go to Forms Tab to add some fields. RU",
+
 	"Plugin unavailable now": "Plugin unavailable now RU",
 	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category. RU"
 }
