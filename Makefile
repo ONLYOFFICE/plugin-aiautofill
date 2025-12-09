@@ -5,6 +5,7 @@ COMPONENTS_DIR = $(SRC_DIR)/components
 VENDOR_DIR = $(SRC_DIR)/vendor
 TRANSLATIONS_DIR = $(SRC_DIR)/translations
 RESOURCES_DIR = $(SRC_DIR)/resources
+STYLES_DIR = $(SRC_DIR)/styles
 
 TERSER = terser
 HTML_MINIFIER = html-minifier-terser
@@ -52,7 +53,7 @@ build: clean check-tools
 	@echo "Building the plugin..."
 	
 	@mkdir -p $(BUILD_DIR)
-	@cp -r $(SCRIPTS_DIR) $(COMPONENTS_DIR) $(VENDOR_DIR) $(TRANSLATIONS_DIR) $(RESOURCES_DIR) $(BUILD_DIR)/
+	@cp -r $(SCRIPTS_DIR) $(COMPONENTS_DIR) $(VENDOR_DIR) $(TRANSLATIONS_DIR) $(RESOURCES_DIR) $(STYLES_DIR) $(BUILD_DIR)/
 	@cp *.html config.json $(BUILD_DIR)/
 	
 	@echo "Minifying JavaScript files..."
