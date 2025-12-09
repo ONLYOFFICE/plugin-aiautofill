@@ -67,8 +67,10 @@ body.theme-light.theme-type-light {
     --color-tooltip-bg: #333333;
     --color-tooltip-text: #FFFFFF;
     
-    --color-error-bg: #FEF3F2;
-    --color-error-border: #FECDCA;
+    --color-error-bg: #FFFFFF;
+    --color-error-border: #C0C0C0;
+    --color-error-title: #000000CC;
+    --color-error-text: #00000099;
     --color-error-icon: #D92D20;
 }
 
@@ -120,8 +122,10 @@ body.theme-white.theme-type-light {
     --color-tooltip-bg: #333333;
     --color-tooltip-text: #FFFFFF;
     
-    --color-error-bg: #FEF3F2;
-    --color-error-border: #FECDCA;
+    --color-error-bg: #FFFFFF;
+    --color-error-border: #E1E1E1;
+    --color-error-title: #383838;
+    --color-error-text: #00000099;
     --color-error-icon: #D92D20;
 }
 
@@ -173,8 +177,10 @@ body.theme-classic-light.theme-type-light {
     --color-tooltip-bg: #333333;
     --color-tooltip-text: #FFFFFF;
     
-    --color-error-bg: #FEF3F2;
-    --color-error-border: #FECDCA;
+    --color-error-bg: #FFFFFF;
+    --color-error-border: #CFCFCF;
+    --color-error-title: #444444;
+    --color-error-text: #A5A5A5;
     --color-error-icon: #D92D20;
 }
 
@@ -226,8 +232,10 @@ body.theme-night.theme-type-dark {
     --color-tooltip-bg: #1a1a1a;
     --color-tooltip-text: #FFFFFF;
     
-    --color-error-bg: #4d2020;
-    --color-error-border: #7c3535;
+    --color-error-bg: #404040;
+    --color-error-border: #686868;
+    --color-error-title: #F3F3F3;
+    --color-error-text: #969696;
     --color-error-icon: #F97066;
 }
 
@@ -279,8 +287,10 @@ body.theme-dark.theme-type-dark {
     --color-tooltip-bg: #1a1a1a;
     --color-tooltip-text: #FFFFFF;
     
-    --color-error-bg: #4d2020;
-    --color-error-border: #7c3535;
+    --color-error-bg: #333333;
+    --color-error-border: #666666;
+    --color-error-title: #FFFFFFCC;
+    --color-error-text: #FFFFFF99;
     --color-error-icon: #F97066;
 }
 
@@ -332,8 +342,10 @@ body.theme-contrast-dark.theme-type-dark {
     --color-tooltip-bg: #0f0f0f;
     --color-tooltip-text: #FFFFFF;
     
-    --color-error-bg: #4d2020;
-    --color-error-border: #7c3535;
+    --color-error-bg: #1E1E1E;
+    --color-error-border: #696969;
+    --color-error-title: #E8E8E8;
+    --color-error-text: #B8B8B8;
     --color-error-icon: #F97066;
 }
 
