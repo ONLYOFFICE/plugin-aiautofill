@@ -25,7 +25,7 @@
         }
         
         body,
-        body.theme-light {
+        body.theme-light.theme-type-light {
             --color-bg-primary: #F7F7F7;
             --color-bg-secondary: #FFFFFF;
             
@@ -38,15 +38,15 @@
             --color-button-primary-bg-hover: #1C1C1C;
             --color-button-primary-bg-active: #1C1C1C;
             --color-button-primary-bg-disabled: #00000080;
-            --color-button-primary-border: #444444;
             --color-button-primary-text: #FFFFFF;
+            --color-button-primary-text-disabled: #FFFFFF80;
             
-            --color-button-secondary-bg: #FFFFFF;
-            --color-button-secondary-bg-hover: #E0E0E0;
-            --color-button-secondary-bg-active: #CBCBCB;
+            --color-button-secondary-bg: #EFEFEF;
+            --color-button-secondary-bg-hover: #D8D8D8;
+            --color-button-secondary-bg-active: #C4C4C4;
             --color-button-secondary-border: #C0C0C0;
             --color-button-secondary-border-hover: #C0C0C0;
-            --color-button-secondary-text: #000000;
+            --color-button-secondary-text: #000000CC;
             
             --color-field-icon-bg: transparent;
             --color-field-icon-bg-hover: #E0E0E0;
@@ -91,16 +91,15 @@
             --color-button-primary-bg-hover: #2566D5;
             --color-button-primary-bg-active: #1E53AE;
             --color-button-primary-bg-disabled: #DCE7FA;
-            --color-button-primary-border: #4A87E7;
             --color-button-primary-text: #FFFFFF;
+            --color-button-primary-text-disabled: #FFFFFF80;
             
-            --color-button-secondary-bg: #FFFFFF;
-            --color-button-secondary-bg-hover: #F9F9F9;
-            --color-button-secondary-bg-active: #EAEAEA;
-            --color-button-secondary-border: #E1E1E1;
-            --color-button-secondary-border-hover: #E1E1E1;
-            --color-button-secondary-border-active: #2566D5;
-            --color-button-secondary-text: #000000;
+            --color-button-secondary-bg: #FAFAFA;
+            --color-button-secondary-bg-hover: #EBEBEB;
+            --color-button-secondary-bg-active: #D6D6D6;
+            --color-button-secondary-border: #D0D0D0;
+            --color-button-secondary-border-hover: #D0D0D0;
+            --color-button-secondary-text: #383838;
             
             --color-field-icon-bg: transparent;
             --color-field-icon-bg-hover: #F9F9F9;
@@ -132,7 +131,7 @@
             --color-error-icon: #D92D20;
         }
         
-        body.theme-classic-light {
+        body.theme-classic-light.theme-type-light {
             --color-bg-primary: #F1F1F1;
             --color-bg-secondary: #FFFFFF;
             
@@ -145,8 +144,8 @@
             --color-button-primary-bg-hover: #666D73;
             --color-button-primary-bg-active: #666D73;
             --color-button-primary-bg-disabled: #A5A5A5;
-            --color-button-primary-border: #7D858C;
             --color-button-primary-text: #FFFFFF;
+            --color-button-primary-text-disabled: #FFFFFF80;
             
             --color-button-secondary-bg: #FFFFFF;
             --color-button-secondary-bg-hover: #D8DADC;
@@ -198,16 +197,15 @@
             --color-button-primary-bg-hover: #4A87E7;
             --color-button-primary-bg-active: #446ECA;
             --color-button-primary-bg-disabled: #375478;
-            --color-button-primary-border: #4A87E7;
             --color-button-primary-text: #FFFFFF;
+            --color-button-primary-text-disabled: #F3F3F366;
             
-            --color-button-secondary-bg: #404040;
-            --color-button-secondary-bg-hover: #585858;
+            --color-button-secondary-bg: #555555;
+            --color-button-secondary-bg-hover: #656565;
             --color-button-secondary-bg-active: #686868;
-            --color-button-secondary-border: #686868;
-            --color-button-secondary-border-hover: #686868;
-            --color-button-secondary-border-active: #4A87E7;
-            --color-button-secondary-text: #FFFFFF;
+            --color-button-secondary-border: #6B6B6B;
+            --color-button-secondary-border-hover: #6B6B6B;
+            --color-button-secondary-text: #CCCCCC;
             
             --color-field-icon-bg: transparent;
             --color-field-icon-bg-hover: #585858;
@@ -239,7 +237,7 @@
             --color-error-icon: #F97066;
         }
         
-        body.theme-dark {
+        body.theme-dark.theme-type-dark {
             --color-bg-primary: #404040;
             --color-bg-secondary: #333333;
             
@@ -252,8 +250,8 @@
             --color-button-primary-bg-hover: #FCFCFC;
             --color-button-primary-bg-active: #FCFCFC;
             --color-button-primary-bg-disabled: #FFFFFF80;
-            --color-button-primary-border: #666666;
             --color-button-primary-text: #333333;
+            --color-button-primary-text-disabled: #33333380;
             
             --color-button-secondary-bg: #333333;
             --color-button-secondary-bg-hover: #555555;
@@ -292,7 +290,7 @@
             --color-error-icon: #F97066;
         }
         
-        body.theme-contrast-dark {
+        body.theme-contrast-dark.theme-type-dark {
             --color-bg-primary: #2A2A2A;
             --color-bg-secondary: #1E1E1E;
             
@@ -305,8 +303,8 @@
             --color-button-primary-bg-hover: #A6A6A6;
             --color-button-primary-bg-active: #A6A6A6;
             --color-button-primary-bg-disabled: #888888;
-            --color-button-primary-border: #E6E6E6;
             --color-button-primary-text: #1E1E1E;
+            --color-button-primary-text-disabled: #1E1E1E80;
             
             --color-button-secondary-bg: #1E1E1E;
             --color-button-secondary-bg-hover: #424242;
@@ -346,7 +344,7 @@
         }
 
         body.theme-light,
-        body.theme-dark {
+        body.theme-dark.theme-type-dark {
             --font-size-base: 12px;
         }
         
@@ -927,7 +925,7 @@
 
             padding: 11px 32px;
 
-            border: 1px solid var(--color-button-primary-border);
+            border: 1px solid var(--color-button-primary-bg);
             border-radius: 1px;
             
             font-family: Arial;
@@ -981,11 +979,13 @@
         .btn-secondary:hover {
             background-color: var(--color-button-secondary-bg-hover);
             border-color: var(--color-button-secondary-border-hover);
+            color: var(--color-button-secondary-text);
         }
         
         .btn-secondary:active {
             background-color: var(--color-button-secondary-bg-active);
             border-color: var(--color-button-secondary-border);
+            color: var(--color-button-secondary-text);
         }
 
         .error {
@@ -1105,14 +1105,16 @@
         
         .btn-primary:disabled {
             cursor: not-allowed;
-            pointer-events: none;
             background-color: var(--color-button-primary-bg-disabled);
+            color: var(--color-button-primary-text-disabled, var(--color-button-primary-text));
         }
         
         .btn-secondary:disabled {
+            background-color: var(--color-button-secondary-bg-hover);
+            border-color: var(--color-button-secondary-border-hover);
+            color: var(--color-button-secondary-text);
             opacity: 0.5;
             cursor: not-allowed;
-            pointer-events: none;
         }
 
         .field-checkbox-label-wrapper {
