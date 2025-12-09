@@ -51,7 +51,7 @@
                     ],
                     isModal: true,
                     EditorsSupport: ['word', 'pdf'],
-                    size: [320, 158],
+                    size: [320, 76],
                     variation: { message },
                     isDisplayedInViewer: true,
                     isViewer: true
