@@ -512,21 +512,32 @@
             });
         }
 
-        function startAICheck() {
-            let lastState = false;
-            setInterval(() => {
+        async function startAICheck() {
+            const initialCheck = await checkAI(5000);
+            if (initialCheck.available) {
+                setButtonsEnabled(true);
+                showView('welcome');
+            } else {
+                setButtonsEnabled(false);
+                showView('errorModel');
+            }
+
+            let lastState = initialCheck.available;
+            setInterval(async () => {
                 if (!window.Asc?.plugin?.executeMethod) return;
                 try {
-                    window.Asc.plugin.executeMethod("AI", [{ type: "Actions" }], (data) => {
-                        const hasChat = data?.Actions?.some(a => a?.Chat) || false;
-                        if (hasChat !== lastState) {
-                            lastState = hasChat;
-                            setButtonsEnabled(hasChat);
-                            if (hasChat && document.getElementById('errorModel')?.classList.contains('error--visible')) {
-                                showView('welcome');
-                            }
+                    const result = await checkAI(1000);
+                    const hasChat = result.available;
+                    if (hasChat !== lastState) {
+                        lastState = hasChat;
+                        if (hasChat) {
+                            setButtonsEnabled(true);
+                            showView('welcome');
+                        } else {
+                            setButtonsEnabled(false);
+                            showView('errorModel');
                         }
-                    });
+                    }
                 } catch (e) { console.error("AI check error:", e); }
             }, 1000);
         }
@@ -543,13 +554,11 @@
                     return;
                 }
                 
-                showView('welcome');
-                startAICheck();
+                await startAICheck();
             } catch (error) {
                 console.error('Error checking form fields on init:', error);
                 document.documentElement.classList.add('theme-ready');
-                showView('welcome');
-                startAICheck();
+                await startAICheck();
             }
         }
 
