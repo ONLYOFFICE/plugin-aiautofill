@@ -317,9 +317,11 @@ UI->>Doc: 13. Fill document<br/>form fields
 
 10.  **AI Mapping**: Plugin uses AI to map form fields to data keys
 
-11.  **User Confirmation**: Plugin shows UI for user to review and confirm mappings
+11.  **User Review**: Plugin shows UI for user to review mappings
 
-12.  **Form Filling**: Upon confirmation, plugin fills the document form fields
+12.  **User Confirmation**: After clicking apply, the user sees a confirmation dialog
+
+13.  **Form Filling**: Upon confirmation, plugin fills the document form fields
 
 ## Error Handling  
 
