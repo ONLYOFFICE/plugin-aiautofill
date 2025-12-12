@@ -1,19 +1,19 @@
 {
     "name"       : "AI Auto Fill",
     "nameLocale" : {
-        "ru": "AI Auto Fill RU",
-        "fr": "AI Auto Fill FR",
-        "es": "AI Auto Fill ES",
-        "de": "AI Auto Fill DE",
-        "cs": "AI Auto Fill CS",
-        "zh": "AI Auto Fill ZH",
-        "pt-BR": "AI Auto Fill PT",
-        "sr-Cyrl-RS": "AI Auto Fill RS",
-        "sr-Latn-RS": "AI Auto Fill RS",
-        "ja-JA": "AI Auto Fill JA",
-        "sq-AL": "AI Auto Fill SQ",
-        "it": "AI Auto Fill IT",
-        "ar-SA": "AI Auto Fill AR"
+        "ar-SA": "التعبئة التلقائية بالذكاء الاصطناعي",
+        "cs": "Automatické vyplňování pomocí AI",
+        "de": "KI-Autofill",
+        "es": "Autocompletado con IA",
+        "fr": "Remplissage automatique IA",
+        "it": "Compilazione automatica AI",
+        "ja-JA": "AI自動入力",
+        "pt-BR": "Preenchimento Automático com IA",
+        "ru": "Автозаполнение ИИ",
+        "sq-AL": "Plotësim Automatik me AI",
+        "sr-Cyrl-RS": "Аутоматско попуњавање са вештачком интелигенцијом",
+        "sr-Latn-RS": "Automatsko popunjavanje sa veštačkom inteligencijom",
+        "zh": "AI自动填充"
     },
 
     "guid"       : "asc.{0616AE85-5DBE-4B6B-A0A9-455C4F1503AD}",
@@ -22,21 +22,21 @@
 
     "variations" : [
         {
-            "description": "Use the AI chatbot",
+            "description": "An ONLYOFFICE plugin that automatically fills document form fields using AI-powered field mapping and third-party data integration.",
             "descriptionLocale": {
-                "ru": "Используйте чат-бот AI",
-                "fr": "Utilisez le chatbot AI",
-                "es": "Utilice el chatbot AI",
-                "pt-BR": "Use o chatbot AI",
-                "de": "Verwenden Sie den AI-Chatbot",
-                "cs": "Použijte chatbota AI",
-                "zh": "使用 AI 聊天机器人",
-                "sr-Cyrl-RS": "Користите AI чет робота",
-                "sr-Latn-RS": "Koristite AI čet robota",
-                "ja-JA": "自然言語やコードの理解または生成が必要なタスクを行うには、AIチャットボットを使用できます。",
-                "sq-AL": "Shtoni dhe selektoni modele AI",
-                "it": "Utilizza il chatbot dell'IA",
-                "ar-SA": "استخدموا روبوت المحادثة الذكي"
+                "ar-SA": "مكون إضافي لـ ONLYOFFICE يملأ حقول نماذج المستندات تلقائيًا باستخدام تعيين الحقول المدعوم بالذكاء الاصطناعي وتكامل البيانات من جهات خارجية.",
+                "cs": "Plugin ONLYOFFICE, který automaticky vyplňuje pole formulářů dokumentů pomocí mapování polí založeného na umělé inteligenci a integrace dat třetích stran.",
+                "de": "Ein ONLYOFFICE-Plugin, das Dokumentformularfelder automatisch mithilfe von KI-gestützter Feldzuordnung und Drittanbieter-Datenintegration ausfüllt.",
+                "es": "Un complemento de ONLYOFFICE que rellena automáticamente los campos de formularios de documentos mediante mapeo de campos con IA e integración de datos de terceros.",
+                "fr": "Un plugin ONLYOFFICE qui remplit automatiquement les champs de formulaires de documents à l'aide du mappage de champs alimenté par l'IA et de l'intégration de données tierces.",
+                "it": "Un plugin ONLYOFFICE che compila automaticamente i campi dei moduli nei documenti utilizzando la mappatura dei campi basata sull'intelligenza artificiale e l'integrazione di dati di terze parti.",
+                "ja-JA": "AIによるフィールドマッピングとサードパーティデータ統合を使用して、ドキュメントフォームフィールドを自動的に入力するONLYOFFICEプラグイン。",
+                "pt-BR": "Um plugin do ONLYOFFICE que preenche automaticamente campos de formulários de documentos usando mapeamento de campos com IA e integração de dados de terceiros.",
+                "ru": "Плагин ONLYOFFICE, который автоматически заполняет поля форм документов с использованием сопоставления полей на основе ИИ и интеграции данных из сторонних источников.",
+                "sq-AL": "Një plugin ONLYOFFICE që plotëson automatikisht fushat e formularëve të dokumenteve duke përdorur hartëzimin e fushave të bazuar në inteligjencën artificiale dhe integrimin e të dhënave nga palë të treta.",
+                "sr-Cyrl-RS": "ONLYOFFICE додатак који автоматски попуњава поља формулара докумената користећи мапирање поља засновано на вештачкој интелигенцији и интеграцију података трећих страна.",
+                "sr-Latn-RS": "ONLYOFFICE dodatak koji automatski popunjava polja formulara dokumenata koristeći mapiranje polja zasnovano na veštačkoj inteligenciji i integraciju podataka trećih strana.",
+                "zh": "一个ONLYOFFICE插件，使用AI驱动的字段映射和第三方数据集成自动填充文档表单字段。"
             },
 
             "url"                 : "index.html",
