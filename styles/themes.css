@@ -6,6 +6,9 @@
     --letter-spacing: 0.02em;
     --button-width: 236px;
     --button-height: 24px;
+    --border-radius-button: 1px;
+    --border-radius-input: 0;
+    --button-font-weight: 400;
 }
 
 html {
@@ -90,7 +93,7 @@ body.theme-white.theme-type-light {
     --color-button-primary-text: #FFFFFF;
     --color-button-primary-text-disabled: #FFFFFF80;
     
-    --color-button-secondary-bg: #FAFAFA;
+    --color-button-secondary-bg: #FFFFFF;
     --color-button-secondary-bg-hover: #EBEBEB;
     --color-button-secondary-bg-active: #D6D6D6;
     --color-button-secondary-border: #D0D0D0;
@@ -353,4 +356,7 @@ body.theme-white.theme-type-light,
 body.theme-night.theme-type-dark {
     --font-size: 12px;
     --font-size-base: 12px;
+    --border-radius-button: 4px;
+    --border-radius-input: 4px;
+    --button-font-weight: 700;
 }
