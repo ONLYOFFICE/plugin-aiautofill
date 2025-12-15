@@ -48,6 +48,7 @@ body.theme-light.theme-type-light {
     --color-field-icon-bg: transparent;
     --color-field-icon-bg-hover: #E0E0E0;
     --color-field-icon-bg-active: #CBCBCB;
+    --color-field-icon: #444444;
     
     --color-checkbox-bg: #FFFFFF;
     --color-checkbox-border: #C0C0C0;
@@ -103,6 +104,7 @@ body.theme-white.theme-type-light {
     --color-field-icon-bg: transparent;
     --color-field-icon-bg-hover: #F9F9F9;
     --color-field-icon-bg-active: #EAEAEA;
+    --color-field-icon: #444444;
     
     --color-checkbox-bg: #FFFFFF;
     --color-checkbox-border: #E1E1E1;
@@ -158,6 +160,7 @@ body.theme-classic-light.theme-type-light {
     --color-field-icon-bg: transparent;
     --color-field-icon-bg-hover: #D8DADC;
     --color-field-icon-bg-active: #7D858C;
+    --color-field-icon: #444444;
     
     --color-checkbox-bg: #FFFFFF;
     --color-checkbox-border: #CFCFCF;
@@ -213,6 +216,7 @@ body.theme-night.theme-type-dark {
     --color-field-icon-bg: transparent;
     --color-field-icon-bg-hover: #585858;
     --color-field-icon-bg-active: #686868;
+    --color-field-icon: #EAEAEA;
     
     --color-checkbox-bg: #404040;
     --color-checkbox-border: #686868;
@@ -268,6 +272,7 @@ body.theme-dark.theme-type-dark {
     --color-field-icon-bg: transparent;
     --color-field-icon-bg-hover: #555555;
     --color-field-icon-bg-active: #606060;
+    --color-field-icon: #CCCCCC;
     
     --color-checkbox-bg: #333333;
     --color-checkbox-border: #666666;
@@ -323,6 +328,7 @@ body.theme-contrast-dark.theme-type-dark {
     --color-field-icon-bg: transparent;
     --color-field-icon-bg-hover: #424242;
     --color-field-icon-bg-active: #666666;
+    --color-field-icon: #E8E8E8;
     
     --color-checkbox-bg: #1E1E1E;
     --color-checkbox-border: #696969;
