@@ -52,9 +52,9 @@ body.theme-light.theme-type-light {
     
     --color-checkbox-bg: #FFFFFF;
     --color-checkbox-border: #C0C0C0;
-    --color-checkbox-border-hover: #848484;
+    --color-checkbox-border-hover: #444444;
     --color-checkbox-checked-bg: #FFFFFF;
-    --color-checkbox-checked-border: #444444;
+    --color-checkbox-checked-border: #C0C0C0;
     --color-checkbox-checkmark: #444444;
     
     --color-input-bg: #FFFFFF;
