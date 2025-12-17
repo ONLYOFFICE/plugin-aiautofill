@@ -236,7 +236,7 @@
                             return resolve([]);
 
                         const formFields = formsMeta
-                            .filter(meta => !this._isFieldLocked(meta))
+                            // .filter(meta => !this._isFieldLocked(meta))
                             .map(meta => this._mapFormField(meta));
 
                         resolve(formFields);
