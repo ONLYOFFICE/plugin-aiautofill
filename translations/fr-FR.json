@@ -42,7 +42,7 @@
 	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "Les données non enregistrées dans le document seront supprimées. Voulez-vous continuer ?",
 
 	"No Data Available": "Aucune donnée disponible",
-	"No form fields were found or no data is available to fill. Please check your data source and try again.": "Aucun champ de formulaire n’a été trouvé ou aucune donnée n’est disponible pour le remplissage. Veuillez vérifier votre source de données et réessayer.",
+	"No data is available to fill the form fields. Please check your data source and try again.": "Aucune donnée n'est disponible pour remplir les champs du formulaire. Veuillez vérifier votre source de données et réessayer.",
 
 	"No form fields detected": "Aucun champ de formulaire détecté",
 	"Autofill cannot be performed until form fields are added. Go to Forms Tab to add some fields.": "Le remplissage automatique ne peut pas être effectué tant que des champs de formulaire n’ont pas été ajoutés. Allez dans l’onglet Formulaires pour ajouter des champs.",

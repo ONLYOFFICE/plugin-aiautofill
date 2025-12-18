@@ -42,7 +42,7 @@
 	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "Të dhënat e paruajtura në dokument do të fshihen. Je i sigurt që do të vazhdosh?",
 
 	"No Data Available": "Nuk ka të dhëna",
-	"No form fields were found or no data is available to fill. Please check your data source and try again.": "Nuk u gjetën fusha formulari ose nuk ka të dhëna për t'u plotësuar. Kontrollo burimin e të dhënave dhe provo përsëri.",
+	"No data is available to fill the form fields. Please check your data source and try again.": "Nuk ka të dhëna të disponueshme për të plotësuar fushat e formularit. Kontrollo burimin e të dhënave dhe provo përsëri.",
 
 	"No form fields detected": "Nuk u zbuluan fusha formulari",
 	"Autofill cannot be performed until form fields are added. Go to Forms Tab to add some fields.": "Plotësimi automatik nuk mund të kryhet derisa të shtohen fusha formulari. Shko te skeda Formularët për të shtuar disa fusha.",

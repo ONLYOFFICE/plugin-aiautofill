@@ -42,7 +42,7 @@
 	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "ドキュメント内の未保存データは削除されます。続行してもよろしいですか？",
 
 	"No Data Available": "利用可能なデータがありません",
-	"No form fields were found or no data is available to fill. Please check your data source and try again.": "フォームフィールドが見つからないか、入力するデータがありません。データソースを確認して再試行してください。",
+	"No data is available to fill the form fields. Please check your data source and try again.": "フォームフィールドに入力するデータがありません。データソースを確認して再試行してください。",
 
 	"No form fields detected": "フォームフィールドが検出されません",
 	"Autofill cannot be performed until form fields are added. Go to Forms Tab to add some fields.": "フォームフィールドが追加されるまで自動入力は実行できません。［フォーム］タブでフィールドを追加してください。",

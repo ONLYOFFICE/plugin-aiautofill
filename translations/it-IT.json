@@ -42,7 +42,7 @@
 	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "I dati non salvati nel documento verranno eliminati. Sei sicuro di voler continuare?",
 
 	"No Data Available": "Nessun dato disponibile",
-	"No form fields were found or no data is available to fill. Please check your data source and try again.": "Non sono stati trovati campi del modulo oppure non sono disponibili dati da compilare. Controlla la fonte dati e riprova.",
+	"No data is available to fill the form fields. Please check your data source and try again.": "Non sono disponibili dati per compilare i campi del modulo. Controlla la fonte dati e riprova.",
 
 	"No form fields detected": "Nessun campo del modulo rilevato",
 	"Autofill cannot be performed until form fields are added. Go to Forms Tab to add some fields.": "La compilazione automatica non può essere eseguita finché non vengono aggiunti campi al modulo. Vai alla scheda Moduli per aggiungere dei campi.",

@@ -42,7 +42,7 @@
 	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "Nesačuvani podaci u dokumentu biće obrisani. Da li ste sigurni da želite da nastavite?",
 
 	"No Data Available": "Nema dostupnih podataka",
-	"No form fields were found or no data is available to fill. Please check your data source and try again.": "Nisu pronađena polja obrasca ili nema dostupnih podataka za popunjavanje. Proverite izvor podataka i pokušajte ponovo.",
+	"No data is available to fill the form fields. Please check your data source and try again.": "Nema dostupnih podataka za popunjavanje polja obrasca. Proverite izvor podataka i pokušajte ponovo.",
 
 	"No form fields detected": "Nisu otkrivena polja obrasca",
 	"Autofill cannot be performed until form fields are added. Go to Forms Tab to add some fields.": "Automatsko popunjavanje nije moguće dok se ne dodaju polja obrasca. Idite na karticu Obrasci da dodate polja.",

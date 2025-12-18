@@ -42,7 +42,7 @@
 	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "Несохранённые данные в документе будут удалены. Продолжить?",
 
 	"No Data Available": "Нет данных",
-	"No form fields were found or no data is available to fill. Please check your data source and try again.": "Поля формы не найдены или нет данных для заполнения. Проверьте источник данных и попробуйте снова.",
+	"No data is available to fill the form fields. Please check your data source and try again.": "Нет данных для заполнения полей формы. Проверьте источник данных и попробуйте снова.",
 
 	"No form fields detected": "Поля формы не обнаружены",
 	"Autofill cannot be performed until form fields are added. Go to Forms Tab to add some fields.": "Автозаполнение невозможно, пока не будут добавлены поля формы. Перейдите на вкладку «Формы» и добавьте поля.",

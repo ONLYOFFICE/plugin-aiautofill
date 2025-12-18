@@ -42,7 +42,7 @@
 	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "文档中未保存的数据将被删除。确定要继续吗？",
 
 	"No Data Available": "没有可用数据",
-	"No form fields were found or no data is available to fill. Please check your data source and try again.": "未找到表单字段，或没有可用于填写的数据。请检查数据源并重试。",
+	"No data is available to fill the form fields. Please check your data source and try again.": "没有可用于填写表单字段的数据。请检查数据源并重试。",
 
 	"No form fields detected": "未检测到表单字段",
 	"Autofill cannot be performed until form fields are added. Go to Forms Tab to add some fields.": "在添加表单字段之前无法执行自动填充。请前往“表单”选项卡添加字段。",

@@ -42,7 +42,7 @@
 	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "Neuložená data v dokumentu budou smazána. Opravdu chcete pokračovat?",
 
 	"No Data Available": "Nejsou k dispozici žádná data",
-	"No form fields were found or no data is available to fill. Please check your data source and try again.": "Nebyla nalezena žádná pole formuláře nebo nejsou k dispozici data k vyplnění. Zkontrolujte zdroj dat a zkuste to znovu.",
+	"No data is available to fill the form fields. Please check your data source and try again.": "Nejsou k dispozici žádná data pro vyplnění polí formuláře. Zkontrolujte zdroj dat a zkuste to znovu.",
 
 	"No form fields detected": "Nebyla zjištěna žádná pole formuláře",
 	"Autofill cannot be performed until form fields are added. Go to Forms Tab to add some fields.": "Automatické vyplňování nelze provést, dokud nebudou přidána pole formuláře. Přejděte na kartu Formuláře a přidejte pole.",

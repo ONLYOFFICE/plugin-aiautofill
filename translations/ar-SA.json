@@ -42,7 +42,7 @@
 	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "سيتم حذف البيانات غير المسجلة في المستند. هل أنت متأكد أنك تريد المتابعة؟",
 
 	"No Data Available": "لا توجد بيانات متاحة",
-	"No form fields were found or no data is available to fill. Please check your data source and try again.": "لم يتم العثور على حقول نموذج أو لا توجد بيانات متاحة للتعبئة. يُرجى التحقق من مصدر البيانات والمحاولة مرة أخرى.",
+	"No data is available to fill the form fields. Please check your data source and try again.": "لا توجد بيانات متاحة لملء حقول النموذج. يُرجى التحقق من مصدر البيانات والمحاولة مرة أخرى.",
 
 	"No form fields detected": "لم يتم اكتشاف حقول نموذج",
 	"Autofill cannot be performed until form fields are added. Go to Forms Tab to add some fields.": "لا يمكن إجراء التعبئة التلقائية حتى تتم إضافة حقول النموذج. انتقل إلى علامة تبويب النماذج لإضافة بعض الحقول.",

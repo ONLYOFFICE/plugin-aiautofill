@@ -659,7 +659,10 @@
 
             updateMsg('Detecting form fields...');
             const formFields = await FormDetectionService.detectAllForms();
-            if (!formFields?.length) return this._saveAndReturnEmpty(storage);
+            if (!formFields?.length) {
+                window.location.href = 'index.html' + (window.Autofiller.getThemeURLParams ? window.Autofiller.getThemeURLParams() : '');
+                return [];
+            }
 
             updateMsg('Fetching data...');
             let realData;
@@ -670,8 +673,7 @@
                     'Data Fetching'
                 );
             } catch (fetchError) {
-                if (fetchError.status && fetchError.status >= 500 && fetchError.status < 600)
-                    return this._saveAndReturnEmpty(storage);
+                return this._saveAndReturnEmpty(storage);
             }
 
             if (!realData || (typeof realData === 'object' && Object.keys(realData).length === 0))
@@ -690,6 +692,9 @@
             const aiResult = await FormService.executeAI(prompt);
             const aiResponse = window.Autofiller.DataMappingService.parseAIResponse(aiResult.text);
             const fieldsWithOptions = FormDetectionService.enrichFieldsWithOptions(formFields, aiResponse.mapping, realData);
+
+            if (!fieldsWithOptions || fieldsWithOptions.length === 0)
+                return this._saveAndReturnEmpty(storage);
 
             storage.set('form_fields', fieldsWithOptions);
             return fieldsWithOptions;
