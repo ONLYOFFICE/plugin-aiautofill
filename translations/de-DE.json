@@ -4,11 +4,11 @@
 	"Warning": "Warnung",
 	"Note": "Hinweis",
 	"Confirm": "Bestätigen",
-	"Continue": "Fortfahren",
+	"Continue": "Weiter",
 	"Close Tab": "Tab schließen",
 
 	"Welcome to the autofill plugin!": "Willkommen beim Autofill-Plugin!",
-	"An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms?": "Es wird versucht, die Formularfelder mithilfe von KI automatisch auszufüllen. Möchtest du das automatische Ausfüllen starten?",
+	"An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms?": "Es wird versucht, die Formularfelder mithilfe von KI automatisch auszufüllen. Möchten Sie das automatische Ausfüllen starten?",
 	"Autofill": "Automatisch ausfüllen",
 	"Analyzing form fields with AI": "Formularfelder werden mit KI analysiert",
 	"Fetching data": "Daten werden abgerufen",
@@ -16,7 +16,7 @@
 	"Mapping fields with AI": "Felder werden mit KI zugeordnet",
 	"Loading form": "Formular wird geladen",
 
-	"Set the values for each parameter. If it's not necessary, uncheck the checkbox. Then press the Apply button.": "Lege die Werte für jeden Parameter fest. Wenn es nicht erforderlich ist, entferne das Häkchen. Klicke anschließend auf „Anwenden“.",
+	"Set the values for each parameter. If it's not necessary, uncheck the checkbox. Then press the Apply button.": "Legen Sie die Werte für jeden Parameter fest. Wenn es nicht erforderlich ist, deaktivieren Sie das Kontrollkästchen. Klicken Sie anschließend auf Anwenden.",
 	"Select All": "Alle auswählen",
 	"Apply": "Anwenden",
 	"Restart": "Neu starten",
@@ -29,24 +29,24 @@
 	"Fetching data...": "Daten werden abgerufen...",
 	"Checking AI availability...": "KI-Verfügbarkeit wird geprüft...",
 	"Mapping fields with AI...": "Felder werden mit KI zugeordnet...",
-	"AI is not available. Please ensure AI features are enabled.": "KI ist nicht verfügbar. Bitte stelle sicher, dass KI-Funktionen aktiviert sind.",
+	"AI is not available. Please ensure AI features are enabled.": "KI ist nicht verfügbar. Bitte stellen Sie sicher, dass KI-Funktionen aktiviert sind.",
 
 	"The fields have been filled in automatically!": "Die Felder wurden automatisch ausgefüllt!",
-	"You can either continue entering data manually or cancel the automatic filling.": "Du kannst die Daten manuell weiter eingeben oder das automatische Ausfüllen abbrechen.",
+	"You can either continue entering data manually or cancel the automatic filling.": "Sie können die Daten manuell weiter eingeben oder das automatische Ausfüllen abbrechen.",
 	"Cancel autofill": "Automatisches Ausfüllen abbrechen",
 	"Redirecting...": "Weiterleitung...",
 	"Reverting changes...": "Änderungen werden rückgängig gemacht...",
 	"Done!": "Fertig!",
 
-	"All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed?": "Alle Daten im Dokument werden durch die zuvor ausgewählten Einstellungen ersetzt. Möchtest du fortfahren?",
-	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "Nicht gespeicherte Daten im Dokument werden gelöscht. Möchtest du fortfahren?",
+	"All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed?": "Alle Daten im Dokument werden durch die zuvor ausgewählten Einstellungen ersetzt. Möchten Sie fortfahren?",
+	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "Nicht gespeicherte Daten im Dokument werden gelöscht. Möchten Sie fortfahren?",
 
 	"No Data Available": "Keine Daten verfügbar",
-	"No data is available to fill the form fields. Please check your data source and try again.": "Es sind keine Daten verfügbar, um die Formularfelder auszufüllen. Bitte prüfe die Datenquelle und versuche es erneut.",
+	"No data is available to fill the form fields. Please check your data source and try again.": "Es sind keine Daten verfügbar, um die Formularfelder auszufüllen. Bitte prüfen Sie die Datenquelle und versuchen Sie es erneut.",
 
-	"No form fields detected": "Keine Formularfelder erkannt",
-	"Autofill cannot be performed until form fields are added. Go to Forms Tab to add some fields.": "Autofill kann erst durchgeführt werden, wenn Formularfelder hinzugefügt wurden. Gehe zur Registerkarte „Formulare“, um Felder hinzuzufügen.",
+	"No form fields found": "Keine Formularfelder erkannt",
+	"Autofill cannot be performed until form fields are added. Go to the Forms tab to add at least one field.": "Die automatische Ausfüllfunktion ist erst verfügbar, nachdem Formularfelder hinzugefügt wurden. Gehen Sie zur Registerkarte „Formulare“, um mindestens ein Feld hinzuzufügen.",
 
 	"Plugin unavailable now": "Plugin derzeit nicht verfügbar",
-	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Dieses Plugin ist derzeit nicht verfügbar, da kein KI-Modell konfiguriert ist. Um diese Funktion zu aktivieren, öffne die Registerkarte „KI“, gehe zu „Einstellungen“ und wähle oder füge ein KI-Modell für die Kategorie „Chatbot“ hinzu."
+	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Dieses Plugin ist derzeit nicht verfügbar, da kein KI-Modell konfiguriert ist. Um diese Funktion zu aktivieren, öffnen Sie die Registerkarte „KI“, gehen Sie zu „Einstellungen“ und wählen oder fügen Sie ein KI-Modell für die Kategorie „Chatbot“ hinzu."
 }

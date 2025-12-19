@@ -8,12 +8,12 @@
 	"Close Tab": "关闭标签页",
 
 	"Welcome to the autofill plugin!": "欢迎使用自动填充插件！",
-	"An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms?": "将尝试使用 AI 推理自动填写表单字段。是否开始自动填充表单？",
+	"An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms?": "将尝试通过 AI 分析自动填写表单字段。是否开始自动填充？",
 	"Autofill": "自动填充",
 	"Analyzing form fields with AI": "正在使用 AI 分析表单字段",
 	"Fetching data": "正在获取数据",
 	"Checking AI availability": "正在检查 AI 可用性",
-	"Mapping fields with AI": "正在使用 AI 映射字段",
+	"Mapping fields with AI": "正在使用 AI 匹配字段",
 	"Loading form": "正在加载表单",
 
 	"Set the values for each parameter. If it's not necessary, uncheck the checkbox. Then press the Apply button.": "为每个参数设置值。如不需要，请取消勾选复选框，然后点击“应用”。",
@@ -23,8 +23,8 @@
 	"Find field location": "查找字段位置",
 	"Processing form data": "正在处理表单数据",
 	"Processing form data...": "正在处理表单数据...",
-	"Restarting AI mapping": "正在重新开始 AI 映射",
-	"Restarting AI mapping...": "正在重新开始 AI 映射...",
+	"Restarting AI mapping": "正在重新进行 AI 字段匹配",
+	"Restarting AI mapping...": "正在重新进行 AI 字段匹配...",
 	"Detecting form fields...": "正在检测表单字段...",
 	"Fetching data...": "正在获取数据...",
 	"Checking AI availability...": "正在检查 AI 可用性...",
@@ -32,7 +32,7 @@
 	"AI is not available. Please ensure AI features are enabled.": "AI 不可用。请确保已启用 AI 功能。",
 
 	"The fields have been filled in automatically!": "字段已自动填写！",
-	"You can either continue entering data manually or cancel the automatic filling.": "你可以继续手动输入数据，或取消自动填写。",
+	"You can either continue entering data manually or cancel the automatic filling.": "可以继续手动输入数据，或取消自动填充。",
 	"Cancel autofill": "取消自动填充",
 	"Redirecting...": "正在跳转...",
 	"Reverting changes...": "正在撤销更改...",
@@ -44,8 +44,8 @@
 	"No Data Available": "没有可用数据",
 	"No data is available to fill the form fields. Please check your data source and try again.": "没有可用于填写表单字段的数据。请检查数据源并重试。",
 
-	"No form fields detected": "未检测到表单字段",
-	"Autofill cannot be performed until form fields are added. Go to Forms Tab to add some fields.": "在添加表单字段之前无法执行自动填充。请前往“表单”选项卡添加字段。",
+	"No form fields found": "未检测到表单字段",
+	"Autofill cannot be performed until form fields are added. Go to the Forms tab to add at least one field.": "在添加表单字段之前无法执行自动填充。前往“表单”选项卡添加至少一个字段。",
 
 	"Plugin unavailable now": "插件当前不可用",
 	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "由于未配置 AI 模型，此插件当前不可用。要启用该功能，请打开“AI”选项卡，进入“设置”，为“聊天机器人”类别选择或添加 AI 模型。"

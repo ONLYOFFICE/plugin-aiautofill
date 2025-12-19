@@ -44,8 +44,8 @@
 	"No Data Available": "Nuk ka të dhëna",
 	"No data is available to fill the form fields. Please check your data source and try again.": "Nuk ka të dhëna të disponueshme për të plotësuar fushat e formularit. Kontrollo burimin e të dhënave dhe provo përsëri.",
 
-	"No form fields detected": "Nuk u zbuluan fusha formulari",
-	"Autofill cannot be performed until form fields are added. Go to Forms Tab to add some fields.": "Plotësimi automatik nuk mund të kryhet derisa të shtohen fusha formulari. Shko te skeda Formularët për të shtuar disa fusha.",
+	"No form fields found": "Nuk u zbuluan fusha formulari",
+	"Autofill cannot be performed until form fields are added. Go to the Forms tab to add at least one field.": "Plotësimi automatik nuk mund të kryhet derisa të shtohen fusha formulari. Shko te skeda Formularët për të shtuar të paktën një fushë.",
 
 	"Plugin unavailable now": "Plugin-i aktualisht nuk është i disponueshëm",
 	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Ky plugin aktualisht nuk është i disponueshëm sepse nuk është konfiguruar asnjë model IA. Për ta aktivizuar këtë veçori, hap skedën IA, shko te Cilësimet dhe zgjidh ose shto një model IA për kategorinë Chatbot."

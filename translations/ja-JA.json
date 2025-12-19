@@ -16,7 +16,7 @@
 	"Mapping fields with AI": "AIでフィールドをマッピング中",
 	"Loading form": "フォームを読み込み中",
 
-	"Set the values for each parameter. If it's not necessary, uncheck the checkbox. Then press the Apply button.": "各パラメーターの値を設定します。不要な場合はチェックを外してください。その後、適用ボタンを押します。",
+	"Set the values for each parameter. If it's not necessary, uncheck the checkbox. Then press the Apply button.": "各パラメーターの値を設定し、「適用」ボタンを押してください。不要な場合はチェックを外してください。",
 	"Select All": "すべて選択",
 	"Apply": "適用",
 	"Restart": "再起動",
@@ -29,7 +29,7 @@
 	"Fetching data...": "データを取得中...",
 	"Checking AI availability...": "AIの利用可否を確認中...",
 	"Mapping fields with AI...": "AIでフィールドをマッピング中...",
-	"AI is not available. Please ensure AI features are enabled.": "AIを利用できません。AI機能が有効になっていることを確認してください。",
+	"AI is not available. Please ensure AI features are enabled.": "AIは利用できないようです。AI機能が有効になっていることをご確認ください。",
 
 	"The fields have been filled in automatically!": "フィールドは自動的に入力されました！",
 	"You can either continue entering data manually or cancel the automatic filling.": "手動で入力を続けるか、自動入力をキャンセルできます。",
@@ -44,9 +44,9 @@
 	"No Data Available": "利用可能なデータがありません",
 	"No data is available to fill the form fields. Please check your data source and try again.": "フォームフィールドに入力するデータがありません。データソースを確認して再試行してください。",
 
-	"No form fields detected": "フォームフィールドが検出されません",
-	"Autofill cannot be performed until form fields are added. Go to Forms Tab to add some fields.": "フォームフィールドが追加されるまで自動入力は実行できません。［フォーム］タブでフィールドを追加してください。",
+	"No form fields found": "検出されたフォームフィールドがありません",
+	"Autofill cannot be performed until form fields are added. Go to the Forms tab to add at least one field.": "フォームフィールドが追加されるまで自動入力は実行できません。「フォーム」タブに移動して、少なくとも1つのフィールドを追加してください。",
 
-	"Plugin unavailable now": "プラグインは現在利用できません",
+	"Plugin unavailable now": "プラグインは現在ご利用いただけません",
 	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "AIモデルが設定されていないため、このプラグインは現在利用できません。この機能を有効にするには、［AI］タブを開き、［設定］でチャットボットカテゴリ用のAIモデルを選択または追加してください。"
 }

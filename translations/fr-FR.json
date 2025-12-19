@@ -8,7 +8,7 @@
 	"Close Tab": "Fermer l’onglet",
 
 	"Welcome to the autofill plugin!": "Bienvenue dans le plugin de remplissage automatique !",
-	"An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms?": "Une tentative sera faite pour remplir automatiquement les champs du formulaire à l’aide de l’IA. Voulez-vous démarrer le remplissage automatique des formulaires ?",
+	"An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms?": "Une tentative sera faite pour remplir automatiquement les champs du formulaire à l’aide de l’IA. Voulez-vous lancer le remplissage automatique des formulaires ?",
 	"Autofill": "Remplissage automatique",
 	"Analyzing form fields with AI": "Analyse des champs du formulaire avec l’IA",
 	"Fetching data": "Récupération des données",
@@ -16,7 +16,7 @@
 	"Mapping fields with AI": "Association des champs avec l’IA",
 	"Loading form": "Chargement du formulaire",
 
-	"Set the values for each parameter. If it's not necessary, uncheck the checkbox. Then press the Apply button.": "Définissez les valeurs pour chaque paramètre. Si ce n’est pas nécessaire, décochez la case. Puis cliquez sur « Appliquer ».",
+	"Set the values for each parameter. If it's not necessary, uncheck the checkbox. Then press the Apply button.": "Définissez les valeurs pour chaque paramètre. Si ce n’est pas nécessaire, décochez la case. Puis appuyez sur le bouton Appliquer.",
 	"Select All": "Tout sélectionner",
 	"Apply": "Appliquer",
 	"Restart": "Redémarrer",
@@ -44,9 +44,9 @@
 	"No Data Available": "Aucune donnée disponible",
 	"No data is available to fill the form fields. Please check your data source and try again.": "Aucune donnée n'est disponible pour remplir les champs du formulaire. Veuillez vérifier votre source de données et réessayer.",
 
-	"No form fields detected": "Aucun champ de formulaire détecté",
-	"Autofill cannot be performed until form fields are added. Go to Forms Tab to add some fields.": "Le remplissage automatique ne peut pas être effectué tant que des champs de formulaire n’ont pas été ajoutés. Allez dans l’onglet Formulaires pour ajouter des champs.",
+	"No form fields found": "Aucun champ de formulaire détecté",
+	"Autofill cannot be performed until form fields are added. Go to the Forms tab to add at least one field.": "Le remplissage automatique ne peut pas être effectué tant que des champs de formulaire n’ont pas été ajoutés. Rendez-vous dans l'onglet Formulaires pour ajouter au moins un champ.",
 
 	"Plugin unavailable now": "Plugin indisponible pour le moment",
-	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Ce plugin est actuellement indisponible car aucun modèle IA n’est configuré. Pour activer cette fonctionnalité, ouvrez l’onglet IA, allez dans Paramètres, puis sélectionnez ou ajoutez un modèle IA pour la catégorie Chatbot."
+	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Ce plugin est actuellement indisponible car aucun modèle IA n’est configuré. Pour activer cette fonctionnalité, ouvrez l’onglet IA, accédez aux Paramètres, puis sélectionnez ou ajoutez un modèle IA pour la catégorie Chatbot."
 }
