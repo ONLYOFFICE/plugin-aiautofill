@@ -45,7 +45,7 @@
 	"No data is available to fill the form fields. Please check your data source and try again.": "Es sind keine Daten verfügbar, um die Formularfelder auszufüllen. Bitte prüfen Sie die Datenquelle und versuchen Sie es erneut.",
 
 	"No form fields found": "Keine Formularfelder erkannt",
-	"Autofill cannot be performed until form fields are added. Go to the Forms tab to add at least one field.": "Die automatische Ausfüllfunktion ist erst verfügbar, nachdem Formularfelder hinzugefügt wurden. Wechseln Sie zur Registerkarte „Formulare“, um Felder hinzuzufügen.",
+	"Autofill cannot be performed until form fields are added. Go to the Forms tab to add at least one field.": "Die automatische Ausfüllfunktion ist erst verfügbar, nachdem Formularfelder hinzugefügt wurden. Gehen Sie zur Registerkarte „Formulare“, um mindestens ein Feld hinzuzufügen.",
 
 	"Plugin unavailable now": "Plugin derzeit nicht verfügbar",
 	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Dieses Plugin ist derzeit nicht verfügbar, da kein KI-Modell konfiguriert ist. Um diese Funktion zu aktivieren, öffnen Sie die Registerkarte „KI“, gehen Sie zu „Einstellungen“ und wählen oder fügen Sie ein KI-Modell für die Kategorie „Chatbot“ hinzu."

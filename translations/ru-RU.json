@@ -44,8 +44,8 @@
 	"No Data Available": "Нет данных",
 	"No data is available to fill the form fields. Please check your data source and try again.": "Нет данных для заполнения полей формы. Проверьте источник данных и попробуйте снова.",
 
-	"No form fields found": "Поля формы не обнаружены",
-	"Autofill cannot be performed until form fields are added. Go to the Forms tab to add at least one field.": "Автозаполнение невозможно, пока не будут добавлены поля формы. Перейдите на вкладку «Формы» и добавьте поля.",
+	"No form fields found": "Поля формы не найдены",
+	"Autofill cannot be performed until form fields are added. Go to the Forms tab to add at least one field.": "Автозаполнение невозможно, пока не будут добавлены поля формы. Перейдите на вкладку «Формы» и добавьте хотя бы одно поле.",
 
 	"Plugin unavailable now": "Плагин сейчас недоступен",
 	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Плагин сейчас недоступен, потому что ИИ-модель не настроена. Чтобы включить эту функцию, откройте вкладку «ИИ», перейдите в «Настройки» и выберите или добавьте ИИ-модель для категории «Чат-бот»."

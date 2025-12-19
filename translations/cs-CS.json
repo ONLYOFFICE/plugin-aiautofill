@@ -45,7 +45,7 @@
 	"No data is available to fill the form fields. Please check your data source and try again.": "Nejsou k dispozici žádná data pro vyplnění polí formuláře. Zkontrolujte zdroj dat a zkuste to znovu.",
 
 	"No form fields found": "Nebyla zjištěna žádná pole formuláře",
-	"Autofill cannot be performed until form fields are added. Go to the Forms tab to add at least one field.": "Automatické vyplňování nelze provést, dokud nebudou přidána pole formuláře. Přejděte na kartu Formuláře a přidejte pole.",
+	"Autofill cannot be performed until form fields are added. Go to the Forms tab to add at least one field.": "Automatické vyplňování nelze provést, dokud nejsou přidána pole formuláře. Přejděte na kartu Formuláře a přidejte alespoň jedno pole.",
 
 	"Plugin unavailable now": "Plugin není nyní k dispozici",
 	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Tento plugin je momentálně nedostupný, protože není nakonfigurován žádný model AI. Chcete-li tuto funkci povolit, otevřete kartu AI, přejděte do Nastavení a vyberte nebo přidejte model AI pro kategorii Chatbot."
