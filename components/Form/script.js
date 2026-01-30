@@ -174,7 +174,7 @@
 
             this._formFields.forEach((field, index) => {
                 let options = field.generatedOptions || [];
-                let fieldLabel = field.tag || field.identifier || 'Field ' + (index + 1);
+                let fieldLabel = field.key || field.tag || field.tip || field.placeholder || 'Field ' + (index + 1);
                 let optionsHTML = this._templates.options(options);
                 
                 let fieldHTML = this._templates.field(field, fieldLabel, optionsHTML);

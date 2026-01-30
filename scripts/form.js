@@ -83,11 +83,15 @@
         _mapFormField(formMeta) {
             const tag = formMeta.Tag || '';
             const key = formMeta.Key || null;
-            const identifier = key || tag;
+            const tip = formMeta.Tip || '';
+            const placeholder = formMeta.Placeholder || '';
+            const identifier = key || tag || tip || placeholder;
             return {
                 internalId: formMeta.InternalId,
                 key: key,
                 tag: tag,
+                tip: tip,
+                placeholder: placeholder,
                 identifier: identifier,
                 type: formMeta.Type || 'unknown',
                 lock: typeof formMeta.Lock === 'number' ? formMeta.Lock : null
@@ -245,12 +249,20 @@
                         const doc = Api.GetDocument();
                         const forms = doc.GetAllForms();
                         const formData = [];
+                        const processedIds = new Set();
                         
-                        for (let i = 0; i < forms.length; i++) {
-                            const form = forms[i];
+                        function addFormToData(form, parentKey = null) {
+                            const formId = form.GetInternalId ? form.GetInternalId() : null;
+                            if (!formId || processedIds.has(formId)) {
+                                return;
+                            }
+                            
+                            processedIds.add(formId);
+                            const key = parentKey !== null ? parentKey : (form.GetFormKey ? form.GetFormKey() : null);
+                            
                             formData.push({
-                                InternalId: form.GetInternalId ? form.GetInternalId() : null,
-                                Key: form.GetFormKey ? form.GetFormKey() : null,
+                                InternalId: formId,
+                                Key: key,
                                 Tag: form.GetTag ? form.GetTag() : '',
                                 Placeholder: form.GetPlaceholder ? form.GetPlaceholder() : '',
                                 Tip: form.GetTip ? form.GetTip() : '',
@@ -258,6 +270,37 @@
                                 Text: form.GetText ? form.GetText() : '',
                                 Lock: form.IsFixed ? (form.IsFixed() ? 0 : null) : null
                             });
+                        }
+                        
+                        function processSubForms(form) {
+                            let hasSubForms = false;
+                            const parentKey = form.GetFormKey ? form.GetFormKey() : null;
+                            
+                            if (form.GetSubForms && typeof form.GetSubForms === 'function') {
+                                try {
+                                    const subForms = form.GetSubForms();
+                                    if (subForms && subForms.length > 0) {
+                                        hasSubForms = true;
+                                        subForms.forEach(subForm => {
+                                            addFormToData(subForm, parentKey);
+                                            processSubForms(subForm);
+                                        });
+                                    }
+                                } catch (e) {
+                                    console.error(e);
+                                }
+                            }
+                            
+                            return hasSubForms;
+                        }
+                        
+                        for (let i = 0; i < forms.length; i++) {
+                            const form = forms[i];
+                            const hasSubForms = processSubForms(form);
+                            
+                            if (!hasSubForms) {
+                                addFormToData(form);
+                            }
                         }
                         
                         return formData;
