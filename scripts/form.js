@@ -139,7 +139,20 @@
             return current;
         },
 
+        _isBooleanField(fieldType) {
+            if (!fieldType) return false;
+            const normalizedType = String(fieldType).toLowerCase();
+            return normalizedType === 'checkbox' || normalizedType === 'radiobutton' || normalizedType === 'radio';
+        },
+
         _generateFieldOptions(value, fieldType) {
+            if (this._isBooleanField(fieldType)) {
+                return [
+                    this._createOption('True'),
+                    this._createOption('False')
+                ];
+            }
+
             if (value === null || value === undefined)
                 return [];
 
@@ -335,6 +348,14 @@
     };
     
     const FormOperationsController = {
+        _convertBooleanValue(value, fieldType) {
+            if (!FormDetectionService._isBooleanField(fieldType) || typeof value !== 'string')
+                return value;
+            
+            const normalized = value.trim().toLowerCase();
+            return normalized === 'true' ? true : normalized === 'false' ? false : value;
+        },
+
         async _storeOriginalValues(selectedData) {
             const originalValues = [];
 
@@ -369,8 +390,9 @@
         async _setFormValues(selectedData) {
             for (const field of selectedData) {
                 try {
+                    const valueToSet = this._convertBooleanValue(field.value, field.type);
                     await window.Autofiller.Utils.withTimeout(
-                        FormService.setFieldValue(field.fieldId, field.value),
+                        FormService.setFieldValue(field.fieldId, valueToSet),
                         2000,
                         `Set field ${field.fieldId}`
                     );
