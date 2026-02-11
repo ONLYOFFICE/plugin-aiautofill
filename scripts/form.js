@@ -86,6 +86,7 @@
             const tip = formMeta.Tip || '';
             const placeholder = formMeta.Placeholder || '';
             const identifier = key || tag || tip || placeholder;
+            const type = formMeta.Type || 'unknown';
             return {
                 internalId: formMeta.InternalId,
                 key: key,
@@ -93,7 +94,8 @@
                 tip: tip,
                 placeholder: placeholder,
                 identifier: identifier,
-                type: formMeta.Type || 'unknown',
+                type,
+                isBoolean: this._isBooleanField(type),
                 lock: typeof formMeta.Lock === 'number' ? formMeta.Lock : null
             };
         },
@@ -144,19 +146,62 @@
         },
 
         _isBooleanField(fieldType) {
-            if (!fieldType) return false;
-            const normalizedType = String(fieldType).toLowerCase();
-            return normalizedType === 'checkbox' || normalizedType === 'radiobutton' || normalizedType === 'radio';
+            if (fieldType == null) return false;
+
+            if (typeof fieldType === 'string') {
+                const t = fieldType.toLowerCase();
+                return t.includes('checkbox') || t.includes('radio');
+            }
+
+            if (typeof fieldType === 'number' && window.Asc) {
+                if (!this._booleanEnumValues) {
+                    const vals = new Set();
+                    try {
+                        for (const obj of Object.values(window.Asc)) {
+                            if (!obj || typeof obj !== 'object') continue;
+                            for (const [name, v] of Object.entries(obj)) {
+                                if (typeof v !== 'number') continue;
+                                const l = name.toLowerCase();
+                                if (l.includes('checkbox') || l.includes('radio'))
+                                    vals.add(v);
+                            }
+                        }
+                    } catch (_) {}
+                    this._booleanEnumValues = vals;
+                }
+                return this._booleanEnumValues.has(fieldType);
+            }
+
+            return false;
+        },
+
+        _resolveBooleanValue(value, field) {
+            if (typeof value === 'boolean')
+                return value ? 'true' : 'false';
+
+            if (typeof value === 'string') {
+                const v = value.trim().toLowerCase();
+                if (v === 'true' || v === 'false')
+                    return v;
+
+                const ids = [field?.key, field?.tag, field?.identifier, field?.tip, field?.placeholder]
+                    .filter(Boolean)
+                    .map(s => String(s).trim().toLowerCase());
+
+                return ids.length ? (ids.includes(v) ? 'true' : 'false') : null;
+            }
+
+            if (Array.isArray(value)) {
+                for (const item of value) {
+                    const r = this._resolveBooleanValue(item, field);
+                    if (r !== null) return r;
+                }
+            }
+
+            return null;
         },
 
         _generateFieldOptions(value, fieldType) {
-            if (this._isBooleanField(fieldType)) {
-                return [
-                    this._createOption('True'),
-                    this._createOption('False')
-                ];
-            }
-
             if (value === null || value === undefined)
                 return [];
 
@@ -184,23 +229,30 @@
             const dataKeys = mapping[field.identifier];
             let generatedOptions = [];
 
-            if (dataKeys)
-                generatedOptions = Array.isArray(dataKeys)
-                    ? this._generateOptionsFromMultipleKeys(dataKeys, sourceData, field.type)
-                    : this._generateOptionsFromSingleKey(dataKeys, sourceData, field.type);
+            if (this._isBooleanField(field.type)) {
+                const keys = dataKeys ? (Array.isArray(dataKeys) ? dataKeys : [dataKeys]) : [];
+                for (const dataKey of keys) {
+                    const value = this._extractValueFromData(sourceData, dataKey);
+                    const boolValue = this._resolveBooleanValue(value, field);
+                    if (boolValue !== null) {
+                        generatedOptions = [
+                            this._createOption(boolValue),
+                            this._createOption(boolValue === 'true' ? 'false' : 'true')
+                        ];
+                        break;
+                    }
+                }
+            } else {
+                if (dataKeys)
+                    generatedOptions = Array.isArray(dataKeys)
+                        ? this._generateOptionsFromMultipleKeys(dataKeys, sourceData, field.type)
+                        : this._generateOptionsFromSingleKey(dataKeys, sourceData, field.type);
 
-            if (generatedOptions.length === 0)
-                generatedOptions = [{
-                    label: '',
-                    value: '',
-                    source: 'no-mapping'
-                }];
+                if (generatedOptions.length === 0)
+                    generatedOptions = [{ label: '', value: '', source: 'no-mapping' }];
+            }
 
-            return {
-                ...field,
-                mappedDataKey: dataKeys || null,
-                generatedOptions
-            };
+            return { ...field, mappedDataKey: dataKeys || null, generatedOptions };
         },
 
         _generateOptionsFromMultipleKeys(dataKeys, sourceData, fieldType) {
@@ -379,12 +431,24 @@
         loadFromStorage() {
             const storage = window.Autofiller.StorageManager('autofiller');
             const storedData = storage.pop('form_fields');
-            
+
             if (storedData) {
-                this.formFieldsData = storedData;
+                this.formFieldsData = storedData.filter(field => {
+                    field.isBoolean = FormDetectionService._isBooleanField(field.type);
+                    if (!field.isBoolean) return true;
+
+                    field.generatedOptions = (field.generatedOptions || [])
+                        .filter(opt => /^(true|false)$/.test(String(opt.value || '').trim().toLowerCase()))
+                        .map(opt => {
+                            const v = String(opt.value).trim().toLowerCase();
+                            return { label: v, value: v, source: 'validated' };
+                        });
+
+                    return field.generatedOptions.length > 0;
+                });
                 return true;
             }
-            
+
             this.formFieldsData = [];
             return false;
         }
@@ -392,11 +456,21 @@
     
     const FormOperationsController = {
         _convertBooleanValue(value, fieldType) {
-            if (!FormDetectionService._isBooleanField(fieldType) || typeof value !== 'string')
+            if (!FormDetectionService._isBooleanField(fieldType))
                 return value;
             
-            const normalized = value.trim().toLowerCase();
-            return normalized === 'true' ? true : normalized === 'false' ? false : value;
+            if (typeof value === 'string') {
+                const normalized = value.trim().toLowerCase();
+                if (normalized === 'true') return true;
+                if (normalized === 'false') return false;
+                return null;
+            }
+            
+            if (typeof value === 'boolean') {
+                return value;
+            }
+
+            return null;
         },
 
         async _storeOriginalValues(selectedData) {
@@ -434,6 +508,10 @@
             for (const field of selectedData) {
                 try {
                     const valueToSet = this._convertBooleanValue(field.value, field.type);
+                    if (FormDetectionService._isBooleanField(field.type) && valueToSet === null) {
+                        continue;
+                    }
+
                     await window.Autofiller.Utils.withTimeout(
                         FormService.setFieldValue(field.fieldId, valueToSet),
                         2000,

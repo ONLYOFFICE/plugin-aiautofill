@@ -165,6 +165,31 @@
             });
         };
 
+        this._isBooleanFieldType = function(fieldType) {
+            if (fieldType === null || fieldType === undefined) return false;
+            const normalizedType = String(fieldType)
+                .toLowerCase()
+                .trim()
+                .replace(/[^a-z0-9]/g, '');
+            return normalizedType.includes('checkbox') || normalizedType.includes('radio');
+        };
+
+        this._validateBooleanFieldOptions = function(options) {
+            const validOptions = options.filter(function(option) {
+                const value = String(option.value || option).trim().toLowerCase();
+                return value === 'true' || value === 'false';
+            });
+            
+            if (validOptions.length > 0) {
+                return validOptions.map(function(option) {
+                    const value = String(option.value || option).trim().toLowerCase();
+                    return { label: value, value: value };
+                });
+            }
+
+            return [];
+        };
+
         this.populateFormFields = function() {
             if (!this.$container.length || !this._formFields.length) {
                 return;
@@ -174,6 +199,13 @@
 
             this._formFields.forEach((field, index) => {
                 let options = field.generatedOptions || [];
+                if (field.isBoolean || this._isBooleanFieldType(field.type)) {
+                    options = this._validateBooleanFieldOptions(options);
+                    if (!options || options.length === 0) {
+                        return;
+                    }
+                }
+                
                 let fieldLabel = field.key || field.tag || field.tip || field.placeholder || 'Field ' + (index + 1);
                 let optionsHTML = this._templates.options(options);
                 
