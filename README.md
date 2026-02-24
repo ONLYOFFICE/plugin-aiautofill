@@ -26,9 +26,9 @@ An ONLYOFFICE plugin that automatically fills document form fields using AI-powe
 const config = {
   editorConfig: {
     plugins: {
-      autostart: ['asc.{0616AE85-5DBE-4B6B-A0A9-455C4F1503AD}'],
+      autostart: ['asc.{6A95DA5C-857E-4C26-B00B-34876F1EEAD8}'],
       options: {
-        'asc.{0616AE85-5DBE-4B6B-A0A9-455C4F1503AD}': {
+        'asc.{6A95DA5C-857E-4C26-B00B-34876F1EEAD8}': {
           code: 'your_initial_security_code',
           callback: 'https://your-backend.com/<path_to_data_endpoint>'
         }

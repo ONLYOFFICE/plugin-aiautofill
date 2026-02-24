@@ -42,9 +42,9 @@ const config = {
 	editorConfig: {
 		// some configuration before
 		plugins: {
-			autostart: ['asc.{0616AE85-5DBE-4B6B-A0A9-455C4F1503AD}'], // to automatically open the plugin
+			autostart: ['asc.{6A95DA5C-857E-4C26-B00B-34876F1EEAD8}'], // to automatically open the plugin
 			options: {
-				'asc.{0616AE85-5DBE-4B6B-A0A9-455C4F1503AD}': {
+				'asc.{6A95DA5C-857E-4C26-B00B-34876F1EEAD8}': {
 					code: 'some_initial_generated_code', // code for security purposes
  					callback: 'http(s)://your_backend/your_data_endpoint', // your data extraction endpoint
 				}
