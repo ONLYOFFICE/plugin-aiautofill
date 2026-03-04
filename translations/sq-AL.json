@@ -1,0 +1,52 @@
+{
+	"Loading...": "Po ngarkohet...",
+	"Cancel": "Anulo",
+	"Warning": "Paralajmërim",
+	"Note": "Shënim",
+	"Confirm": "Konfirmo",
+	"Continue": "Vazhdo",
+	"Close Tab": "Mbyll skedën",
+
+	"Welcome to the autofill plugin!": "Mirë se vini te plugin-i i plotësimit automatik!",
+	"An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms?": "Do të bëhet një përpjekje për të plotësuar automatikisht fushat e formularit duke përdorur inferencë të IA. Dëshiron të nisësh plotësimin automatik të formularëve?",
+	"Autofill": "Plotësim automatik",
+	"Analyzing form fields with AI": "Duke analizuar fushat e formularit me IA",
+	"Fetching data": "Duke marrë të dhëna",
+	"Checking AI availability": "Duke kontrolluar disponueshmërinë e IA",
+	"Mapping fields with AI": "Duke hartëzuar fushat me IA",
+	"Loading form": "Duke ngarkuar formularin",
+
+	"Set the values for each parameter. If it's not necessary, uncheck the checkbox. Then press the Apply button.": "Vendos vlerat për secilin parametër. Nëse nuk është e nevojshme, hiq shenjën nga kutia. Pastaj shtyp butonin Apliko.",
+	"Select All": "Zgjidh të gjitha",
+	"Apply": "Apliko",
+	"Restart": "Rinis",
+	"Find field location": "Gjej vendndodhjen e fushës",
+	"Processing form data": "Duke përpunuar të dhënat e formularit",
+	"Processing form data...": "Duke përpunuar të dhënat e formularit...",
+	"Restarting AI mapping": "Duke rinisur hartëzimin e IA",
+	"Restarting AI mapping...": "Duke rinisur hartëzimin e IA...",
+	"Detecting form fields...": "Duke zbuluar fushat e formularit...",
+	"Fetching data...": "Duke marrë të dhëna...",
+	"Checking AI availability...": "Duke kontrolluar disponueshmërinë e IA...",
+	"Mapping fields with AI...": "Duke hartëzuar fushat me IA...",
+	"AI is not available. Please ensure AI features are enabled.": "IA nuk është e disponueshme. Sigurohu që veçoritë e IA janë të aktivizuara.",
+
+	"The fields have been filled in automatically!": "Fushat u plotësuan automatikisht!",
+	"You can either continue entering data manually or cancel the automatic filling.": "Mund të vazhdosh të fusësh të dhënat manualisht ose të anulosh plotësimin automatik.",
+	"Cancel autofill": "Anulo plotësimin automatik",
+	"Redirecting...": "Po ridrejtohet...",
+	"Reverting changes...": "Po kthehen ndryshimet...",
+	"Done!": "U krye!",
+
+	"All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed?": "Të gjitha të dhënat në dokument do të zëvendësohen me cilësimet që ke zgjedhur më parë. Je i sigurt që do të vazhdosh?",
+	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "Të dhënat e paruajtura në dokument do të fshihen. Je i sigurt që do të vazhdosh?",
+
+	"No Data Available": "Nuk ka të dhëna",
+	"No data is available to fill the form fields. Please check your data source and try again.": "Nuk ka të dhëna të disponueshme për të plotësuar fushat e formularit. Kontrollo burimin e të dhënave dhe provo përsëri.",
+
+	"No form fields found": "Nuk u zbuluan fusha formulari",
+	"Autofill cannot be performed until form fields are added. Go to the Forms tab to add at least one field.": "Plotësimi automatik nuk mund të kryhet derisa të shtohen fusha formulari. Shko te skeda Formularët për të shtuar të paktën një fushë.",
+
+	"Plugin unavailable now": "Plugin-i aktualisht nuk është i disponueshëm",
+	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Ky plugin aktualisht nuk është i disponueshëm sepse nuk është konfiguruar asnjë model IA. Për ta aktivizuar këtë veçori, hap skedën IA, shko te Cilësimet dhe zgjidh ose shto një model IA për kategorinë Chatbot."
+}

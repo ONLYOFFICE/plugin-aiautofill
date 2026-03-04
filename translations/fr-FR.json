@@ -1,0 +1,52 @@
+{
+	"Loading...": "Chargement...",
+	"Cancel": "Annuler",
+	"Warning": "Avertissement",
+	"Note": "Remarque",
+	"Confirm": "Confirmer",
+	"Continue": "Continuer",
+	"Close Tab": "Fermer l’onglet",
+
+	"Welcome to the autofill plugin!": "Bienvenue dans le plugin de remplissage automatique !",
+	"An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms?": "Une tentative sera faite pour remplir automatiquement les champs du formulaire à l’aide de l’IA. Voulez-vous lancer le remplissage automatique des formulaires ?",
+	"Autofill": "Remplissage automatique",
+	"Analyzing form fields with AI": "Analyse des champs du formulaire avec l’IA",
+	"Fetching data": "Récupération des données",
+	"Checking AI availability": "Vérification de la disponibilité de l’IA",
+	"Mapping fields with AI": "Association des champs avec l’IA",
+	"Loading form": "Chargement du formulaire",
+
+	"Set the values for each parameter. If it's not necessary, uncheck the checkbox. Then press the Apply button.": "Définissez les valeurs pour chaque paramètre. Si ce n’est pas nécessaire, décochez la case. Puis appuyez sur le bouton Appliquer.",
+	"Select All": "Tout sélectionner",
+	"Apply": "Appliquer",
+	"Restart": "Redémarrer",
+	"Find field location": "Trouver l’emplacement du champ",
+	"Processing form data": "Traitement des données du formulaire",
+	"Processing form data...": "Traitement des données du formulaire...",
+	"Restarting AI mapping": "Redémarrage de l’association IA",
+	"Restarting AI mapping...": "Redémarrage de l’association IA...",
+	"Detecting form fields...": "Détection des champs du formulaire...",
+	"Fetching data...": "Récupération des données...",
+	"Checking AI availability...": "Vérification de la disponibilité de l’IA...",
+	"Mapping fields with AI...": "Association des champs avec l’IA...",
+	"AI is not available. Please ensure AI features are enabled.": "L’IA n’est pas disponible. Veuillez vérifier que les fonctionnalités IA sont activées.",
+
+	"The fields have been filled in automatically!": "Les champs ont été remplis automatiquement !",
+	"You can either continue entering data manually or cancel the automatic filling.": "Vous pouvez continuer à saisir les données manuellement ou annuler le remplissage automatique.",
+	"Cancel autofill": "Annuler le remplissage automatique",
+	"Redirecting...": "Redirection...",
+	"Reverting changes...": "Annulation des modifications...",
+	"Done!": "Terminé !",
+
+	"All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed?": "Toutes les données du document seront remplacées par les paramètres sélectionnés précédemment. Voulez-vous continuer ?",
+	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "Les données non enregistrées dans le document seront supprimées. Voulez-vous continuer ?",
+
+	"No Data Available": "Aucune donnée disponible",
+	"No data is available to fill the form fields. Please check your data source and try again.": "Aucune donnée n'est disponible pour remplir les champs du formulaire. Veuillez vérifier votre source de données et réessayer.",
+
+	"No form fields found": "Aucun champ de formulaire détecté",
+	"Autofill cannot be performed until form fields are added. Go to the Forms tab to add at least one field.": "Le remplissage automatique ne peut pas être effectué tant que des champs de formulaire n’ont pas été ajoutés. Rendez-vous dans l'onglet Formulaires pour ajouter au moins un champ.",
+
+	"Plugin unavailable now": "Plugin indisponible pour le moment",
+	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Ce plugin est actuellement indisponible car aucun modèle IA n’est configuré. Pour activer cette fonctionnalité, ouvrez l’onglet IA, accédez aux Paramètres, puis sélectionnez ou ajoutez un modèle IA pour la catégorie Chatbot."
+}

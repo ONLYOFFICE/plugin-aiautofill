@@ -1,0 +1,52 @@
+{
+	"Loading...": "Caricamento...",
+	"Cancel": "Annulla",
+	"Warning": "Avviso",
+	"Note": "Nota",
+	"Confirm": "Conferma",
+	"Continue": "Continua",
+	"Close Tab": "Chiudi scheda",
+
+	"Welcome to the autofill plugin!": "Benvenuto nel plugin di compilazione automatica!",
+	"An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms?": "Verrà effettuato un tentativo di compilare automaticamente i campi del modulo tramite inferenza IA. Vuoi avviare la compilazione automatica dei moduli?",
+	"Autofill": "Compilazione automatica",
+	"Analyzing form fields with AI": "Analisi dei campi del modulo con IA",
+	"Fetching data": "Recupero dati",
+	"Checking AI availability": "Verifica disponibilità IA",
+	"Mapping fields with AI": "Mappatura dei campi con IA",
+	"Loading form": "Caricamento del modulo",
+
+	"Set the values for each parameter. If it's not necessary, uncheck the checkbox. Then press the Apply button.": "Imposta i valori per ciascun parametro. Se non è necessario, deseleziona la casella. Quindi premi il pulsante Applica.",
+	"Select All": "Seleziona tutto",
+	"Apply": "Applica",
+	"Restart": "Riavvia",
+	"Find field location": "Trova posizione del campo",
+	"Processing form data": "Elaborazione dati del modulo",
+	"Processing form data...": "Elaborazione dati del modulo...",
+	"Restarting AI mapping": "Riavvio della mappatura IA",
+	"Restarting AI mapping...": "Riavvio della mappatura IA...",
+	"Detecting form fields...": "Rilevamento dei campi del modulo...",
+	"Fetching data...": "Recupero dati...",
+	"Checking AI availability...": "Verifica disponibilità IA...",
+	"Mapping fields with AI...": "Mappatura dei campi con IA...",
+	"AI is not available. Please ensure AI features are enabled.": "L'IA non è disponibile. Assicurati che le funzionalità IA siano abilitate.",
+
+	"The fields have been filled in automatically!": "I campi sono stati compilati automaticamente!",
+	"You can either continue entering data manually or cancel the automatic filling.": "Puoi continuare a inserire i dati manualmente oppure annullare la compilazione automatica.",
+	"Cancel autofill": "Annulla compilazione automatica",
+	"Redirecting...": "Reindirizzamento...",
+	"Reverting changes...": "Ripristino delle modifiche...",
+	"Done!": "Fatto!",
+
+	"All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed?": "Tutti i dati nel documento verranno sostituiti con le impostazioni selezionate in precedenza. Sei sicuro di voler procedere?",
+	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "I dati non salvati nel documento verranno eliminati. Sei sicuro di voler continuare?",
+
+	"No Data Available": "Nessun dato disponibile",
+	"No data is available to fill the form fields. Please check your data source and try again.": "Non sono disponibili dati per compilare i campi del modulo. Controlla la fonte dati e riprova.",
+
+	"No form fields found": "Nessun campo del modulo rilevato",
+	"Autofill cannot be performed until form fields are added. Go to the Forms tab to add at least one field.": "La compilazione automatica non può essere eseguita finché non vengono aggiunti campi al modulo. Vai alla scheda Moduli per aggiungere almeno un campo.",
+
+	"Plugin unavailable now": "Plugin non disponibile ora",
+	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Questo plugin non è attualmente disponibile perché non è configurato alcun modello IA. Per abilitare questa funzione, apri la scheda IA, vai su Impostazioni e seleziona o aggiungi un modello IA per la categoria Chatbot."
+}

@@ -1,0 +1,52 @@
+{
+	"Loading...": "Učitavanje...",
+	"Cancel": "Otkaži",
+	"Warning": "Upozorenje",
+	"Note": "Napomena",
+	"Confirm": "Potvrdi",
+	"Continue": "Nastavi",
+	"Close Tab": "Zatvori karticu",
+
+	"Welcome to the autofill plugin!": "Dobro došli u dodatak za automatsko popunjavanje!",
+	"An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms?": "Pokušaćemo da automatski popunimo polja obrasca pomoću AI inferencije. Da li želite da pokrenete automatsko popunjavanje obrazaca?",
+	"Autofill": "Automatsko popunjavanje",
+	"Analyzing form fields with AI": "Analiza polja obrasca pomoću AI",
+	"Fetching data": "Preuzimanje podataka",
+	"Checking AI availability": "Provera dostupnosti AI",
+	"Mapping fields with AI": "Mapiranje polja pomoću AI",
+	"Loading form": "Učitavanje obrasca",
+
+	"Set the values for each parameter. If it's not necessary, uncheck the checkbox. Then press the Apply button.": "Podesite vrednosti za svaki parametar. Ako nije potrebno, uklonite oznaku. Zatim pritisnite dugme Primeni.",
+	"Select All": "Izaberi sve",
+	"Apply": "Primeni",
+	"Restart": "Ponovo pokreni",
+	"Find field location": "Pronađi lokaciju polja",
+	"Processing form data": "Obrada podataka obrasca",
+	"Processing form data...": "Obrada podataka obrasca...",
+	"Restarting AI mapping": "Ponovno pokretanje AI mapiranja",
+	"Restarting AI mapping...": "Ponovno pokretanje AI mapiranja...",
+	"Detecting form fields...": "Otkrivanje polja obrasca...",
+	"Fetching data...": "Preuzimanje podataka...",
+	"Checking AI availability...": "Provera dostupnosti AI...",
+	"Mapping fields with AI...": "Mapiranje polja pomoću AI...",
+	"AI is not available. Please ensure AI features are enabled.": "AI nije dostupan. Uverite se da su AI funkcije omogućene.",
+
+	"The fields have been filled in automatically!": "Polja su automatski popunjena!",
+	"You can either continue entering data manually or cancel the automatic filling.": "Možete nastaviti da unosite podatke ručno ili otkazati automatsko popunjavanje.",
+	"Cancel autofill": "Otkaži automatsko popunjavanje",
+	"Redirecting...": "Preusmeravanje...",
+	"Reverting changes...": "Vraćanje promena...",
+	"Done!": "Gotovo!",
+
+	"All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed?": "Svi podaci u dokumentu biće zamenjeni podešavanjima koja ste ranije izabrali. Da li ste sigurni da želite da nastavite?",
+	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "Nesačuvani podaci u dokumentu biće obrisani. Da li ste sigurni da želite da nastavite?",
+
+	"No Data Available": "Nema dostupnih podataka",
+	"No data is available to fill the form fields. Please check your data source and try again.": "Nema dostupnih podataka za popunjavanje polja obrasca. Proverite izvor podataka i pokušajte ponovo.",
+
+	"No form fields found": "Nisu otkrivena polja obrasca",
+	"Autofill cannot be performed until form fields are added. Go to the Forms tab to add at least one field.": "Automatsko popunjavanje nije moguće dok se ne dodaju polja obrasca. Idite na karticu Obrasci da biste dodali bar jedno polje.",
+
+	"Plugin unavailable now": "Dodatak trenutno nije dostupan",
+	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Ovaj dodatak trenutno nije dostupan jer nije podešen AI model. Da biste omogućili ovu funkciju, otvorite karticu AI, idite u Podešavanja i izaberite ili dodajte AI model za kategoriju Chatbot."
+}

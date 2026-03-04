@@ -1,0 +1,57 @@
+{
+    "name"       : "AI Auto Fill",
+    "nameLocale": {
+        "ar-SA": "التعبئة التلقائية بالذكاء الاصطناعي",
+        "cs": "Automatické vyplňování pomocí AI",
+        "de": "KI-Autofill",
+        "es": "Autocompletado con IA",
+        "fr": "Remplissage automatique IA",
+        "it": "Compilazione automatica AI",
+        "ja-JA": "AI自動入力",
+        "pt-BR": "Preenchimento Automático com IA",
+        "ru": "Автозаполнение с помощью ИИ",
+        "sq-AL": "Plotësim Automatik me AI",
+        "sr-Cyrl-RS": "Аутоматско попуњавање са вештачком интелигенцијом",
+        "sr-Latn-RS": "Automatsko popunjavanje sa veštačkom inteligencijom",
+        "zh": "AI自动填充"
+    },
+
+    "guid"       : "asc.{6A95DA5C-857E-4C26-B00B-34876F1EEAD8}",
+    "version"    : "1.0.0",
+    "minVersion" : "9.2.0",
+
+    "variations" : [
+        {
+            "description": "An ONLYOFFICE plugin that automatically fills document form fields using AI-powered field mapping and third-party data integration.",
+            "descriptionLocale": {
+                "ar-SA": "مكون إضافي لـ ONLYOFFICE يملأ حقول نماذج المستندات تلقائيًا باستخدام تعيين الحقول المدعوم بالذكاء الاصطناعي وتكامل البيانات من جهات خارجية.",
+                "cs": "Plugin ONLYOFFICE, který automaticky vyplňuje pole formulářů dokumentů pomocí mapování polí založeného na umělé inteligenci a integrace dat třetích stran.",
+                "de": "Ein ONLYOFFICE-Plugin, das Formularfelder im Dokument automatisch mithilfe von KI-gestützter Feldzuordnung und Drittanbieter-Datenintegration ausfüllt.",
+                "es": "Un complemento de ONLYOFFICE que rellena automáticamente los campos de formularios de documentos mediante mapeo de campos con IA e integración de datos de terceros.",
+                "fr": "Un plugin ONLYOFFICE qui remplit automatiquement les champs de formulaires de documents à l'aide du mappage de champs alimenté par l'IA et de l'intégration de données tierces.",
+                "it": "Un plugin ONLYOFFICE che compila automaticamente i campi dei moduli nei documenti utilizzando la mappatura dei campi basata sull'intelligenza artificiale e l'integrazione di dati di terze parti.",
+                "ja-JA": "AIによるフィールドマッピングとサードパーティデータの統合を使用して、ドキュメントフォームのフィールドを自動的に入力するONLYOFFICEのプラグインです。",
+                "pt-BR": "Um plugin do ONLYOFFICE que preenche automaticamente campos de formulários de documentos usando mapeamento de campos com IA e integração de dados de terceiros.",
+                "ru": "Плагин ONLYOFFICE, который автоматически заполняет поля форм документов, используя сопоставление полей на основе ИИ и интеграцию данных из сторонних источников.",
+                "sq-AL": "Një plugin ONLYOFFICE që plotëson automatikisht fushat e formularëve të dokumenteve duke përdorur hartëzimin e fushave të bazuar në inteligjencën artificiale dhe integrimin e të dhënave nga palë të treta.",
+                "sr-Cyrl-RS": "ONLYOFFICE додатак који автоматски попуњава поља формулара докумената користећи мапирање поља засновано на вештачкој интелигенцији и интеграцију података трећих страна.",
+                "sr-Latn-RS": "ONLYOFFICE dodatak koji automatski popunjava polja formulara dokumenata koristeći mapiranje polja zasnovano na veštačkoj inteligenciji i integraciju podataka trećih strana.",
+                "zh": "借助 AI 智能字段匹配与第三方数据集成，实现文档表单的自动填写，显著提升填写效率与准确性。"
+            },
+
+            "url"                 : "index.html",
+
+            "icons": "resources/%theme-type%(light|dark)/icon%scale%(default).%extension%(png)",
+
+            "isViewer"            : false,
+            "EditorsSupport"      : ["word"],
+            "type"                : "panel",
+            "initDataType"        : "none",
+            "buttons"             : [],
+
+            "isUpdateOleOnResize" : true,
+
+            "size"                : [400, 600]
+        }
+    ]
+}
