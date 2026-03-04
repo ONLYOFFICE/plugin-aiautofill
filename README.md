@@ -4,7 +4,7 @@ An ONLYOFFICE plugin that automatically fills document form fields using AI-powe
 
 ## Features
 
-- **AI Powered Field Mapping**: Automatically matches form fields with data keys using ONLYOFFICE AI
+- **AI Powered Field Mapping**: Automatically matches form fields with data keys using AI
 - **Third-Party Integration**: Connects to external backend services to retrieve data from
 - **Code Rotation Security**: Implements secure code rotation mechanism for API calls
 - **Flexible Data Handling**: Supports flat, nested, and array data structures
@@ -42,7 +42,7 @@ const config = {
 };
 ```
 
-2. Open a document with form fields in ONLYOFFICE
+2. Open a PDF form with form fields in ONLYOFFICE
 3. Click the AI Auto Fill plugin icon in the left panel
 4. Click "Autofill" to automatically populate form fields
 
@@ -65,7 +65,7 @@ The built plugin will be in the `build/` directory.
 
 ### Basic Workflow
 
-1. **Open a Document**: Open a PDF file with form fields in ONLYOFFICE
+1. **Open a Document**: Open a PDF form with form fields in ONLYOFFICE
 2. **Launch Plugin**: Click the AI Auto Fill icon in the plugins panel
 3. **Start Autofill**: Click the "Autofill" button to begin the process
 4. **AI Processing**: The plugin:
