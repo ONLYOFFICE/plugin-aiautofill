@@ -45,7 +45,7 @@
 	"No data is available to fill the form fields. Please check your data source and try again.": "没有可用于填写表单字段的数据。请检查数据源并重试。",
 
 	"No form fields found": "未检测到表单字段",
-	"Autofill cannot be performed until form fields are added. Go to the Forms tab to add at least one field.": "在添加表单字段之前无法执行自动填充。前往“表单”选项卡添加至少一个字段。",
+	"Autofill cannot be performed until form fields with meaningful names are added. Go to the Forms tab to add at least one field.": "在添加表单字段之前无法执行自动填充。前往“表单”选项卡添加至少一个字段。",
 
 	"Plugin unavailable now": "插件当前不可用",
 	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "由于未配置 AI 模型，此插件当前不可用。要启用该功能，请打开“AI”选项卡，进入“设置”，为“聊天机器人”类别选择或添加 AI 模型。"
