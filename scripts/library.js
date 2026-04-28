@@ -34,7 +34,13 @@
         },
     };
 
+    const DEFAULT_RE = /^(?:text|field|input|value|column|col|row|item|data|node|element|cell|label|name|key|var|prop|attr)[a-z]{0,6}\d+$/i;
+
     const Prompts = {
+        filterMeaningfulFields(formFields) {
+            return formFields.filter(f => f.identifier && f.identifier.trim() && !DEFAULT_RE.test(f.identifier.trim()));
+        },
+
         getFieldMappingPrompt(dataKeys, formFields) {
             const fieldIdentifiers = formFields
                 .filter(f => f.identifier && f.identifier.trim())
