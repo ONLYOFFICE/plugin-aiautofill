@@ -297,21 +297,37 @@
         async detectAllForms() {
             return new Promise((resolve, reject) => {
                 try {
+                    const _options = (window.Asc.plugin.info || {}).options || {};
+                    const _rawRoles = _options.userRoles;
+                    const _userRoles = (Array.isArray(_rawRoles) && _rawRoles.length > 0) ? _rawRoles : null;
+                    window.Asc.scope = { userRoles: _userRoles };
+
                     window.Asc.plugin.callCommand(function() {
                         const doc = Api.GetDocument();
                         const forms = doc.GetAllForms();
                         const formData = [];
                         const processedIds = new Set();
-                        
+                        const userRoles = Asc.scope.userRoles;
+
+                        function canUserFill(form) {
+                            const roleName = form.GetRole ? form.GetRole() : null;
+                            if (!roleName || roleName.toLowerCase() === 'anyone') return true;
+
+                            if (!userRoles) return false;
+                            return userRoles.some(function(r) { return r.toLowerCase() === roleName.toLowerCase(); });
+                        }
+
                         function addFormToData(form, parentKey = null) {
                             const formId = form.GetInternalId ? form.GetInternalId() : null;
                             if (!formId || processedIds.has(formId)) {
                                 return;
                             }
-                            
+
+                            if (!canUserFill(form)) return;
+
                             processedIds.add(formId);
                             const key = parentKey !== null ? parentKey : (form.GetFormKey ? form.GetFormKey() : null);
-                            
+
                             formData.push({
                                 InternalId: formId,
                                 Key: key,
@@ -323,11 +339,11 @@
                                 Lock: form.IsFixed ? (form.IsFixed() ? 0 : null) : null
                             });
                         }
-                        
+
                         function processSubForms(form) {
                             let hasSubForms = false;
                             const parentKey = form.GetFormKey ? form.GetFormKey() : null;
-                            
+
                             if (form.GetSubForms && typeof form.GetSubForms === 'function') {
                                 try {
                                     const subForms = form.GetSubForms();
@@ -342,19 +358,19 @@
                                     console.error(e);
                                 }
                             }
-                            
+
                             return hasSubForms;
                         }
-                        
+
                         for (let i = 0; i < forms.length; i++) {
                             const form = forms[i];
                             const hasSubForms = processSubForms(form);
-                            
+
                             if (!hasSubForms) {
                                 addFormToData(form);
                             }
                         }
-                        
+
                         return formData;
                     }, false, true, (formsMeta) => {
                         if (!formsMeta || formsMeta.length === 0)
