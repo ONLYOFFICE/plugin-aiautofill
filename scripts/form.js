@@ -317,13 +317,18 @@
                             return userRoles.some(function(r) { return r.toLowerCase() === roleName.toLowerCase(); });
                         }
 
+                        function isImageField(form) {
+                            const type = form.GetFormType ? form.GetFormType() : 'unknown';
+                            return type === 'pictureForm';
+                        }
+
                         function addFormToData(form, parentKey = null) {
                             const formId = form.GetInternalId ? form.GetInternalId() : null;
                             if (!formId || processedIds.has(formId)) {
                                 return;
                             }
 
-                            if (!canUserFill(form)) return;
+                            if (!canUserFill(form) || isImageField(form)) return;
 
                             processedIds.add(formId);
                             const key = parentKey !== null ? parentKey : (form.GetFormKey ? form.GetFormKey() : null);
