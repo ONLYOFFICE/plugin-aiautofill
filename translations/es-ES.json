@@ -45,7 +45,9 @@
 	"No data is available to fill the form fields. Please check your data source and try again.": "No hay datos disponibles para completar los campos del formulario. Comprueba tu fuente de datos e inténtalo de nuevo.",
 
 	"No form fields found": "No se detectaron campos del formulario",
+	"Form is signed": "El formulario está firmado",
 	"Autofill cannot be performed until form fields with meaningful names are added. Go to the Forms tab to add at least one field.": "No se puede realizar el autocompletado hasta que se agreguen campos al formulario. Vaya a la pestaña Formularios para añadir al menos un campo.",
+	"The form is signed and cannot be filled automatically.": "El formulario está firmado y no se puede completar automáticamente.",
 
 	"Plugin unavailable now": "Complemento no disponible ahora",
 	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Este complemento no está disponible actualmente porque no hay ningún modelo de IA configurado. Para habilitar esta función, abre la pestaña IA, ve a Configuración y selecciona o añade un modelo de IA para la categoría Chatbot."
