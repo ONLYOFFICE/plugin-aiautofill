@@ -1,6 +1,6 @@
 # Change Log
 
-##
+## 1.0.1
 - Added signature validation to forms
 - Removed image support from form filling
 - Optimized prompt templates used for data mapping
