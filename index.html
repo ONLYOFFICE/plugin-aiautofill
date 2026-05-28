@@ -376,6 +376,18 @@
             </div>
         </div>
 
+        <div id="errorSigned" class="error">
+            <div class="error__box">
+                <div class="error__header">
+                    <div class="error__icon">
+                        <img src="resources/icons/alert.svg" alt="Alert">
+                    </div>
+                    <h3 class="error__title i18n">Form is signed</h3>
+                </div>
+                <p class="error__message i18n">The form is signed and cannot be filled automatically.</p>
+            </div>
+        </div>
+
         <div id="emptyState" class="error">
             <div class="error__box">
                 <div class="error__header">
@@ -406,7 +418,8 @@
                 welcome: document.getElementById('welcomeContent'),
                 empty: document.getElementById('emptyState'),
                 errorModel: document.getElementById('errorModel'),
-                errorFields: document.getElementById('errorFields')
+                errorFields: document.getElementById('errorFields'),
+                errorSigned: document.getElementById('errorSigned')
             };
 
             Object.entries(views).forEach(([key, el]) => {
@@ -577,9 +590,21 @@
 
         async function initializePlugin() {
             try {
-                const formFields = await window.Autofiller.FormDetectionService.detectAllForms();
-                
+                const signedPromise = new Promise((resolve) => {
+                    window.Asc.plugin.executeMethod("IsFormSigned", [], (result) => {
+                        resolve(result);
+                    });
+                });
+                const formFieldsPromise = window.Autofiller.FormDetectionService.detectAllForms();
+                const [signed, formFields] = await Promise.all([signedPromise, formFieldsPromise]);
+
                 document.documentElement.classList.add('theme-ready');
+
+                if (signed) {
+                    if (loader) loader.hide();
+                    showView('errorSigned');
+                    return;
+                }
                 
                 if (!formFields || formFields.length === 0) {
                     if (loader) loader.hide();

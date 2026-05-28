@@ -45,7 +45,9 @@
 	"No data is available to fill the form fields. Please check your data source and try again.": "لا توجد بيانات متاحة لملء حقول النموذج. يُرجى التحقق من مصدر البيانات والمحاولة مرة أخرى.",
 
 	"No form fields found": "لم يتم اكتشاف حقول نموذج",
+	"Form is signed": "تم توقيع النموذج",
 	"Autofill cannot be performed until form fields with meaningful names are added. Go to the Forms tab to add at least one field.": "لا يمكن تنفيذ التعبئة التلقائية إلا بعد إضافة حقول النموذج. انتقل إلى علامة التبويب 'النماذج' لإضافة حقل واحد على الأقل.",
+	"The form is signed and cannot be filled automatically.": "النموذج موقع ولا يمكن تعبئته تلقائيًا.",
 
 	"Plugin unavailable now": "الإضافة غير متاحة الآن",
 	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "هذه الإضافة غير متاحة حاليًا لأنه لم يتم تكوين نموذج ذكاء اصطناعي. لتمكين هذه الميزة، افتح علامة تبويب الذكاء الاصطناعي، انتقل إلى الإعدادات، ثم اختر أو أضف نموذج ذكاء اصطناعي لفئة روبوت الدردشة."
