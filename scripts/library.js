@@ -46,38 +46,20 @@
                 .filter(f => f.identifier && f.identifier.trim())
                 .map(f => f.identifier);
 
-            return `You are an expert in data mapping and structure analysis.
-
-## TASK
-Map EVERY form field to the most relevant available data key(s). Prefer an approximate match over no match — it is always better to suggest a candidate than to leave a field empty.
-
+            return `You are an expert data mapping AI. Map EVERY form field below to the most relevant available data key(s). Prefer approximate matches over leaving a field empty — it is always better to suggest a candidate than to leave a field empty.
 ## INPUT DATA
-
-### Form field keys:
-${fieldIdentifiers.join(', ')}
-
-### Available data keys:
-${dataKeys.join('\n')}
-
+Form fields: ${fieldIdentifiers.join(', ')}
+Available keys: ${dataKeys.join('\n')}
 ## MAPPING RULES
-
-1. **Exhaustive**: Map as many form fields as possible. Only omit a field if NO data key has any plausible relationship to it.
-2. **Use what exists**: Use ONLY existing keys listed above — do NOT invent new keys.
-3. **Fuzzy match allowed**: Partial, semantic, or contextual matches are acceptable (e.g. "Position" → a job-title key, "CompanyName1" → a company-name key).
-4. **Numbered/indexed fields**: Fields ending in a number (e.g. CompanyName1, CompanyName2, JobTitle1, Description3) represent repeated slots — map them all to the same data key(s) as the un-numbered equivalent.
-5. **One-to-many**: If multiple data keys suit one form field, include all of them as an array: \`"FieldName": ["key1", "key2"]\`.
-6. **Many-to-one**: The same data key can be reused across multiple form fields.
-7. **Type guidance**: Prefer keys whose type hint matches the field's expected content (date fields → date keys, etc.).
-
-## RESPONSE FORMAT
-
-Return **ONLY** valid JSON:
-\`\`\`json
-{"mapping":{"form_field_name":"data_key_name",...}}
-\`\`\`
-
-CRITICAL: Return **ONLY** valid JSON without any additional explanations, comments, no additional text or markdown formatting!
-No // comments, no /* */ comments, no text before or after the JSON.`;
+1. **Exhaustive**: Only omit a field if zero relationship exists.
+2. **Strict Keys**: Use ONLY the keys listed above — do NOT invent or modify any key.
+3. **Fuzzy Match**: Semantic, partial, or contextual matches are allowed (e.g. "Position" → job-title key, "CompanyName1" → company-name key).
+4. **Numbered Fields**: Fields ending in a number (e.g. JobTitle1, JobTitle2) represent repeated slots — map them all to the same data key(s) as the un-numbered equivalent.
+5. **Cardinality**: Output single strings or arrays for multiple matches ('"field": ["k1", "k2"]'). Reusing keys is allowed.
+6. **Type Match**: Prefer matching data types (e.g., date to date).
+## OUTPUT FORMAT
+Return raw, valid JSON only. No markdown, code blocks, explanations, comments, or // and /* */ inside JSON.
+{"mapping":{"form_field_name":"data_key_name","another_field":["key1","key2"]}}`;
         }
     };
 
