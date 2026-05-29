@@ -297,25 +297,11 @@
         async detectAllForms() {
             return new Promise((resolve, reject) => {
                 try {
-                    const _options = (window.Asc.plugin.info || {}).options || {};
-                    const _rawRoles = _options.userRoles;
-                    const _userRoles = (Array.isArray(_rawRoles) && _rawRoles.length > 0) ? _rawRoles : null;
-                    window.Asc.scope = { userRoles: _userRoles };
-
                     window.Asc.plugin.callCommand(function() {
                         const doc = Api.GetDocument();
                         const forms = doc.GetAllForms();
                         const formData = [];
                         const processedIds = new Set();
-                        const userRoles = Asc.scope.userRoles;
-
-                        function canUserFill(form) {
-                            const roleName = form.GetRole ? form.GetRole() : null;
-                            if (!roleName || roleName.toLowerCase() === 'anyone') return true;
-
-                            if (!userRoles) return false;
-                            return userRoles.some(function(r) { return r.toLowerCase() === roleName.toLowerCase(); });
-                        }
 
                         function isImageField(form) {
                             const type = form.GetFormType ? form.GetFormType() : 'unknown';
@@ -328,7 +314,7 @@
                                 return;
                             }
 
-                            if (!canUserFill(form) || isImageField(form)) return;
+                            if (isImageField(form)) return;
 
                             processedIds.add(formId);
                             const key = parentKey !== null ? parentKey : (form.GetFormKey ? form.GetFormKey() : null);
