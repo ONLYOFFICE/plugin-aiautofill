@@ -49,7 +49,10 @@
 
         async executeAI(prompt) {
             const operation = new Promise((resolve, reject) => {
-                window.Asc.plugin.executeMethod('AI', [{ type: 'Chat', data: prompt }], (result) => {
+                // TODO: When there is a flag to disable chain-of-thought, remove the system instruction. For now this solution might help bypass thinking for some models.
+                const systemInstruction = "[System: Respond directly. Do not use chain-of-thought, reasoning steps, or <think> tags. Output only the final answer.]\n\n";
+                const payload = systemInstruction + prompt;
+                window.Asc.plugin.executeMethod('AI', [{ type: 'Chat', data: payload }], (result) => {
                     result?.error ? reject(result.error) : resolve(result);
                 });
             });
