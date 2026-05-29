@@ -369,10 +369,22 @@
                     </div>
                     <h3 class="error__title i18n">No form fields found</h3>
                 </div>
-                <p class="error__message i18n">Autofill cannot be performed until form fields are added. Go to the Forms tab to add at least one field.</p>
+                <p class="error__message i18n">Autofill cannot be performed until form fields with meaningful names are added. Go to the Forms tab to add at least one field.</p>
             </div>
             <div class="button-group">
                 <button class="btn btn-primary i18n" id="retryBtnFields">Restart</button>
+            </div>
+        </div>
+
+        <div id="errorSigned" class="error">
+            <div class="error__box">
+                <div class="error__header">
+                    <div class="error__icon">
+                        <img src="resources/icons/alert.svg" alt="Alert">
+                    </div>
+                    <h3 class="error__title i18n">Form is signed</h3>
+                </div>
+                <p class="error__message i18n">The form is signed and cannot be filled automatically.</p>
             </div>
         </div>
 
@@ -406,7 +418,8 @@
                 welcome: document.getElementById('welcomeContent'),
                 empty: document.getElementById('emptyState'),
                 errorModel: document.getElementById('errorModel'),
-                errorFields: document.getElementById('errorFields')
+                errorFields: document.getElementById('errorFields'),
+                errorSigned: document.getElementById('errorSigned')
             };
 
             Object.entries(views).forEach(([key, el]) => {
@@ -434,9 +447,9 @@
                 if (loader)
                     loader.show(window.Asc.plugin.tr('Analyzing form fields with AI'));
 
-                const formFields = await window.Autofiller.FormDetectionService.detectAllForms();
-                
-                if (!formFields || formFields.length === 0) {
+                const allFormFields = await window.Autofiller.FormDetectionService.detectAllForms();
+                const formFields = window.Autofiller.Prompts.filterMeaningfulFields(allFormFields || []);
+                if (!formFields.length) {
                     if (loader) loader.hide();
                     showView('errorFields');
                     return;
@@ -577,9 +590,21 @@
 
         async function initializePlugin() {
             try {
-                const formFields = await window.Autofiller.FormDetectionService.detectAllForms();
-                
+                const signedPromise = new Promise((resolve) => {
+                    window.Asc.plugin.executeMethod("IsFormSigned", [], (result) => {
+                        resolve(result);
+                    });
+                });
+                const formFieldsPromise = window.Autofiller.FormDetectionService.detectAllForms();
+                const [signed, formFields] = await Promise.all([signedPromise, formFieldsPromise]);
+
                 document.documentElement.classList.add('theme-ready');
+
+                if (signed) {
+                    if (loader) loader.hide();
+                    showView('errorSigned');
+                    return;
+                }
                 
                 if (!formFields || formFields.length === 0) {
                     if (loader) loader.hide();

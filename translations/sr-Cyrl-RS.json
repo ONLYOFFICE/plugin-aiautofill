@@ -45,7 +45,9 @@
 	"No data is available to fill the form fields. Please check your data source and try again.": "Нема доступних података за попуњавање поља обрасца. Проверите извор података и покушајте поново.",
 
 	"No form fields found": "Нису откривена поља обрасца",
-	"Autofill cannot be performed until form fields are added. Go to the Forms tab to add at least one field.": "Аутоматско попуњавање није могуће док се не додају поља обрасца. Идите на картицу Обрасци да бисте додали бар једно поље.",
+	"Form is signed": "Образац је подписан",
+	"Autofill cannot be performed until form fields with meaningful names are added. Go to the Forms tab to add at least one field.": "Аутоматско попуњавање није могуће док се не додају поља обрасца. Идите на картицу Обрасци да бисте додали бар једно поље.",
+	"The form is signed and cannot be filled automatically.": "Образац је подписан и не може бити аутоматски попуњен.",
 
 	"Plugin unavailable now": "Додатак тренутно није доступан",
 	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Овај додатак тренутно није доступан јер није подешен AI модел. Да бисте омогућили ову функцију, отворите картицу AI, идите у Подешавања и изаберите или додајте AI модел за категорију Chatbot."

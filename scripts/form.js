@@ -49,7 +49,10 @@
 
         async executeAI(prompt) {
             const operation = new Promise((resolve, reject) => {
-                window.Asc.plugin.executeMethod('AI', [{ type: 'Chat', data: prompt }], (result) => {
+                // TODO: When there is a flag to disable chain-of-thought, remove the system instruction. For now this solution might help bypass thinking for some models.
+                const systemInstruction = "[System: Respond directly. Do not use chain-of-thought, reasoning steps, or <think> tags. Output only the final answer.]\n\n";
+                const payload = systemInstruction + prompt;
+                window.Asc.plugin.executeMethod('AI', [{ type: 'Chat', data: payload }], (result) => {
                     result?.error ? reject(result.error) : resolve(result);
                 });
             });
@@ -302,16 +305,23 @@
                         const forms = doc.GetAllForms();
                         const formData = [];
                         const processedIds = new Set();
-                        
+
+                        function isImageField(form) {
+                            const type = form.GetFormType ? form.GetFormType() : 'unknown';
+                            return type === 'pictureForm';
+                        }
+
                         function addFormToData(form, parentKey = null) {
                             const formId = form.GetInternalId ? form.GetInternalId() : null;
                             if (!formId || processedIds.has(formId)) {
                                 return;
                             }
-                            
+
+                            if (isImageField(form)) return;
+
                             processedIds.add(formId);
                             const key = parentKey !== null ? parentKey : (form.GetFormKey ? form.GetFormKey() : null);
-                            
+
                             formData.push({
                                 InternalId: formId,
                                 Key: key,
@@ -323,11 +333,11 @@
                                 Lock: form.IsFixed ? (form.IsFixed() ? 0 : null) : null
                             });
                         }
-                        
+
                         function processSubForms(form) {
                             let hasSubForms = false;
                             const parentKey = form.GetFormKey ? form.GetFormKey() : null;
-                            
+
                             if (form.GetSubForms && typeof form.GetSubForms === 'function') {
                                 try {
                                     const subForms = form.GetSubForms();
@@ -342,19 +352,19 @@
                                     console.error(e);
                                 }
                             }
-                            
+
                             return hasSubForms;
                         }
-                        
+
                         for (let i = 0; i < forms.length; i++) {
                             const form = forms[i];
                             const hasSubForms = processSubForms(form);
-                            
+
                             if (!hasSubForms) {
                                 addFormToData(form);
                             }
                         }
-                        
+
                         return formData;
                     }, false, true, (formsMeta) => {
                         if (!formsMeta || formsMeta.length === 0)

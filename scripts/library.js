@@ -34,47 +34,32 @@
         },
     };
 
+    const DEFAULT_RE = /^(?:text|field|input|value|column|col|row|item|data|node|element|cell|label|name|key|var|prop|attr)[a-z]{0,6}\d+$/i;
+
     const Prompts = {
+        filterMeaningfulFields(formFields) {
+            return formFields.filter(f => f.identifier && f.identifier.trim() && !DEFAULT_RE.test(f.identifier.trim()));
+        },
+
         getFieldMappingPrompt(dataKeys, formFields) {
             const fieldIdentifiers = formFields
                 .filter(f => f.identifier && f.identifier.trim())
                 .map(f => f.identifier);
 
-            return `You are an expert in data mapping and structure analysis.
-
-## TASK
-Analyze two arrays of keys and create a mapping between available data and form fields.
-
+            return `You are an expert data mapping AI. Map EVERY form field below to the most relevant available data key(s). Prefer approximate matches over leaving a field empty — it is always better to suggest a candidate than to leave a field empty.
 ## INPUT DATA
-
-### Form field keys:
-${fieldIdentifiers.join(', ')}
-
-### Available data keys:
-${dataKeys.join(', ')}
-
+Form fields: ${fieldIdentifiers.join(', ')}
+Available keys: ${dataKeys.join('\n')}
 ## MAPPING RULES
-
-1. **Use what exists**: Use ONLY existing keys from "INPUT DATA" - DO NOT create new keys
-2. **Exact match**: Key should match exactly or be very similar (considering case, underscores, camelCase)
-3. **Full names preferred**: Prefer using complete names where possible over split first/last
-4. **Partial match**: Part of data key corresponds to form field (e.g., "user_first_name" → "firstName")
-5. **Data type**: Respect data types (e.g., use strings for text fields, numbers for salary, etc.)
-6. **One-to-many**: One data key can fill multiple form fields, include all possible matching keys in the mapping as an array ("form_field":["data_key1","data_key2"])
-7. **Priority**: If there are multiple candidates for the same form field, select the most appropriate one first, but if all are valid, include all of them
-
-## CONFIDENCE THRESHOLD
-**Only include mappings with confidence ≥ 75%**
-
-## RESPONSE FORMAT
-
-Return **ONLY** valid JSON:
-\`\`\`json
-{"mapping":{"form_field_name":"data_key_name",...}}
-\`\`\`
-
-CRITICAL: Return **ONLY** valid JSON without any additional explanations, comments, no additional text or markdown formatting!
-No // comments, no /* */ comments, no text before or after the JSON.`;
+1. **Exhaustive**: Only omit a field if zero relationship exists.
+2. **Strict Keys**: Use ONLY the keys listed above — do NOT invent or modify any key.
+3. **Fuzzy Match**: Semantic, partial, or contextual matches are allowed (e.g. "Position" → job-title key, "CompanyName1" → company-name key).
+4. **Numbered Fields**: Fields ending in a number (e.g. JobTitle1, JobTitle2) represent repeated slots — map them all to the same data key(s) as the un-numbered equivalent.
+5. **Cardinality**: Output single strings or arrays for multiple matches ('"field": ["k1", "k2"]'). Reusing keys is allowed.
+6. **Type Match**: Prefer matching data types (e.g., date to date).
+## OUTPUT FORMAT
+Return raw, valid JSON only. No markdown, code blocks, explanations, comments, or // and /* */ inside JSON.
+{"mapping":{"form_field_name":"data_key_name","another_field":["key1","key2"]}}`;
         }
     };
 
