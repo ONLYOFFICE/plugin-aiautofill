@@ -363,7 +363,7 @@
 
                         function isImageField(form) {
                             const type = form.GetFormType ? form.GetFormType() : 'unknown';
-                            return type === 'pictureForm';
+                            return ['pictureForm', 'signatureForm'].indexOf(type) !== -1;
                         }
 
                         function addFormToData(form, parentKey = null) {
