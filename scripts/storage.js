@@ -15,10 +15,10 @@
  * limitations under the License.
  *
  */
-(function(window, undefined) {
+(function (window, undefined) {
     const StorageManager = (namespace = 'autofiller', storageEngine = null) => {
         const storage = storageEngine || (typeof window !== 'undefined' && window.localStorage) || null;
-        
+
         if (!storage)
             console.warn('Storage not available, operations will be no-ops');
 
@@ -32,15 +32,15 @@
                     console.warn(`Storage unavailable: Cannot get "${key}"`);
                     return defaultValue;
                 }
-                
+
                 try {
                     const namespacedKey = _getKey(key);
                     const item = storage.getItem(namespacedKey);
-                    
+
                     if (item === null) {
                         return defaultValue;
                     }
-                    
+
                     try {
                         return JSON.parse(item);
                     } catch (parseError) {
@@ -56,7 +56,7 @@
                     console.warn(`Storage unavailable: Cannot set "${key}"`);
                     return false;
                 }
-                
+
                 try {
                     const namespacedKey = _getKey(key);
                     const serializedValue = typeof value === 'string' ? value : JSON.stringify(value);
@@ -72,7 +72,7 @@
                     console.warn(`Storage unavailable: Cannot remove "${key}"`);
                     return false;
                 }
-                
+
                 try {
                     const namespacedKey = _getKey(key);
                     storage.removeItem(namespacedKey);
@@ -87,18 +87,18 @@
                     console.warn('Storage unavailable: Cannot clear');
                     return false;
                 }
-                
+
                 try {
                     const keysToRemove = [];
                     const prefix = `${namespace}_`;
-                    
+
                     for (let i = 0; i < storage.length; i++) {
                         const key = storage.key(i);
                         if (key && key.startsWith(prefix)) {
                             keysToRemove.push(key);
                         }
                     }
-                    
+
                     keysToRemove.forEach(key => storage.removeItem(key));
                     return true;
                 } catch (error) {
@@ -110,7 +110,7 @@
                 if (!storage) {
                     return false;
                 }
-                
+
                 try {
                     const namespacedKey = _getKey(key);
                     return storage.getItem(namespacedKey) !== null;
@@ -123,18 +123,18 @@
                 if (!storage) {
                     return [];
                 }
-                
+
                 try {
                     const keys = [];
                     const prefix = `${namespace}_`;
-                    
+
                     for (let i = 0; i < storage.length; i++) {
                         const key = storage.key(i);
                         if (key && key.startsWith(prefix)) {
                             keys.push(key.substring(prefix.length));
                         }
                     }
-                    
+
                     return keys;
                 } catch (error) {
                     console.error('Error getting storage keys:', error.message);
@@ -155,11 +155,11 @@
             getAll() {
                 const items = {};
                 const keys = this.keys();
-                
+
                 keys.forEach(key => {
                     items[key] = this.get(key);
                 });
-                
+
                 return items;
             },
 
@@ -167,14 +167,14 @@
                 if (!items || typeof items !== 'object') {
                     return false;
                 }
-                
+
                 let success = true;
                 Object.entries(items).forEach(([key, value]) => {
                     if (!this.set(key, value)) {
                         success = false;
                     }
                 });
-                
+
                 return success;
             },
 

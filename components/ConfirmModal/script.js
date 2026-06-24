@@ -15,15 +15,15 @@
  * limitations under the License.
  *
  */
-(function(window, undefined) {
+(function (window, undefined) {
     function ConfirmModal(options) {
         this.messages = {
             confirmReplace: "All data in the document will be replaced with the settings you previously selected.\nAre you sure you want to proceed?"
         };
 
-        this._init = function() {
+        this._init = function () {
             const defaults = {
-                translate: function(text) { return text; },
+                translate: function (text) { return text; },
                 message: null
             };
             this.options = Object.assign({}, defaults, options);
@@ -32,7 +32,7 @@
             this.onCancel = null;
         };
 
-        this.show = function(onConfirm, onCancel, customMessage) {
+        this.show = function (onConfirm, onCancel, customMessage) {
             let me = this;
             this.onConfirm = onConfirm;
             this.onCancel = onCancel;
@@ -75,7 +75,7 @@
                 };
 
                 this.window = new window.Asc.PluginWindow();
-                
+
                 this.window.attachEvent('onInit', () => {
                     window.Autofiller.Utils.safeExecute(
                         () => this.window.sendEvent('onSetMessage', { message }),
@@ -102,22 +102,22 @@
             return this.window;
         };
 
-        this.close = function() {
+        this.close = function () {
             if (this.window) {
                 window.Autofiller.Utils.safeExecute(
                     () => this.window.close(),
                     'Error closing modal window'
                 );
-                
+
                 this.window = null;
             }
         };
 
-        this.getWindow = function() {
+        this.getWindow = function () {
             return this.window;
         };
 
-        this.isShowing = function() {
+        this.isShowing = function () {
             return this.window !== null;
         };
 

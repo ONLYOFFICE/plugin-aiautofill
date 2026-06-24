@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-(function(window, undefined) {
+(function (window, undefined) {
     const Editor = {
         async callMethod(name, args) {
             return new Promise(resolve => {

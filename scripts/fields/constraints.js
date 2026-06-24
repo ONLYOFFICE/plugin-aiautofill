@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-(function(window, undefined) {
+(function (window, undefined) {
     const ConstraintsValidator = {
         toRegExp(mask) {
             let pattern = '^';
@@ -51,16 +51,16 @@
 
             const format = constraints.format || {};
             if (format.type === 'mask' && format.value) {
-                try { if (!this.toRegExp(format.value).test(string)) return null; } catch (e) {}
+                try { if (!this.toRegExp(format.value).test(string)) return null; } catch (e) { }
                 return string;
             }
 
             if (format.type === 'regExp' && format.value) {
-                try { if (!new RegExp('^(?:' + format.value + ')$').test(string)) return null; } catch (e) {}
+                try { if (!new RegExp('^(?:' + format.value + ')$').test(string)) return null; } catch (e) { }
                 return string;
             }
 
-            if (format.type === 'digit') 
+            if (format.type === 'digit')
                 string = string.replace(/\D+/g, '');
             else if (format.type === 'letter')
                 string = string.replace(/[^A-Za-z]+/g, '');

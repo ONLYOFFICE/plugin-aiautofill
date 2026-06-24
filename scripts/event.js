@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-(function(window, undefined) {
+(function (window, undefined) {
     const _buttonHandlers = [];
     const _messageHandlers = [];
     let _pluginButtonInitialized = false;
@@ -23,7 +23,7 @@
     const EventBus = {
         sendPluginEvent(eventName, data) {
             if (!window.Autofiller?.Utils?.isPluginAvailable()) return false;
-            
+
             return window.Autofiller.Utils.safeExecute(
                 () => {
                     window.Asc.plugin.sendEvent(eventName, data);
@@ -35,7 +35,7 @@
 
         executeCommand(command, params = '') {
             if (!window.Autofiller?.Utils?.isPluginAvailable()) return false;
-            
+
             return window.Autofiller.Utils.safeExecute(
                 () => {
                     window.Asc.plugin.executeCommand(command, params);
@@ -64,7 +64,7 @@
 
         attachPluginEvent(eventName, callback) {
             if (!window.Autofiller?.Utils?.isPluginAvailable()) return false;
-            
+
             if (typeof window.Asc.plugin.attachEvent !== 'function') {
                 return false;
             }
@@ -81,7 +81,7 @@
         on(eventType, handler) {
             if (eventType === 'button') {
                 _buttonHandlers.push(handler);
-                
+
                 if (!_pluginButtonInitialized && window.Autofiller?.Utils?.isPluginAvailable()) {
                     window.Asc.plugin.button = (id, windowId) => {
                         const context = { id, windowId };
@@ -93,10 +93,10 @@
                 }
                 return true;
             }
-            
+
             if (eventType === 'message') {
                 _messageHandlers.push(handler);
-                
+
                 if (_messageHandlers.length === 1) {
                     window.addEventListener('message', (event) => {
                         const action = event.data?.action;
@@ -109,7 +109,7 @@
                 }
                 return true;
             }
-            
+
             return false;
         },
 
@@ -121,7 +121,7 @@
                     return true;
                 }
             }
-            
+
             if (eventType === 'message') {
                 const index = _messageHandlers.indexOf(handler);
                 if (index > -1) {
@@ -129,7 +129,7 @@
                     return true;
                 }
             }
-            
+
             return false;
         },
 
@@ -138,18 +138,18 @@
                 _buttonHandlers.length = 0;
                 return true;
             }
-            
+
             if (eventType === 'message') {
                 _messageHandlers.length = 0;
                 return true;
             }
-            
+
             if (!eventType) {
                 _buttonHandlers.length = 0;
                 _messageHandlers.length = 0;
                 return true;
             }
-            
+
             return false;
         },
 
