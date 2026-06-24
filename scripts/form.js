@@ -59,8 +59,8 @@
                 try {
                     window.Asc.plugin.callCommand(function () {
                         var ids = {};
-                        (Asc.scope.autofillerRestore || []).forEach(function (f) {
-                            ids[f.id] = f.value;
+                        (Asc.scope.autofillerRestore || []).forEach(function (entry) {
+                            ids[entry.id] = entry.value;
                         });
 
                         function applyValue(form, value) {
@@ -154,7 +154,22 @@
                 identifier: identifier,
                 type,
                 isBoolean: this._isBooleanField(type),
-                lock: typeof formMeta.Lock === 'number' ? formMeta.Lock : null
+                lock: typeof formMeta.Lock === 'number' ? formMeta.Lock : null,
+                constraints: formMeta.Constraints || {},
+                isComplex: !!formMeta.IsComplex,
+                subFields: (formMeta.SubFields || []).map(subField => ({
+                    internalId: subField.InternalId,
+                    type: subField.Type,
+                    charactersLimit: (subField.Constraints && typeof subField.Constraints.charactersLimit === 'number')
+                        ? subField.Constraints.charactersLimit
+                        : -1
+                })),
+                isRadioGroup: !!formMeta.IsRadioGroup,
+                groupValue: formMeta.GroupValue || '',
+                choices: (formMeta.Choices || []).map(choice => ({
+                    choice: choice.Choice,
+                    internalId: choice.InternalId
+                }))
             };
         },
 
@@ -208,6 +223,9 @@
 
             if (typeof fieldType === 'string') {
                 const t = fieldType.toLowerCase();
+                if (t.includes('radiogroup'))
+                    return false;
+
                 return t.includes('checkbox') || t.includes('radio');
             }
 
@@ -285,31 +303,7 @@
 
         _enrichField(field, mapping, sourceData) {
             const dataKeys = mapping[field.identifier];
-            let generatedOptions = [];
-
-            if (this._isBooleanField(field.type)) {
-                const keys = dataKeys ? (Array.isArray(dataKeys) ? dataKeys : [dataKeys]) : [];
-                for (const dataKey of keys) {
-                    const value = this._extractValueFromData(sourceData, dataKey);
-                    const boolValue = this._resolveBooleanValue(value, field);
-                    if (boolValue !== null) {
-                        generatedOptions = [
-                            this._createOption(boolValue),
-                            this._createOption(boolValue === 'true' ? 'false' : 'true')
-                        ];
-                        break;
-                    }
-                }
-            } else {
-                if (dataKeys)
-                    generatedOptions = Array.isArray(dataKeys)
-                        ? this._generateOptionsFromMultipleKeys(dataKeys, sourceData, field.type)
-                        : this._generateOptionsFromSingleKey(dataKeys, sourceData, field.type);
-
-                if (generatedOptions.length === 0)
-                    generatedOptions = [{ label: '', value: '', source: 'no-mapping' }];
-            }
-
+            const generatedOptions = window.Autofiller.FieldTypes.enrich(field, dataKeys, sourceData);
             return { ...field, mappedDataKey: dataKeys || null, generatedOptions };
         },
 
@@ -355,73 +349,7 @@
         async detectAllForms() {
             return new Promise((resolve, reject) => {
                 try {
-                    window.Asc.plugin.callCommand(function () {
-                        const doc = Api.GetDocument();
-                        const forms = doc.GetAllForms();
-                        const formData = [];
-                        const processedIds = new Set();
-
-                        function isImageField(form) {
-                            const type = form.GetFormType ? form.GetFormType() : 'unknown';
-                            return ['pictureForm', 'signatureForm'].indexOf(type) !== -1;
-                        }
-
-                        function addFormToData(form, parentKey = null) {
-                            const formId = form.GetInternalId ? form.GetInternalId() : null;
-                            if (!formId || processedIds.has(formId)) {
-                                return;
-                            }
-
-                            if (isImageField(form)) return;
-
-                            processedIds.add(formId);
-                            const key = parentKey !== null ? parentKey : (form.GetFormKey ? form.GetFormKey() : null);
-
-                            formData.push({
-                                InternalId: formId,
-                                Key: key,
-                                Tag: form.GetTag ? form.GetTag() : '',
-                                Placeholder: form.GetPlaceholder ? form.GetPlaceholder() : '',
-                                Tip: form.GetTip ? form.GetTip() : '',
-                                Type: form.GetFormType ? form.GetFormType() : 'unknown',
-                                Text: form.GetText ? form.GetText() : '',
-                                Lock: form.IsFixed ? (form.IsFixed() ? 0 : null) : null
-                            });
-                        }
-
-                        function processSubForms(form) {
-                            let hasSubForms = false;
-                            const parentKey = form.GetFormKey ? form.GetFormKey() : null;
-
-                            if (form.GetSubForms && typeof form.GetSubForms === 'function') {
-                                try {
-                                    const subForms = form.GetSubForms();
-                                    if (subForms && subForms.length > 0) {
-                                        hasSubForms = true;
-                                        subForms.forEach(subForm => {
-                                            addFormToData(subForm, parentKey);
-                                            processSubForms(subForm);
-                                        });
-                                    }
-                                } catch (e) {
-                                    console.error(e);
-                                }
-                            }
-
-                            return hasSubForms;
-                        }
-
-                        for (let i = 0; i < forms.length; i++) {
-                            const form = forms[i];
-                            const hasSubForms = processSubForms(form);
-
-                            if (!hasSubForms) {
-                                addFormToData(form);
-                            }
-                        }
-
-                        return formData;
-                    }, false, true, (formsMeta) => {
+                    window.Asc.plugin.callCommand(window.Autofiller.FieldDetection.collectForms, false, true, (formsMeta) => {
                         if (!formsMeta || formsMeta.length === 0)
                             return resolve([]);
 
@@ -500,16 +428,7 @@
             if (storedData) {
                 this.formFieldsData = storedData.filter(field => {
                     field.isBoolean = FormDetectionService._isBooleanField(field.type);
-                    if (!field.isBoolean) return true;
-
-                    field.generatedOptions = (field.generatedOptions || [])
-                        .filter(opt => /^(true|false)$/.test(String(opt.value || '').trim().toLowerCase()))
-                        .map(opt => {
-                            const v = String(opt.value).trim().toLowerCase();
-                            return { label: v, value: v, source: 'validated' };
-                        });
-
-                    return field.generatedOptions.length > 0;
+                    return window.Autofiller.FieldTypes.normalizeStored(field);
                 });
                 return true;
             }
@@ -520,47 +439,29 @@
     };
 
     const FormOperationsController = {
-        _convertBooleanValue(value, fieldType) {
-            if (!FormDetectionService._isBooleanField(fieldType))
-                return value;
-
-            if (typeof value === 'string') {
-                const normalized = value.trim().toLowerCase();
-                if (normalized === 'true') return true;
-                if (normalized === 'false') return false;
-                return null;
-            }
-
-            if (typeof value === 'boolean') {
-                return value;
-            }
-
-            return null;
-        },
-
         async _storeOriginalValues(selectedData) {
             const originalValues = [];
 
-            for (const field of selectedData) {
+            const captureValue = async (fieldId, label, type) => {
                 try {
                     const currentValue = await window.Autofiller.Utils.withTimeout(
-                        FormService.getFieldValue(field.fieldId),
+                        FormService.getFieldValue(fieldId),
                         2000,
                         'Get field value'
                     );
-                    originalValues.push({
-                        fieldId: field.fieldId,
-                        label: field.label,
-                        value: currentValue,
-                        type: field.type
-                    });
+                    originalValues.push({ fieldId, label, value: currentValue, type });
                 } catch (error) {
-                    originalValues.push({
-                        fieldId: field.fieldId,
-                        label: field.label,
-                        value: '',
-                        type: field.type
-                    });
+                    originalValues.push({ fieldId, label, value: '', type });
+                }
+            };
+
+            for (const field of selectedData) {
+                const targets = window.Autofiller.FieldTypes.getTargets(field);
+                if (targets && targets.length) {
+                    for (const sub of targets)
+                        await captureValue(sub.internalId, field.label, sub.type || 'textForm');
+                } else {
+                    await captureValue(field.fieldId, field.label, field.type);
                 }
             }
 
@@ -572,16 +473,7 @@
         async _setFormValues(selectedData) {
             for (const field of selectedData) {
                 try {
-                    const valueToSet = this._convertBooleanValue(field.value, field.type);
-                    if (FormDetectionService._isBooleanField(field.type) && valueToSet === null) {
-                        continue;
-                    }
-
-                    await window.Autofiller.Utils.withTimeout(
-                        FormService.setFieldValue(field.fieldId, valueToSet),
-                        2000,
-                        `Set field ${field.fieldId}`
-                    );
+                    await window.Autofiller.FieldTypes.apply(field);
                 } catch (error) {
                     console.error(`Error setting field ${field.fieldId}:`, error);
                 }
