@@ -607,6 +607,8 @@
                 return FormOperationsController.handleApplyRequest();
             if (buttonId === 'restartBtn' || buttonId === 1)
                 return FormInitializer._handleRestart();
+            if (buttonId === 'backBtn')
+                return FormInitializer._handleBack();
             if (buttonId === 'closeBtn' || buttonId === -1)
                 return window.Autofiller.EventBus.closePlugin();
         },
@@ -679,6 +681,23 @@
                 restartButton.addEventListener('click', () => {
                     this._handleRestart();
                 });
+
+            const backButton = document.getElementById('backBtn');
+            if (backButton)
+                backButton.addEventListener('click', () => {
+                    this._handleBack();
+                });
+        },
+
+        _handleBack() {
+            if (window.Autofiller.JsonDataSource)
+                window.Autofiller.JsonDataSource.clear();
+            if (window.Autofiller.DataSources) {
+                window.Autofiller.DataSources.clearCachedData();
+                window.Autofiller.DataSources.select('');
+            }
+
+            window.location.href = 'index.html' + (window.Autofiller.getThemeURLParams ? window.Autofiller.getThemeURLParams() : '');
         },
 
         async _handleRestart() {
@@ -785,7 +804,7 @@
             let realData;
             try {
                 realData = await window.Autofiller.Utils.withTimeout(
-                    window.Autofiller.DataExtractor.fetch(),
+                    window.Autofiller.DataSources.fetch(),
                     5000,
                     'Data Fetching'
                 );
@@ -875,6 +894,11 @@
             const restartBtnEmpty = document.getElementById('restartBtnEmpty');
             if (restartBtnEmpty) {
                 restartBtnEmpty.addEventListener('click', () => this._handleRestart());
+            }
+
+            const backBtnEmpty = document.getElementById('backBtnEmpty');
+            if (backBtnEmpty) {
+                backBtnEmpty.addEventListener('click', () => this._handleBack());
             }
 
             this._toggleView(hasData);

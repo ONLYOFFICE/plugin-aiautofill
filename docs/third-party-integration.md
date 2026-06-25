@@ -8,6 +8,8 @@ The AI Auto Fill plugin for ONLYOFFICE enables automated form filling using AI-p
 
 -  [Quick Start](#quick-start)
 
+-  [Data Sources](#data-sources)
+
 -  [Configuration](#configuration)
 
 -  [Code Rotation Security](#code-rotation-security)
@@ -20,13 +22,24 @@ The AI Auto Fill plugin for ONLYOFFICE enables automated form filling using AI-p
 
 ## Quick Start
 
-To integrate with the AI Auto Fill plugin, you need to:
+The plugin reads form-filling data from one of two sources:
 
-1.  **Configure the plugin** with your callback URL (required) and initial code (required) for security purposes.
+1.  **File** — the user loads a local `.json` file from the plugin panel (no configuration required).
 
-2.  **Implement a callback endpoint** that returns composed data from a third-party API which will be used for form matching and filling.
+2.  **Endpoint** (`options.callback`) — implement an endpoint that returns composed data from a third-party API, with optional [code rotation](#code-rotation-security) security.
 
-3.  **Support code rotation** to securely call your backend's data endpoint and for secure subsequent requests.
+## Data Sources
+
+The plugin's main panel shows a **Data source** selector. The user must pick a source before
+the **Autofill** button becomes enabled. The selector is populated dynamically:
+
+- **File** — always available; the user loads a local `.json` file.
+- **Endpoint** — shown only when `callback` is configured in the plugin options.
+
+| Source            | UI label            | Option     | Type          | Code rotation | Use case                                     |
+| ----------------- | ------------------- | ---------- | ------------- | ------------- | -------------------------------------------- |
+| JSON file         | `File`              | (UI only)  | user-selected | No            | User loads a JSON file from the plugin panel |
+| Callback endpoint | `Endpoint`          | `callback` | string (URL)  | Yes           | Dynamic data served by your backend          |
 
 ## Configuration
 
@@ -38,25 +51,25 @@ Configure the plugin through ONLYOFFICE Document Server's plugin configuration:
 
 // When initializing the ONLYOFFICE Document Server configuration
 const config = {
-	// some configuration before
-	editorConfig: {
-		// some configuration before
-		plugins: {
-			autostart: ['asc.{6A95DA5C-857E-4C26-B00B-34876F1EEAD8}'], // to automatically open the plugin
-			options: {
-				'asc.{6A95DA5C-857E-4C26-B00B-34876F1EEAD8}': {
-					code: 'some_initial_generated_code', // code for security purposes
- 					callback: 'http(s)://your_backend/your_data_endpoint', // your data extraction endpoint
-				}
-			},
-			pluginsData: [
-				'http(s)://you_backend/path_to_plugin/config.json' // location to plugin's config.json
-			],
-			url: 'http(s)://your_backend/path_to_plugin' // location to plugin
-		},
-		// some configuration after
-	}
-	// some configuration after
+  // some configuration before
+  editorConfig: {
+    // some configuration before
+    plugins: {
+      autostart: ['asc.{6A95DA5C-857E-4C26-B00B-34876F1EEAD8}'], // to automatically open the plugin
+      options: {
+        'asc.{6A95DA5C-857E-4C26-B00B-34876F1EEAD8}': {
+          code: 'some_initial_generated_code', // code for security purposes
+           callback: 'http(s)://your_backend/your_data_endpoint', // your data extraction endpoint
+        }
+      },
+      pluginsData: [
+        'http(s)://you_backend/path_to_plugin/config.json' // location to plugin's config.json
+      ],
+      url: 'http(s)://your_backend/path_to_plugin' // location to plugin
+    },
+    // some configuration after
+  }
+  // some configuration after
 };
 
 // Proceed with your usual initialization
@@ -160,10 +173,10 @@ Your endpoint must return a JSON response with two required fields:
 
 ```json
 {
-	"data":  {
-		// Your form data object
-	},
-	"code": "next-access-code"
+  "data":  {
+    // Your form data object
+  },
+  "code": "next-access-code"
 }
 ```
 
@@ -182,14 +195,14 @@ The plugin validates responses with the following checks:
 
 ```json
 {
-	"data": {
-		"firstName": "John",
-		"lastName": "Doe",
-		"email": "john.doe@example.com",
-		"phone": "+1-234-567-8900",
-		"address": "123 Main St"
-	},
-	"code": "xyz789abc"
+  "data": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@example.com",
+    "phone": "+1-234-567-8900",
+    "address": "123 Main St"
+  },
+  "code": "xyz789abc"
 }
 ```
 
@@ -197,23 +210,23 @@ The plugin validates responses with the following checks:
 
 ```json
 {
-	"data": {
-		"user": {
-			"name": {
-				"first": "John",
-				"last": "Doe"
-			},
-			"contact": {
-				"email": "john.doe@example.com",
-				"phone": "+1-234-567-8900"
-			}
-		},
-		"company": {
-			"name": "...",
-			"address": "..."
-		}
-	},
-	"code":  "abc123"
+  "data": {
+    "user": {
+      "name": {
+        "first": "John",
+        "last": "Doe"
+      },
+      "contact": {
+        "email": "john.doe@example.com",
+        "phone": "+1-234-567-8900"
+      }
+    },
+    "company": {
+      "name": "...",
+      "address": "..."
+    }
+  },
+  "code":  "abc123"
 }
 ```
 
@@ -229,19 +242,19 @@ The plugin will extract nested keys as dot-notation paths:
 
 ```json
 {
-	"data":  {
-		"employees":  [
-			{
-				"name":  "John Doe",
-				"position":  "Manager"
-			},
-			{
-				"name":  "Jane Doe",
-				"position":  "Developer"
-			}
-		]
-	},
-	"code":  "abc123"
+  "data":  {
+    "employees":  [
+      {
+        "name":  "John Doe",
+        "position":  "Manager"
+      },
+      {
+        "name":  "Jane Doe",
+        "position":  "Developer"
+      }
+    ]
+  },
+  "code":  "abc123"
 }
 ```
 
@@ -333,8 +346,8 @@ UI->>Doc: 13. Fill document<br/>form fields
 // 1. Invalid response structure
 
 {
-	// Missing "data" or "code" fields
-	// Plugin will throw: "Invalid API response: missing data property"
+  // Missing "data" or "code" fields
+  // Plugin will throw: "Invalid API response: missing data property"
 }
 
 // 2. Network timeout (5 second limit)

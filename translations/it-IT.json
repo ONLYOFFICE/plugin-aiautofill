@@ -41,7 +41,7 @@
 	"All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed?": "Tutti i dati nel documento verranno sostituiti con le impostazioni selezionate in precedenza. Sei sicuro di voler procedere?",
 	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "I dati non salvati nel documento verranno eliminati. Sei sicuro di voler continuare?",
 
-	"No Data Available": "Nessun dato disponibile",
+	"No data available": "Nessun dato disponibile",
 	"No data is available to fill the form fields. Please check your data source and try again.": "Non sono disponibili dati per compilare i campi del modulo. Controlla la fonte dati e riprova.",
 
 	"No form fields found": "Nessun campo del modulo rilevato",
@@ -50,5 +50,12 @@
 	"The form is signed and cannot be filled automatically.": "Il modulo è firmato e non può essere compilato automaticamente.",
 
 	"Plugin unavailable now": "Plugin non disponibile ora",
-	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Questo plugin non è attualmente disponibile perché non è configurato alcun modello IA. Per abilitare questa funzione, apri la scheda IA, vai su Impostazioni e seleziona o aggiungi un modello IA per la categoria Chatbot."
+	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Questo plugin non è attualmente disponibile perché non è configurato alcun modello IA. Per abilitare questa funzione, apri la scheda IA, vai su Impostazioni e seleziona o aggiungi un modello IA per la categoria Chatbot.",
+
+	"Load JSON": "Carica JSON",
+	"The selected file is not valid JSON.": "Il file selezionato non è un JSON valido.",
+	"Data source": "Origine dati",
+	"Select a data source": "Seleziona un'origine dati",
+	"File": "File",
+	"Endpoint": "Endpoint"
 }

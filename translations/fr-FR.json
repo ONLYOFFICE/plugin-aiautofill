@@ -41,7 +41,7 @@
 	"All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed?": "Toutes les données du document seront remplacées par les paramètres sélectionnés précédemment. Voulez-vous continuer ?",
 	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "Les données non enregistrées dans le document seront supprimées. Voulez-vous continuer ?",
 
-	"No Data Available": "Aucune donnée disponible",
+	"No data available": "Aucune donnée disponible",
 	"No data is available to fill the form fields. Please check your data source and try again.": "Aucune donnée n'est disponible pour remplir les champs du formulaire. Veuillez vérifier votre source de données et réessayer.",
 
 	"No form fields found": "Aucun champ de formulaire détecté",
@@ -50,5 +50,12 @@
 	"The form is signed and cannot be filled automatically.": "Le formulaire est signé et ne peut pas être rempli automatiquement.",
 
 	"Plugin unavailable now": "Plugin indisponible pour le moment",
-	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Ce plugin est actuellement indisponible car aucun modèle IA n’est configuré. Pour activer cette fonctionnalité, ouvrez l’onglet IA, accédez aux Paramètres, puis sélectionnez ou ajoutez un modèle IA pour la catégorie Chatbot."
+	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Ce plugin est actuellement indisponible car aucun modèle IA n’est configuré. Pour activer cette fonctionnalité, ouvrez l’onglet IA, accédez aux Paramètres, puis sélectionnez ou ajoutez un modèle IA pour la catégorie Chatbot.",
+
+	"Load JSON": "Charger JSON",
+	"The selected file is not valid JSON.": "Le fichier sélectionné n'est pas un JSON valide.",
+	"Data source": "Source de données",
+	"Select a data source": "Sélectionnez une source de données",
+	"File": "Fichier",
+	"Endpoint": "Point de terminaison"
 }

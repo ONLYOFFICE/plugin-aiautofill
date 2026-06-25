@@ -32,7 +32,10 @@
     <script src="scripts/storage.js"></script>
     <script src="scripts/event.js"></script>
     <script src="scripts/library.js"></script>
-    <script src="scripts/extractor.js"></script>
+    <script src="scripts/datasource/registry.js"></script>
+    <script src="scripts/datasource/context.js"></script>
+    <script src="scripts/datasource/json.js"></script>
+    <script src="scripts/datasource/callback.js"></script>
     <script src="scripts/mapper.js"></script>
     <script src="scripts/fields/constraints.js"></script>
     <script src="scripts/fields/registry.js"></script>
@@ -208,6 +211,104 @@
             color: var(--color-button-secondary-text);
         }
 
+        .data-source {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            margin-bottom: 16px;
+            padding: 10px;
+
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius-button);
+
+            background-color: var(--color-bg-secondary);
+        }
+
+        .data-source__label {
+            font-weight: 600;
+
+            color: var(--color-text);
+        }
+
+        .data-source__select {
+            box-sizing: border-box;
+            width: 100%;
+            min-height: var(--button-height);
+
+            padding: 6px 28px 6px 10px;
+
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius-button);
+
+            font-family: var(--font-family);
+            font-size: var(--font-size);
+            text-overflow: ellipsis;
+
+            background-color: var(--color-bg-primary);
+            color: var(--color-text);
+            cursor: pointer;
+        }
+
+        .data-source__file {
+            display: flex;
+            flex-direction: column;
+            
+            gap: 8px;
+        }
+
+        .file-source__info {
+            display: flex;
+            align-items: center;
+
+            gap: 4px;
+            padding: 4px 4px 4px 10px;
+
+            border-radius: var(--border-radius-button);
+
+            background-color: var(--color-bg-primary);
+        }
+
+        .file-source__name {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            color: var(--color-text);
+        }
+
+        .file-source__remove {
+            flex-shrink: 0;
+
+            width: 20px;
+            height: 20px;
+
+            padding: 0;
+
+            border: none;
+            border-radius: 50%;
+
+            font-size: 16px;
+            line-height: 1;
+
+            background: none;
+            cursor: pointer;
+            color: var(--color-text-secondary);
+        }
+
+        .file-source__remove:hover {
+            color: var(--color-text);
+        }
+
+        .file-source__error {
+            margin: 0;
+
+            color: var(--color-error-text, #cc3333);
+        }
+
         .error {
             display: none;
             flex-direction: column;
@@ -351,6 +452,21 @@
             <div class="text-content description i18n">
                 An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms?
             </div>
+            <div class="data-source">
+                <label class="data-source__label i18n" for="dataSourceSelect">Data source</label>
+                <select class="data-source__select" id="dataSourceSelect">
+                    <option value="" disabled selected class="i18n">Select a data source</option>
+                </select>
+                <div class="data-source__file" id="fileControl" style="display: none;">
+                    <input type="file" id="dataFileInput" accept=".json,application/json" hidden>
+                    <button type="button" class="btn btn-secondary i18n" id="loadFileBtn">Load JSON</button>
+                    <div class="file-source__info" id="fileInfo" style="display: none;">
+                        <span class="file-source__name" id="fileName"></span>
+                        <button type="button" class="file-source__remove" id="removeFileBtn" title="Remove" aria-label="Remove">&times;</button>
+                    </div>
+                    <p class="file-source__error i18n" id="fileError" style="display: none;">The selected file is not valid JSON.</p>
+                </div>
+            </div>
             <div class="button-group">
                 <button class="btn btn-primary i18n" id="autofillBtn">Autofill</button>
                 <button class="btn btn-secondary i18n" id="cancelBtn">Cancel</button>
@@ -414,11 +530,140 @@
     <script>
         let loader;
 
+        function sourceReady() {
+            const datasource = window.Autofiller.DataSources;
+            const id = datasource.getSelectedId();
+            if (!id)
+                return false;
+
+            const source = datasource.get(id);
+            return !!(source && source.isAvailable && source.isAvailable());
+        }
+
         function setButtonsEnabled(enabled) {
-            ['autofillBtn', 'cancelBtn'].forEach(id => {
-                const btn = document.getElementById(id);
-                if (btn) btn.disabled = !enabled;
+            const cancelBtn = document.getElementById('cancelBtn');
+            if (cancelBtn)
+                cancelBtn.disabled = !enabled;
+
+            const autofillBtn = document.getElementById('autofillBtn');
+            if (autofillBtn)
+                autofillBtn.disabled = !enabled || !sourceReady();
+        }
+
+        function setProcessing(processing) {
+            ['autofillBtn', 'cancelBtn', 'dataSourceSelect', 'loadFileBtn', 'removeFileBtn'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) element.disabled = processing;
             });
+        }
+
+        function reinitializeFileSource() {
+            const fileInfo = document.getElementById('fileInfo');
+            const fileName = document.getElementById('fileName');
+            const loadFileBtn = document.getElementById('loadFileBtn');
+            const source = window.Autofiller.JsonDataSource;
+
+            if (source && source.hasData) {
+                if (fileName)
+                    fileName.textContent = source.fileName || 'data.json';
+                if (fileInfo)
+                    fileInfo.style.display = 'flex';
+                if (loadFileBtn)
+                    loadFileBtn.style.display = 'none';
+            } else {
+                if (fileInfo)
+                    fileInfo.style.display = 'none';
+                if (loadFileBtn)
+                    loadFileBtn.style.display = 'flex';
+            }
+        }
+
+        function reinitializeDataSource() {
+            const select = document.getElementById('dataSourceSelect');
+            if (select)
+                select.value = '';
+
+            window.Autofiller.DataSources.select('');
+            window.Autofiller.JsonDataSource?.clear();
+
+            const fileControl = document.getElementById('fileControl');
+            if (fileControl)
+                fileControl.style.display = 'none';
+
+            showFileError(false);
+            reinitializeFileSource();
+        }
+
+        function buildDataSourceOptions() {
+            const select = document.getElementById('dataSourceSelect');
+            if (!select)
+                return;
+
+            Array.from(select.querySelectorAll('option[data-dynamic]')).forEach(o => o.remove());
+            window.Autofiller.DataSources.listSelectable().forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.id;
+                option.textContent = window.Asc?.plugin?.tr ? window.Asc.plugin.tr(item.label) : item.label;
+                option.setAttribute('data-dynamic', '');
+                select.appendChild(option);
+            });
+        }
+
+        function isFileSourceSelected() {
+            const select = document.getElementById('dataSourceSelect');
+            const meta = window.Autofiller.DataSources.listSelectable().find(item => item.id === select?.value);
+            return !!(meta && meta.requiresFile);
+        }
+
+        function handleSourceChange() {
+            const select = document.getElementById('dataSourceSelect');
+            const fileControl = document.getElementById('fileControl');
+            const id = select?.value || '';
+
+            window.Autofiller.DataSources.select(id);
+            const needsFile = isFileSourceSelected();
+            if (fileControl)
+                fileControl.style.display = needsFile ? 'flex' : 'none';
+
+            showFileError(false);
+            if (needsFile)
+                reinitializeFileSource();
+
+            setButtonsEnabled(true);
+        }
+
+        function showFileError(show) {
+            const fileError = document.getElementById('fileError');
+            if (fileError)
+                fileError.style.display = show ? 'block' : 'none';
+        }
+
+        async function handleFileSelected(event) {
+            const input = event.target;
+            const file = input.files && input.files[0];
+            if (!file) return;
+
+            showFileError(false);
+            try {
+                const text = await file.text();
+                window.Autofiller.JsonDataSource.load(text, file.name);
+                reinitializeFileSource();
+            } catch (error) {
+                console.error('Failed to load data file:', error);
+                window.Autofiller.JsonDataSource.clear();
+                reinitializeFileSource();
+                showFileError(true);
+            } finally {
+                input.value = '';
+                setButtonsEnabled(true);
+            }
+        }
+
+        function handleRemoveFile() {
+            window.Autofiller.JsonDataSource.clear();
+            showFileError(false);
+            reinitializeFileSource();
+            setButtonsEnabled(true);
         }
 
         function showView(view) {
@@ -452,6 +697,7 @@
         async function handleDetection() {
             try {
                 setButtonsEnabled(false);
+                setProcessing(true);
                 if (loader)
                     loader.show(window.Asc.plugin.tr('Analyzing form fields with AI'));
 
@@ -469,7 +715,7 @@
                 let realData;
                 try {
                     realData = await window.Autofiller.Utils.withTimeout(
-                        window.Autofiller.DataExtractor.fetch(),
+                        window.Autofiller.DataSources.fetch(),
                         5000,
                         'Data Fetching'
                     );
@@ -520,6 +766,7 @@
 
                 const storage = window.Autofiller.StorageManager('autofiller');
                 storage.set('form_fields', fieldsWithOptions);
+                window.Autofiller.DataSources.clearSession();
                 
                 if (loader)
                     loader.updateMessage(window.Asc.plugin.tr('Loading form'));
@@ -652,7 +899,16 @@
             document.getElementById('cancelBtn')?.addEventListener('click', close);
             document.getElementById('retryBtnFields')?.addEventListener('click', handleRestart);
             document.getElementById('retryBtnEmpty')?.addEventListener('click', handleRestart);
-            
+
+            buildDataSourceOptions();
+            reinitializeDataSource();
+
+            const select = document.getElementById('dataSourceSelect');
+            select?.addEventListener('change', handleSourceChange);
+            document.getElementById('loadFileBtn')?.addEventListener('click', () => document.getElementById('dataFileInput')?.click());
+            document.getElementById('dataFileInput')?.addEventListener('change', handleFileSelected);
+            document.getElementById('removeFileBtn')?.addEventListener('click', handleRemoveFile);
+
             window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
 
             initializePlugin();

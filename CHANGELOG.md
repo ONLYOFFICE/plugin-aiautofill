@@ -2,10 +2,14 @@
 
 ##
 ### Added
+- Data source selector with JSON file upload and callback endpoint support.
+- Pluggable data source registry.
 - Dedicated handlers for text, boolean, radio, and complex form field types.
 - Field constraint validation for character limits and related rules.
 
 ### Changed
+- Refactored data extraction into pluggable data source modules.
+- Updated third-party integration documentation for multiple data source options.
 - Refined AI mapping prompt with a confidence threshold and clearer matching rules.
 - Excluded signature form fields from autofill processing.
 

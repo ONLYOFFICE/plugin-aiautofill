@@ -41,7 +41,7 @@
 	"All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed?": "Alle Daten im Dokument werden durch die zuvor ausgewählten Einstellungen ersetzt. Möchten Sie fortfahren?",
 	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "Nicht gespeicherte Daten im Dokument werden gelöscht. Möchten Sie fortfahren?",
 
-	"No Data Available": "Keine Daten verfügbar",
+	"No data available": "Keine Daten verfügbar",
 	"No data is available to fill the form fields. Please check your data source and try again.": "Es sind keine Daten verfügbar, um die Formularfelder auszufüllen. Bitte prüfen Sie die Datenquelle und versuchen Sie es erneut.",
 
 	"No form fields found": "Keine Formularfelder erkannt",
@@ -50,5 +50,12 @@
 	"The form is signed and cannot be filled automatically.": "Das Formular ist signiert und kann nicht automatisch ausgefüllt werden.",
 
 	"Plugin unavailable now": "Plugin derzeit nicht verfügbar",
-	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Dieses Plugin ist derzeit nicht verfügbar, da kein KI-Modell konfiguriert ist. Um diese Funktion zu aktivieren, öffnen Sie die Registerkarte „KI“, gehen Sie zu „Einstellungen“ und wählen oder fügen Sie ein KI-Modell für die Kategorie „Chatbot“ hinzu."
+	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Dieses Plugin ist derzeit nicht verfügbar, da kein KI-Modell konfiguriert ist. Um diese Funktion zu aktivieren, öffnen Sie die Registerkarte „KI“, gehen Sie zu „Einstellungen“ und wählen oder fügen Sie ein KI-Modell für die Kategorie „Chatbot“ hinzu.",
+
+	"Load JSON": "JSON laden",
+	"The selected file is not valid JSON.": "Die ausgewählte Datei ist kein gültiges JSON.",
+	"Data source": "Datenquelle",
+	"Select a data source": "Datenquelle auswählen",
+	"File": "Datei",
+	"Endpoint": "Endpunkt"
 }
