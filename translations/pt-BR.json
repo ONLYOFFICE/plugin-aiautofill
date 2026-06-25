@@ -41,7 +41,7 @@
 	"All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed?": "Todos os dados no documento serão substituídos pelas configurações selecionadas anteriormente. Tem certeza de que deseja continuar?",
 	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "Dados não salvos no documento serão excluídos. Tem certeza de que deseja continuar?",
 
-	"No Data Available": "Nenhum dado disponível",
+	"No data available": "Nenhum dado disponível",
 	"No data is available to fill the form fields. Please check your data source and try again.": "Não há dados disponíveis para preencher os campos do formulário. Verifique sua fonte de dados e tente novamente.",
 
 	"No form fields found": "Nenhum campo de formulário detectado",
@@ -50,5 +50,12 @@
 	"The form is signed and cannot be filled automatically.": "O formulário está assinado e não pode ser preenchido automaticamente.",
 
 	"Plugin unavailable now": "Plugin indisponível no momento",
-	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Este plugin está indisponível no momento porque nenhum modelo de IA está configurado. Para habilitar este recurso, abra a guia IA, vá para Configurações e selecione ou adicione um modelo de IA para a categoria Chatbot."
+	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Este plugin está indisponível no momento porque nenhum modelo de IA está configurado. Para habilitar este recurso, abra a guia IA, vá para Configurações e selecione ou adicione um modelo de IA para a categoria Chatbot.",
+
+	"Load JSON": "Carregar JSON",
+	"The selected file is not valid JSON.": "O arquivo selecionado não é um JSON válido.",
+	"Data source": "Fonte de dados",
+	"Select a data source": "Selecione uma fonte de dados",
+	"File": "Arquivo",
+	"Endpoint": "Endpoint"
 }

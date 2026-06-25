@@ -41,7 +41,7 @@
 	"All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed?": "سيتم استبدال جميع البيانات في المستند بالإعدادات التي اخترتها سابقًا. هل أنت متأكد أنك تريد المتابعة؟",
 	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "سيتم حذف البيانات غير المسجلة في المستند. هل أنت متأكد أنك تريد المتابعة؟",
 
-	"No Data Available": "لا توجد بيانات متاحة",
+	"No data available": "لا توجد بيانات متاحة",
 	"No data is available to fill the form fields. Please check your data source and try again.": "لا توجد بيانات متاحة لملء حقول النموذج. يُرجى التحقق من مصدر البيانات والمحاولة مرة أخرى.",
 
 	"No form fields found": "لم يتم اكتشاف حقول نموذج",
@@ -50,5 +50,12 @@
 	"The form is signed and cannot be filled automatically.": "النموذج موقع ولا يمكن تعبئته تلقائيًا.",
 
 	"Plugin unavailable now": "الإضافة غير متاحة الآن",
-	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "هذه الإضافة غير متاحة حاليًا لأنه لم يتم تكوين نموذج ذكاء اصطناعي. لتمكين هذه الميزة، افتح علامة تبويب الذكاء الاصطناعي، انتقل إلى الإعدادات، ثم اختر أو أضف نموذج ذكاء اصطناعي لفئة روبوت الدردشة."
+	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "هذه الإضافة غير متاحة حاليًا لأنه لم يتم تكوين نموذج ذكاء اصطناعي. لتمكين هذه الميزة، افتح علامة تبويب الذكاء الاصطناعي، انتقل إلى الإعدادات، ثم اختر أو أضف نموذج ذكاء اصطناعي لفئة روبوت الدردشة.",
+
+	"Load JSON": "تحميل JSON",
+	"The selected file is not valid JSON.": "الملف المحدد ليس JSON صالحًا.",
+	"Data source": "مصدر البيانات",
+	"Select a data source": "اختر مصدر البيانات",
+	"File": "ملف",
+	"Endpoint": "نقطة النهاية"
 }

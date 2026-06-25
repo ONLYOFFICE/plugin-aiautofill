@@ -41,7 +41,7 @@
 	"All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed?": "Svi podaci u dokumentu biće zamenjeni podešavanjima koja ste ranije izabrali. Da li ste sigurni da želite da nastavite?",
 	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "Nesačuvani podaci u dokumentu biće obrisani. Da li ste sigurni da želite da nastavite?",
 
-	"No Data Available": "Nema dostupnih podataka",
+	"No data available": "Nema dostupnih podataka",
 	"No data is available to fill the form fields. Please check your data source and try again.": "Nema dostupnih podataka za popunjavanje polja obrasca. Proverite izvor podataka i pokušajte ponovo.",
 
 	"No form fields found": "Nisu otkrivena polja obrasca",
@@ -50,5 +50,12 @@
 	"The form is signed and cannot be filled automatically.": "Obracaj je podnadjen i ne može biti automatski popunjen.",
 
 	"Plugin unavailable now": "Dodatak trenutno nije dostupan",
-	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Ovaj dodatak trenutno nije dostupan jer nije podešen AI model. Da biste omogućili ovu funkciju, otvorite karticu AI, idite u Podešavanja i izaberite ili dodajte AI model za kategoriju Chatbot."
+	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Ovaj dodatak trenutno nije dostupan jer nije podešen AI model. Da biste omogućili ovu funkciju, otvorite karticu AI, idite u Podešavanja i izaberite ili dodajte AI model za kategoriju Chatbot.",
+
+	"Load JSON": "Učitaj JSON",
+	"The selected file is not valid JSON.": "Izabrana datoteka nije ispravan JSON.",
+	"Data source": "Izvor podataka",
+	"Select a data source": "Izaberite izvor podataka",
+	"File": "Datoteka",
+	"Endpoint": "Krajnja tačka"
 }

@@ -41,7 +41,7 @@
 	"All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed?": "Všechna data v dokumentu budou nahrazena nastavením, které jste dříve vybrali. Opravdu chcete pokračovat?",
 	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "Neuložená data v dokumentu budou smazána. Opravdu chcete pokračovat?",
 
-	"No Data Available": "Nejsou k dispozici žádná data",
+	"No data available": "Nejsou k dispozici žádná data",
 	"No data is available to fill the form fields. Please check your data source and try again.": "Nejsou k dispozici žádná data pro vyplnění polí formuláře. Zkontrolujte zdroj dat a zkuste to znovu.",
 
 	"No form fields found": "Nebyla zjištěna žádná pole formuláře",
@@ -50,5 +50,12 @@
 	"The form is signed and cannot be filled automatically.": "Formulář je podepsán a nelze jej vyplnit automaticky.",
 
 	"Plugin unavailable now": "Plugin není nyní k dispozici",
-	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Tento plugin je momentálně nedostupný, protože není nakonfigurován žádný model AI. Chcete-li tuto funkci povolit, otevřete kartu AI, přejděte do Nastavení a vyberte nebo přidejte model AI pro kategorii Chatbot."
+	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Tento plugin je momentálně nedostupný, protože není nakonfigurován žádný model AI. Chcete-li tuto funkci povolit, otevřete kartu AI, přejděte do Nastavení a vyberte nebo přidejte model AI pro kategorii Chatbot.",
+
+	"Load JSON": "Načíst JSON",
+	"The selected file is not valid JSON.": "Vybraný soubor není platný JSON.",
+	"Data source": "Zdroj dat",
+	"Select a data source": "Vyberte zdroj dat",
+	"File": "Soubor",
+	"Endpoint": "Koncový bod"
 }

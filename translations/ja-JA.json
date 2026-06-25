@@ -41,7 +41,7 @@
 	"All data in the document will be replaced with the settings you previously selected. Are you sure you want to proceed?": "ドキュメント内のすべてのデータは、以前に選択した設定で置き換えられます。続行してもよろしいですか？",
 	"An unrecorded data in the document will be deleted. Are you sure you want to continue?": "ドキュメント内の未保存データは削除されます。続行してもよろしいですか？",
 
-	"No Data Available": "利用可能なデータがありません",
+	"No data available": "利用可能なデータがありません",
 	"No data is available to fill the form fields. Please check your data source and try again.": "フォームフィールドに入力するデータがありません。データソースを確認して再試行してください。",
 
 	"No form fields found": "検出されたフォームフィールドがありません",
@@ -50,5 +50,12 @@
 	"The form is signed and cannot be filled automatically.": "フォームは署名されているため、自動入力は実行できません。",
 
 	"Plugin unavailable now": "プラグインは現在ご利用いただけません",
-	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "AIモデルが設定されていないため、このプラグインは現在利用できません。この機能を有効にするには、［AI］タブを開き、［設定］でチャットボットカテゴリ用のAIモデルを選択または追加してください。"
+	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "AIモデルが設定されていないため、このプラグインは現在利用できません。この機能を有効にするには、［AI］タブを開き、［設定］でチャットボットカテゴリ用のAIモデルを選択または追加してください。",
+
+	"Load JSON": "JSON を読み込む",
+	"The selected file is not valid JSON.": "選択したファイルは有効な JSON ではありません。",
+	"Data source": "データソース",
+	"Select a data source": "データソースを選択",
+	"File": "ファイル",
+	"Endpoint": "エンドポイント"
 }
