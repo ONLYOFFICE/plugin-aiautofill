@@ -109,7 +109,7 @@
                 _nextCode = null;
 
                 const address = code ? `${url}?code=${encodeURIComponent(code)}` : url;
-                const response = await fetch(address);
+                const response = await fetch(address, { credentials: 'omit' });
 
                 if (!response.ok) {
                     const error = new Error(`HTTP error! status: ${response.status}`);
