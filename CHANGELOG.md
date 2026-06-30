@@ -1,6 +1,6 @@
 # Change Log
 
-##
+## 1.1.0
 ### Added
 - Dedicated handlers for text, boolean, radio, and complex form field types.
 - Field constraint validation for character limits and related rules.
