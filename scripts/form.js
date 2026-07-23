@@ -189,16 +189,18 @@
             const key = formMeta.Key || null;
             const tip = formMeta.Tip || '';
             const placeholder = formMeta.Placeholder || '';
-            const fieldName = key || tag || '';
-            const readable = tip.trim() || placeholder.trim();
-            const isGenericName = !fieldName ||
-                !!(window.Autofiller.Prompts && window.Autofiller.Prompts.isGenericIdentifier(fieldName));
-            const identifier = (isGenericName && readable) ? readable : fieldName;
+            const label = formMeta.Label || '';
+            const keyName = (key || '').trim();
+            const readable = [tip, placeholder, label, tag].map(t => String(t || '').trim()).find(Boolean) || '';
+            const isGenericKey = !keyName ||
+                !!(window.Autofiller.Prompts && window.Autofiller.Prompts.isGenericIdentifier(keyName));
+            const identifier = (isGenericKey && readable) ? readable : (keyName || readable);
             const type = formMeta.Type || 'unknown';
             return {
                 internalId: formMeta.InternalId,
                 key: key,
                 tag: tag,
+                label: label,
                 tip: tip,
                 placeholder: placeholder,
                 identifier: identifier,
@@ -310,7 +312,7 @@
                 if (v === 'true' || v === 'false')
                     return v;
 
-                const ids = [field?.key, field?.tag, field?.identifier, field?.tip, field?.placeholder]
+                const ids = [field?.key, field?.tag, field?.label, field?.identifier, field?.tip, field?.placeholder]
                     .filter(Boolean)
                     .map(s => String(s).trim().toLowerCase());
 
