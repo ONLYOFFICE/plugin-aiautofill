@@ -438,7 +438,8 @@
         }
 
         function handleRestart() {
-            window.Autofiller.FormDetectionService.detectAllForms().then(formFields => {
+            window.Autofiller.FormDetectionService.detectAllForms().then(allFormFields => {
+                const formFields = window.Autofiller.Prompts.filterMeaningfulFields(allFormFields || []);
                 if (!formFields || formFields.length === 0)
                     showView('errorFields');
                 else

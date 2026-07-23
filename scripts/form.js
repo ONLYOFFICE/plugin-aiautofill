@@ -143,7 +143,11 @@
             const key = formMeta.Key || null;
             const tip = formMeta.Tip || '';
             const placeholder = formMeta.Placeholder || '';
-            const identifier = key || tag || tip || placeholder;
+            const fieldName = key || tag || '';
+            const readable = tip.trim() || placeholder.trim();
+            const isGenericName = !fieldName ||
+                !!(window.Autofiller.Prompts && window.Autofiller.Prompts.isGenericIdentifier(fieldName));
+            const identifier = (isGenericName && readable) ? readable : fieldName;
             const type = formMeta.Type || 'unknown';
             return {
                 internalId: formMeta.InternalId,
@@ -304,7 +308,11 @@
         _enrichField(field, mapping, sourceData) {
             const dataKeys = mapping[field.identifier];
             const generatedOptions = window.Autofiller.FieldTypes.enrich(field, dataKeys, sourceData);
-            return { ...field, mappedDataKey: dataKeys || null, generatedOptions };
+            return {
+                ...field,
+                mappedDataKey: dataKeys || null,
+                generatedOptions
+            };
         },
 
         _generateOptionsFromMultipleKeys(dataKeys, sourceData, fieldType) {
@@ -775,11 +783,15 @@
             const updateMsg = (msg) => FormStateManager.loader?.updateMessage(window.Asc.plugin.tr(msg));
 
             updateMsg('Detecting form fields...');
-            const formFields = await FormDetectionService.detectAllForms();
-            if (!formFields?.length) {
+            const allFormFields = await FormDetectionService.detectAllForms();
+            if (!allFormFields?.length) {
                 window.location.href = 'index.html' + (window.Autofiller.getThemeURLParams ? window.Autofiller.getThemeURLParams() : '');
                 return [];
             }
+
+            const formFields = window.Autofiller.Prompts.filterMeaningfulFields(allFormFields);
+            if (!formFields.length)
+                return this._saveAndReturnEmpty(storage);
 
             updateMsg('Fetching data...');
             let realData;

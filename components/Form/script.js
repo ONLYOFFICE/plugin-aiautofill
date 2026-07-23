@@ -37,10 +37,14 @@
 
             field: function (field, fieldLabel, optionsHTML) {
                 var tr = (window.Asc && window.Asc.plugin && window.Asc.plugin.tr) ? window.Asc.plugin.tr : function (t) { return t; };
+                var esc = function (s) {
+                    return String(s).replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+                };
+
                 return `<div class="form-field">
                     <div class="field-checkbox-label-wrapper">
                         <input type="checkbox" class="field-checkbox" checked data-field-id="${field.internalId}">
-                        <label class="field-label">${fieldLabel}</label>
+                        <label class="field-label" title="${esc(fieldLabel)}">${esc(fieldLabel)}</label>
                     </div>
                     <div class="field-input-container">
                         <select class="field-input" data-field-id="${field.internalId}">
@@ -209,7 +213,18 @@
                     }
                 }
 
-                let fieldLabel = field.key || field.tag || field.tip || field.placeholder || 'Field ' + (index + 1);
+                let fieldName = String(field.key || field.tag || '').trim();
+                let hint = String(field.tip || field.placeholder || '').replace(/\s+/g, ' ').trim();
+                let isGenericName = !fieldName ||
+                    (window.Autofiller.Prompts && window.Autofiller.Prompts.isGenericIdentifier(fieldName));
+
+                let fieldLabel;
+                if (isGenericName) {
+                    fieldLabel = hint || fieldName || 'Field ' + (index + 1);
+                } else {
+                    fieldLabel = fieldName;
+                }
+
                 let optionsHTML = this._templates.options(options);
 
                 let fieldHTML = this._templates.field(field, fieldLabel, optionsHTML);
@@ -230,7 +245,7 @@
                 let $checkbox = $(this);
                 let fieldId = $checkbox.attr('data-field-id');
                 let $select = $('.field-input[data-field-id="' + fieldId + '"]');
-                let $label = $checkbox.next('label');
+                let $label = $checkbox.closest('.field-checkbox-label-wrapper').find('.field-label');
 
                 if ($select.length && $label.length) {
                     let field = me._formFields.find(function (f) {

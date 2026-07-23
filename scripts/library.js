@@ -34,17 +34,32 @@
         },
     };
 
-    const DEFAULT_RE = /^(?:text|field|input|value|column|col|row|item|data|node|element|cell|label|name|key|var|prop|attr)[a-z]{0,6}\d+$/i;
+    const DEFAULT_RE = /^(?:text|field|input|value|column|col|row|item|data|node|element|cell|label|name|key|var|prop|attr|check(?:box)?|drop(?:down)?|combo(?:box)?|list(?:box)?|radio|choice|option|select|date|pic(?:ture)?)[a-z]{0,6}\d+$/i;
+
+    function _cleanText(value) {
+        return String(value || '').replace(/\s+/g, ' ').trim();
+    }
 
     const Prompts = {
+        isGenericIdentifier(name) {
+            return DEFAULT_RE.test(_cleanText(name));
+        },
+
         filterMeaningfulFields(formFields) {
-            return formFields.filter(f => f.identifier && f.identifier.trim() && !DEFAULT_RE.test(f.identifier.trim()));
+            return formFields.filter(f => {
+                const identifier = f.identifier && f.identifier.trim();
+                if (!identifier)
+                    return false;
+                if (!DEFAULT_RE.test(identifier))
+                    return true;
+                return !!(_cleanText(f.tip) || _cleanText(f.placeholder));
+            });
         },
 
         getFieldMappingPrompt(dataKeys, formFields) {
             const fieldIdentifiers = formFields
                 .filter(f => f.identifier && f.identifier.trim())
-                .map(f => f.identifier);
+                .map(f => _cleanText(f.identifier));
 
             return `You are an expert data mapping AI. Map form fields to the best available data key(s) from the list below.
 ## INPUT DATA
