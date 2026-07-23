@@ -54,6 +54,35 @@
             return candidates.length === 1 ? String(candidates[0]) : null;
         },
 
+        parseDate(value) {
+            const string = String(value == null ? '' : value).trim();
+            if (!string)
+                return null;
+
+            if (/^\d{4}$/.test(string) || /^\d{4}[-/]\d{1,2}$/.test(string))
+                return null;
+
+            const ymd = /^(\d{4})[-/](\d{1,2})[-/](\d{1,2})(?:[T\s].*)?$/.exec(string);
+            if (ymd) {
+                const year = +ymd[1];
+                const month = +ymd[2];
+                const day = +ymd[3];
+                const date = new Date(year, month - 1, day);
+                if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day)
+                    return null;
+                return date;
+            }
+
+            const ms = Date.parse(string);
+            if (isNaN(ms))
+                return null;
+
+            if (!/[^\d]/.test(string))
+                return null;
+
+            return new Date(ms);
+        },
+
         resolveValueForField(rawValue, field) {
             if (rawValue === null || rawValue === undefined)
                 return null;
@@ -90,7 +119,7 @@
                 && string.length > constraints.charactersLimit)
                 return null;
 
-            if (field.type === 'dateForm' && isNaN(Date.parse(string)))
+            if (field.type === 'dateForm' && !this.parseDate(string))
                 return null;
 
             return string;
