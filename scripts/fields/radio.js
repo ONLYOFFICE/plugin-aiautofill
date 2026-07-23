@@ -23,6 +23,10 @@
             return !!field.isRadioGroup;
         },
 
+        isSelfSufficient(field) {
+            return (field.choices || []).length > 0;
+        },
+
         enrich(field, dataKeys, sourceData) {
             const ctx = window.Autofiller.FieldTypeContext;
             let options = [];

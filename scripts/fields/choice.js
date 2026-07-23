@@ -27,6 +27,11 @@
             return field.type === 'comboBoxForm' && !(field.constraints && field.constraints.isEditable);
         },
 
+        isSelfSufficient(field) {
+            const listValues = field.constraints && field.constraints.listValues;
+            return Array.isArray(listValues) && listValues.length > 0;
+        },
+
         enrich(field, dataKeys, sourceData) {
             const ctx = window.Autofiller.FieldTypeContext;
             let options = [];

@@ -45,14 +45,21 @@
             return DEFAULT_RE.test(_cleanText(name));
         },
 
+        hasMappingContext(field) {
+            const identifier = field.identifier && field.identifier.trim();
+            if (!identifier)
+                return false;
+            if (!DEFAULT_RE.test(identifier))
+                return true;
+            return !!(_cleanText(field.tip) || _cleanText(field.placeholder));
+        },
+
         filterMeaningfulFields(formFields) {
             return formFields.filter(f => {
-                const identifier = f.identifier && f.identifier.trim();
-                if (!identifier)
-                    return false;
-                if (!DEFAULT_RE.test(identifier))
+                if (window.Autofiller.FieldTypes && window.Autofiller.FieldTypes.isSelfSufficient(f))
                     return true;
-                return !!(_cleanText(f.tip) || _cleanText(f.placeholder));
+
+                return this.hasMappingContext(f);
             });
         },
 
@@ -60,7 +67,7 @@
             const seenLines = new Set();
             const fieldLines = [];
             formFields
-                .filter(f => f.identifier && f.identifier.trim())
+                .filter(f => this.hasMappingContext(f))
                 .forEach(f => {
                     const name = _cleanText(f.identifier);
                     const hint = [_cleanText(f.tip), _cleanText(f.placeholder)]

@@ -66,6 +66,11 @@
             return handler && handler.getTargets ? handler.getTargets(field) : null;
         },
 
+        isSelfSufficient(field) {
+            const handler = this.resolve(field);
+            return !!(handler && handler.isSelfSufficient && handler.isSelfSufficient(field));
+        },
+
         normalizeStored(field) {
             const handler = this.resolve(field);
             return handler && handler.normalizeStored ? handler.normalizeStored(field) : true;
