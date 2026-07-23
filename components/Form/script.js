@@ -214,17 +214,13 @@
                 }
 
                 let fieldName = String(field.key || field.tag || '').trim();
-                let hint = String(field.tip || field.placeholder || '').replace(/\s+/g, ' ').trim();
+                let hint = String(field.tip || field.placeholder || field.label || '').replace(/\s+/g, ' ').trim();
+                let displayName = String(field.displayName || '').trim();
                 let isGenericName = !fieldName ||
                     (window.Autofiller.Prompts && window.Autofiller.Prompts.isGenericIdentifier(fieldName));
-
-                let fieldLabel;
-                if (isGenericName) {
-                    let displayName = String(field.displayName || '').trim();
-                    fieldLabel = displayName || hint || fieldName || 'Field ' + (index + 1);
-                } else {
-                    fieldLabel = fieldName;
-                }
+                let fieldLabel = (!isGenericName && fieldName)
+                    ? fieldName
+                    : (displayName || hint || fieldName || 'Field ' + (index + 1));
 
                 let optionsHTML = this._templates.options(options);
 

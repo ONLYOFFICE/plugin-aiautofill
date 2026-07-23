@@ -94,13 +94,13 @@ Available keys: ${dataKeys.join('\n')}
 1. **Exhaustive**: Only omit a field if zero relationship exists.
 2. **Strict Keys**: Use ONLY the keys listed above — do NOT invent or modify any key.
 3. **Field Names**: Use each field's "name" EXACTLY as the JSON key — never its hint or type.
-4. **Use Hints**: When a field name is generic (e.g. "Text11"), rely on its hint to find the matching key (e.g. hint "Please enter a nationality" → nationality key).
-5. **Fuzzy Match**: Semantic, partial, or contextual matches are allowed (e.g. "Position" → job-title key, "CompanyName1" → company-name key).
+4. **Use Hints**: When a field name is generic (e.g. "Text11"), rely on its hint to find the matching key (e.g. hint "Please enter a nationality" - nationality key).
+5. **Fuzzy Match**: Semantic, partial, or contextual matches are allowed (e.g. "Position" - job-title key, "CompanyName1" - company-name key).
 6. **Numbered Fields**: Fields ending in a number (e.g. JobTitle1, JobTitle2) represent repeated slots — map them all to the same data key(s) as the un-numbered equivalent.
 7. **Cardinality**: Output single strings or arrays for multiple matches ('"field": ["k1", "k2"]'). Reusing keys is allowed.
 8. **Type Match**: Prefer matching data types (e.g., date to date).
 9. **Confidence**: You confidence level for each mapping must be more than 80%.
-10. **Labels**: In "labels", give EVERY form field a short human-friendly title (1-4 words) in the same language as the field text — e.g. "Please enter a last name" → "Last name", "Please enter an any second nationality" → "Second nationality". Use the field's "name" as the JSON key, same as in "mapping".
+10. **Labels**: In "labels", give EVERY form field a short human-friendly title (1-4 words) in the same language as the field text — including fields that already have a real key. Reformat keys and long prompts alike: "DateOfBirth" / "date_of_birth" - "Date of birth", "Please enter a last name" - "Last name", "CheckBox12" with hint "Visa" - "Visa". Use the field's "name" as the JSON key, same as in "mapping".
 ## OUTPUT FORMAT
 Return raw, valid JSON only. No markdown, code blocks, explanations, comments, or // and /* */ inside JSON.
 {"mapping":{"form_field_name":"data_key_name","another_field":["key1","key2"]},"labels":{"form_field_name":"Short Title","another_field":"Another Title"}}`;
