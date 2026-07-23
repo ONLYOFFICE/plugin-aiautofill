@@ -143,7 +143,11 @@
             const key = formMeta.Key || null;
             const tip = formMeta.Tip || '';
             const placeholder = formMeta.Placeholder || '';
-            const identifier = key || tag || tip || placeholder;
+            const fieldName = key || tag || '';
+            const readable = tip.trim() || placeholder.trim();
+            const isGenericName = !fieldName ||
+                !!(window.Autofiller.Prompts && window.Autofiller.Prompts.isGenericIdentifier(fieldName));
+            const identifier = (isGenericName && readable) ? readable : fieldName;
             const type = formMeta.Type || 'unknown';
             return {
                 internalId: formMeta.InternalId,
@@ -301,10 +305,16 @@
             };
         },
 
-        _enrichField(field, mapping, sourceData) {
+        _enrichField(field, mapping, sourceData, labels) {
             const dataKeys = mapping[field.identifier];
             const generatedOptions = window.Autofiller.FieldTypes.enrich(field, dataKeys, sourceData);
-            return { ...field, mappedDataKey: dataKeys || null, generatedOptions };
+            const displayName = labels && labels[field.identifier];
+            return {
+                ...field,
+                mappedDataKey: dataKeys || null,
+                displayName: displayName ? String(displayName).trim() : null,
+                generatedOptions
+            };
         },
 
         _generateOptionsFromMultipleKeys(dataKeys, sourceData, fieldType) {
@@ -365,9 +375,9 @@
             });
         },
 
-        enrichFieldsWithOptions(formFields, mapping, sourceData) {
+        enrichFieldsWithOptions(formFields, mapping, sourceData, labels) {
             return formFields
-                .map(field => this._enrichField(field, mapping, sourceData))
+                .map(field => this._enrichField(field, mapping, sourceData, labels))
                 .filter(field => this._hasValidOptions(field));
         },
     };
@@ -775,11 +785,15 @@
             const updateMsg = (msg) => FormStateManager.loader?.updateMessage(window.Asc.plugin.tr(msg));
 
             updateMsg('Detecting form fields...');
-            const formFields = await FormDetectionService.detectAllForms();
-            if (!formFields?.length) {
+            const allFormFields = await FormDetectionService.detectAllForms();
+            if (!allFormFields?.length) {
                 window.location.href = 'index.html' + (window.Autofiller.getThemeURLParams ? window.Autofiller.getThemeURLParams() : '');
                 return [];
             }
+
+            const formFields = window.Autofiller.Prompts.filterMeaningfulFields(allFormFields);
+            if (!formFields.length)
+                return this._saveAndReturnEmpty(storage);
 
             updateMsg('Fetching data...');
             let realData;
@@ -808,7 +822,7 @@
             const prompt = window.Autofiller.Prompts.getFieldMappingPrompt(dataKeys, formFields);
             const aiResult = await FormService.executeAI(prompt);
             const aiResponse = window.Autofiller.DataMappingService.parseAIResponse(aiResult.text);
-            const fieldsWithOptions = FormDetectionService.enrichFieldsWithOptions(formFields, aiResponse.mapping, realData);
+            const fieldsWithOptions = FormDetectionService.enrichFieldsWithOptions(formFields, aiResponse.mapping, realData, aiResponse.labels);
 
             if (!fieldsWithOptions || fieldsWithOptions.length === 0)
                 return this._saveAndReturnEmpty(storage);

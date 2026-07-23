@@ -33,28 +33,34 @@
             return `{"mapping":${content}}`;
         },
 
-        _sanitizeJSON(content) {
+        _extractJSONCandidates(content) {
             if (typeof content !== 'string')
-                return content;
+                return [content];
 
             const cleanedContent = content.replace(/```(?:json)?\s*/g, '').trim();
+            const candidates = [];
+
+            const fullObject = cleanedContent.match(/\{\s*"mapping"\s*:[\s\S]*\}/);
+            if (fullObject)
+                candidates.push(this._removeComments(fullObject[0]));
+
             const mappingContent = cleanedContent.match(/\{\s*"mapping"\s*:\s*\{[\s\S]*?\}\s*\}/);
             if (mappingContent)
-                return this._removeComments(mappingContent[0]);
+                candidates.push(this._removeComments(mappingContent[0]));
 
             const partialMappingContent = cleanedContent.match(/"mapping"\s*:\s*(\{[\s\S]*?\})/);
-            if (partialMappingContent) {
-                const wrappedMapping = this._wrapInMappingObject(partialMappingContent[1]);
-                return this._removeComments(wrappedMapping);
-            }
+            if (partialMappingContent)
+                candidates.push(this._removeComments(this._wrapInMappingObject(partialMappingContent[1])));
 
-            return content;
+            candidates.push(content);
+            return candidates;
         },
 
         _createEmptyMapping(reasoning) {
             const translator = window.Asc?.plugin?.tr;
             return {
                 mapping: {},
+                labels: {},
                 reasoning: translator ? translator(reasoning) : reasoning
             };
         },
@@ -84,19 +90,19 @@
         },
 
         parseAIResponse(aiResponse) {
-            try {
-                const content = this._extractResponseContent(aiResponse);
-                const sanitizedContent = this._sanitizeJSON(content);
-                const parsedMapping = typeof sanitizedContent === 'string'
-                    ? JSON.parse(sanitizedContent)
-                    : sanitizedContent;
-
-                return parsedMapping && parsedMapping.mapping
-                    ? parsedMapping
-                    : this._createEmptyMapping('No valid mapping found');
-            } catch (error) {
-                return this._createEmptyMapping(`Parse failed: ${error.message}`);
+            const content = this._extractResponseContent(aiResponse);
+            const candidates = this._extractJSONCandidates(content);
+            for (const candidate of candidates) {
+                try {
+                    const parsed = typeof candidate === 'string' ? JSON.parse(candidate) : candidate;
+                    if (parsed && parsed.mapping) {
+                        parsed.labels = (parsed.labels && typeof parsed.labels === 'object') ? parsed.labels : {};
+                        return parsed;
+                    }
+                } catch (error) { }
             }
+
+            return this._createEmptyMapping('No valid mapping found');
         },
     };
 

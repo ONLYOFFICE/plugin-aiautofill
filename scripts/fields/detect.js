@@ -28,6 +28,16 @@
             return ['pictureForm', 'signatureForm'].indexOf(type) !== -1;
         }
 
+        function getTip(form) {
+            if (form.GetTipText) return form.GetTipText() || '';
+            return '';
+        }
+
+        function getPlaceholder(form) {
+            if (form.GetPlaceholderText) return form.GetPlaceholderText() || '';
+            return '';
+        }
+
         function getFormConstraints(form, type) {
             var constraints = {};
             try {
@@ -72,8 +82,8 @@
                 radioGroups[groupKey] = {
                     Key: groupKey,
                     Tag: form.GetTag ? form.GetTag() : '',
-                    Placeholder: form.GetPlaceholder ? form.GetPlaceholder() : '',
-                    Tip: form.GetTip ? form.GetTip() : '',
+                    Placeholder: getPlaceholder(form),
+                    Tip: getTip(form),
                     Lock: form.IsFixed ? (form.IsFixed() ? 0 : null) : null,
                     Selected: form.GetGroupValue ? (form.GetGroupValue() || '') : '',
                     Choices: []
@@ -108,8 +118,8 @@
                 InternalId: formId,
                 Key: key,
                 Tag: form.GetTag ? form.GetTag() : '',
-                Placeholder: form.GetPlaceholder ? form.GetPlaceholder() : '',
-                Tip: form.GetTip ? form.GetTip() : '',
+                Placeholder: getPlaceholder(form),
+                Tip: getTip(form),
                 Type: type,
                 Text: form.GetText ? form.GetText() : '',
                 Lock: form.IsFixed ? (form.IsFixed() ? 0 : null) : null,
@@ -245,8 +255,8 @@
                 InternalId: parentId,
                 Key: parentKey,
                 Tag: form.GetTag ? form.GetTag() : '',
-                Placeholder: form.GetPlaceholder ? form.GetPlaceholder() : '',
-                Tip: form.GetTip ? form.GetTip() : '',
+                Placeholder: getPlaceholder(form),
+                Tip: getTip(form),
                 Type: 'complexForm',
                 Text: form.GetText ? form.GetText() : '',
                 Lock: form.IsFixed ? (form.IsFixed() ? 0 : null) : null,

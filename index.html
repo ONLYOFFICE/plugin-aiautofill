@@ -438,7 +438,8 @@
         }
 
         function handleRestart() {
-            window.Autofiller.FormDetectionService.detectAllForms().then(formFields => {
+            window.Autofiller.FormDetectionService.detectAllForms().then(allFormFields => {
+                const formFields = window.Autofiller.Prompts.filterMeaningfulFields(allFormFields || []);
                 if (!formFields || formFields.length === 0)
                     showView('errorFields');
                 else
@@ -510,7 +511,7 @@
                 }
 
                 const aiResponse = window.Autofiller.DataMappingService.parseAIResponse(aiResult.text);
-                const fieldsWithOptions = window.Autofiller.FormDetectionService.enrichFieldsWithOptions(formFields, aiResponse.mapping, realData);
+                const fieldsWithOptions = window.Autofiller.FormDetectionService.enrichFieldsWithOptions(formFields, aiResponse.mapping, realData, aiResponse.labels);
 
                 if (!fieldsWithOptions || fieldsWithOptions.length === 0) {
                     if (loader) loader.hide();
