@@ -30,6 +30,52 @@
             });
         },
 
+        async setDateValue(internalId, value) {
+            if (!internalId)
+                return;
+
+            const date = window.Autofiller.ConstraintsValidator.parseDate(value);
+            if (!date)
+                return;
+
+            window.Asc.scope = window.Asc.scope || {};
+            window.Asc.scope.autofillerDate = { id: String(internalId), ms: date.getTime() };
+
+            return window.Autofiller.Editor.callCommand(function () {
+                var data = Asc.scope.autofillerDate;
+
+                function applyTo(form) {
+                    if (!form || !form.GetInternalId || String(form.GetInternalId()) !== data.id)
+                        return false;
+
+                    form.SetTime(data.ms);
+                    return true;
+                }
+
+                function walk(form) {
+                    if (applyTo(form))
+                        return true;
+                    try {
+                        var subs = form.GetSubForms ? form.GetSubForms() || [] : [];
+                        for (var s = 0; s < subs.length; s++)
+                            if (walk(subs[s]))
+                                return true;
+                    } catch (e) { }
+                    return false;
+                }
+
+                var forms = Api.GetDocument().GetAllForms();
+                for (var i = 0; i < forms.length; i++) {
+                    if (walk(forms[i]))
+                        return true;
+                }
+
+                return false;
+            }).finally(function () {
+                delete window.Asc.scope.autofillerDate;
+            });
+        },
+
         async getFieldValue(internalId) {
             return new Promise((resolve, reject) => {
                 if (!window.Autofiller?.Utils?.isPluginAvailable())
@@ -482,10 +528,24 @@
 
         async _setFormValues(selectedData) {
             for (const field of selectedData) {
+                if (field.type === 'dateForm')
+                    continue;
                 try {
                     await window.Autofiller.FieldTypes.apply(field);
                 } catch (error) {
                     console.error(`Error setting field ${field.fieldId}:`, error);
+                }
+            }
+        },
+
+        async _setDateValues(selectedData) {
+            for (const field of selectedData) {
+                if (field.type !== 'dateForm')
+                    continue;
+                try {
+                    await window.Autofiller.FieldTypes.apply(field);
+                } catch (error) {
+                    console.error(`Error setting date field ${field.fieldId}:`, error);
                 }
             }
         },
@@ -575,6 +635,8 @@
                 await this._setFormValues(selectedData);
 
                 await this._hideLoader();
+
+                await this._setDateValues(selectedData);
 
                 if (shouldStoreOriginal)
                     this._showRevertModal();

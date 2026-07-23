@@ -54,6 +54,14 @@
                 2000,
                 'Set field ' + internalId
             );
+        },
+
+        setDate(internalId, value) {
+            return window.Autofiller.Utils.withTimeout(
+                window.Autofiller.FormService.setDateValue(internalId, value),
+                2000,
+                'Set date ' + internalId
+            );
         }
     };
 
