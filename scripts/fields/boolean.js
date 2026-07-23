@@ -37,6 +37,10 @@
             return window.Autofiller.FieldTypeContext.isBooleanField(field.type);
         },
 
+        isSelfSufficient() {
+            return true;
+        },
+
         enrich(field, dataKeys, sourceData) {
             const ctx = window.Autofiller.FieldTypeContext;
             const keys = dataKeys ? (Array.isArray(dataKeys) ? dataKeys : [dataKeys]) : [];
@@ -50,7 +54,11 @@
                     ];
             }
 
-            return [];
+            // No resolvable with AI — fall back to manual true/false options.
+            return [
+                { label: 'false', value: 'false', source: 'list' },
+                { label: 'true', value: 'true', source: 'list' }
+            ];
         },
 
         normalizeStored(field) {
