@@ -58,47 +58,51 @@
             if (rawValue === null || rawValue === undefined)
                 return null;
 
-            let string = String(rawValue);
+            let string = String(rawValue).trim();
+            if (!string)
+                return null;
+
             const constraints = field.constraints || {};
             if (Array.isArray(constraints.listValues) && constraints.listValues.length > 0 && constraints.isEditable !== true)
                 return this.toListItem(string, constraints.listValues);
 
             const format = constraints.format || {};
             if (format.type === 'mask' && format.value) {
-                try { if (!this.toRegExp(format.value).test(string)) return null; } catch (e) { }
-                return string;
+                try { if (!this.toRegExp(format.value).test(string)) return null; } catch (e) { return null; }
+            } else if (format.type === 'regExp' && format.value) {
+                try { if (!new RegExp('^(?:' + format.value + ')$').test(string)) return null; } catch (e) { return null; }
+            } else if (format.type === 'digit') {
+                if (!/^\d+$/.test(string))
+                    return null;
+            } else if (format.type === 'letter') {
+                if (!/^[A-Za-z\s\-']+$/.test(string) || !/[A-Za-z]/.test(string))
+                    return null;
             }
-
-            if (format.type === 'regExp' && format.value) {
-                try { if (!new RegExp('^(?:' + format.value + ')$').test(string)) return null; } catch (e) { }
-                return string;
-            }
-
-            if (format.type === 'digit')
-                string = string.replace(/\D+/g, '');
-            else if (format.type === 'letter')
-                string = string.replace(/[^A-Za-z]+/g, '');
 
             if (constraints.allowedSymbols && typeof constraints.allowedSymbols === 'string' && constraints.allowedSymbols.length) {
-                let filtered = '';
-                for (let i = 0; i < string.length; i++)
-                    if (constraints.allowedSymbols.indexOf(string[i]) !== -1)
-                        filtered += string[i];
-
-                string = filtered;
+                for (let i = 0; i < string.length; i++) {
+                    const ch = string[i];
+                    if (constraints.allowedSymbols.indexOf(ch) === -1 && !/[\s\-']/.test(ch))
+                        return null;
+                }
             }
 
-            if (typeof constraints.charactersLimit === 'number' && constraints.charactersLimit > 0)
-                string = string.slice(0, constraints.charactersLimit);
-
-            if (field.type === 'dateForm' && string.trim() && isNaN(Date.parse(string)))
+            if (typeof constraints.charactersLimit === 'number' && constraints.charactersLimit > 0
+                && string.length > constraints.charactersLimit)
                 return null;
 
-            return string.length ? string : null;
+            if (field.type === 'dateForm' && isNaN(Date.parse(string)))
+                return null;
+
+            return string;
         },
 
         splitValueAcrossBoxes(value, limits) {
             const digits = String(value == null ? '' : value).replace(/\D+/g, '');
+            const capacity = limits.reduce((sum, limit) => sum + (limit > 0 ? limit : 0), 0);
+            if (capacity > 0 && digits.length > capacity)
+                return null;
+
             const result = new Array(limits.length).fill('');
             let idx = digits.length;
             for (let i = limits.length - 1; i >= 0; i--) {

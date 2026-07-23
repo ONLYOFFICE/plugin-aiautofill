@@ -39,6 +39,9 @@
                 field.value,
                 targets.map(subField => subField.charactersLimit)
             );
+            
+            if (!parts)
+                return;
 
             for (let i = 0; i < targets.length; i++)
                 await ctx.setValue(targets[i].internalId, parts[i] || '');
