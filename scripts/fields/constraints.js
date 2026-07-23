@@ -30,14 +30,28 @@
             return new RegExp(pattern + '$');
         },
 
+        _normalizeListText(value) {
+            return String(value).toLowerCase().replace(/[\s\-_.,;:!?()[\]'"\/\\]+/g, ' ').trim();
+        },
+
         toListItem(value, listValues) {
-            const target = String(value).trim().toLowerCase();
+            const target = this._normalizeListText(value);
+            if (!target)
+                return null;
+
             for (let i = 0; i < listValues.length; i++) {
-                if (String(listValues[i]).trim().toLowerCase() === target)
+                if (this._normalizeListText(listValues[i]) === target)
                     return String(listValues[i]);
             }
 
-            return null;
+            const candidates = [];
+            for (let i = 0; i < listValues.length; i++) {
+                const item = this._normalizeListText(listValues[i]);
+                if (item && (target.indexOf(item) !== -1 || item.indexOf(target) !== -1))
+                    candidates.push(listValues[i]);
+            }
+
+            return candidates.length === 1 ? String(candidates[0]) : null;
         },
 
         resolveValueForField(rawValue, field) {
