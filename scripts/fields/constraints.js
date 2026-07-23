@@ -75,14 +75,13 @@
                 if (!/^\d+$/.test(string))
                     return null;
             } else if (format.type === 'letter') {
-                if (!/^[A-Za-z\s\-']+$/.test(string) || !/[A-Za-z]/.test(string))
+                if (!/^[A-Za-z]+$/.test(string))
                     return null;
             }
 
             if (constraints.allowedSymbols && typeof constraints.allowedSymbols === 'string' && constraints.allowedSymbols.length) {
                 for (let i = 0; i < string.length; i++) {
-                    const ch = string[i];
-                    if (constraints.allowedSymbols.indexOf(ch) === -1 && !/[\s\-']/.test(ch))
+                    if (constraints.allowedSymbols.indexOf(string[i]) === -1)
                         return null;
                 }
             }
