@@ -51,7 +51,8 @@
                 return false;
             if (!DEFAULT_RE.test(identifier))
                 return true;
-            return !!(_cleanText(field.tip) || _cleanText(field.placeholder));
+            return !!(_cleanText(field.tip) || _cleanText(field.placeholder)
+                || _cleanText(field.label) || _cleanText(field.tag));
         },
 
         filterMeaningfulFields(formFields) {
@@ -70,7 +71,7 @@
                 .filter(f => this.hasMappingContext(f))
                 .forEach(f => {
                     const name = _cleanText(f.identifier);
-                    const hint = [_cleanText(f.tip), _cleanText(f.placeholder)]
+                    const hint = [_cleanText(f.tip), _cleanText(f.placeholder), _cleanText(f.label), _cleanText(f.tag)]
                         .find(t => t && t.toLowerCase() !== name.toLowerCase()) || '';
                     let line = `- name: "${name}"`;
                     if (hint)

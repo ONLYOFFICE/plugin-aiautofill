@@ -38,6 +38,11 @@
             return '';
         }
 
+        function getLabel(form) {
+            if (form.GetLabel) return form.GetLabel() || '';
+            return '';
+        }
+
         function getFormConstraints(form, type) {
             var constraints = {};
             try {
@@ -82,6 +87,7 @@
                 radioGroups[groupKey] = {
                     Key: groupKey,
                     Tag: form.GetTag ? form.GetTag() : '',
+                    Label: getLabel(form),
                     Placeholder: getPlaceholder(form),
                     Tip: getTip(form),
                     Lock: form.IsFixed ? (form.IsFixed() ? 0 : null) : null,
@@ -118,6 +124,7 @@
                 InternalId: formId,
                 Key: key,
                 Tag: form.GetTag ? form.GetTag() : '',
+                Label: getLabel(form),
                 Placeholder: getPlaceholder(form),
                 Tip: getTip(form),
                 Type: type,
@@ -160,6 +167,7 @@
                     InternalId: group.Choices.length ? group.Choices[0].InternalId : groupKey,
                     Key: group.Key,
                     Tag: group.Tag,
+                    Label: group.Label || '',
                     Placeholder: group.Placeholder,
                     Tip: group.Tip,
                     Type: 'radioGroupForm',
@@ -255,6 +263,7 @@
                 InternalId: parentId,
                 Key: parentKey,
                 Tag: form.GetTag ? form.GetTag() : '',
+                Label: getLabel(form),
                 Placeholder: getPlaceholder(form),
                 Tip: getTip(form),
                 Type: 'complexForm',
