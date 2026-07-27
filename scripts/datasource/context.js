@@ -16,7 +16,11 @@
  *
  */
 (function (window, undefined) {
+    const MAX_RAW_BYTES = 5 * 1024 * 1024;
+
     const DataSourceContext = {
+        MAX_RAW_BYTES,
+
         getOptions() {
             return window.Asc?.plugin?.info?.options || {};
         },
@@ -31,9 +35,27 @@
             return null;
         },
 
+        isDataLarge(error) {
+            return !!error?.tooLarge;
+        },
+
+        validateDataSize(text) {
+            if (typeof text !== 'string')
+                return;
+
+            if (new TextEncoder().encode(text).length > MAX_RAW_BYTES) {
+                const mb = Math.round(MAX_RAW_BYTES / (1024 * 1024));
+                const error = new Error(`Data source exceeds the ${mb} MB size limit`);
+                error.tooLarge = true;
+                throw error;
+            }
+        },
+
         parseJson(raw, source) {
             if (typeof raw !== 'string')
                 return raw;
+
+            this.validateDataSize(raw);
 
             try {
                 return JSON.parse(raw);
@@ -67,7 +89,14 @@
                 throw error;
             }
 
-            return response.json();
+            const text = await response.text();
+            this.validateDataSize(text);
+
+            try {
+                return JSON.parse(text);
+            } catch (error) {
+                throw new Error(`Failed to parse JSON response: ${error.message}`);
+            }
         }
     };
 

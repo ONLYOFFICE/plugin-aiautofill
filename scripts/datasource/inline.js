@@ -70,10 +70,16 @@
 
             _tr: (text) => text,
             _onChange: null,
+            _onDataTooLarge: null,
 
-            mount(container, { tr, onChange }) {
+            onDataTooLarge(error) {
+                this._onDataTooLarge?.(error);
+            },
+
+            mount(container, { tr, onChange, onDataTooLarge }) {
                 this._tr = tr;
                 this._onChange = onChange;
+                this._onDataTooLarge = onDataTooLarge;
 
                 container.innerHTML = `
                     <textarea class="datasource__textarea" autocomplete="off" spellcheck="false"></textarea>
@@ -103,6 +109,11 @@
                         try {
                             InlineDataSource.load(this._textarea.value);
                         } catch (error) {
+                            if (window.Autofiller.DataSourceContext.isDataLarge(error)) {
+                                this.onDataTooLarge(error);
+                                return;
+                            }
+
                             InlineDataSource.clear();
                         }
                     }

@@ -138,6 +138,8 @@
                 validateResponse(result);
                 return { ok: true, detail: 'Connection successful' };
             } catch (error) {
+                if (ctx.isDataLarge(error))
+                    return { ok: false, detail: 'Response is too large' };
                 const suffix = error.status ? ` (${error.status})` : '';
                 return { ok: false, detail: `Connection failed${suffix}` };
             }
@@ -166,6 +168,11 @@
 
             _tr: (text) => text,
             _onChange: null,
+            _onDataTooLarge: null,
+
+            onDataTooLarge(error) {
+                this._onDataTooLarge?.(error);
+            },
 
             _renderHost() {
                 const info = window.Autofiller.DataSources.status('callback');
@@ -180,9 +187,10 @@
                 this._statusEl.style.display = message ? 'block' : 'none';
             },
 
-            mount(container, { tr, onChange }) {
+            mount(container, { tr, onChange, onDataTooLarge }) {
                 this._tr = tr;
                 this._onChange = onChange;
+                this._onDataTooLarge = onDataTooLarge;
 
                 container.innerHTML = `
                     <div class="datasource-card">
@@ -217,13 +225,12 @@
                 window.Autofiller.Utils.withTimeout(CallbackDataSource.test(), 5000, 'Endpoint test')
                     .then(result => {
                         _reachable = !!result?.ok;
-                        this._onChange?.();
+                        if (!_reachable)
+                            this._setStatus(result?.detail ? this._tr(result.detail) : this._tr("Couldn't reach your data service."));
                     }).catch(() => {
                         _reachable = false;
-                        this._onChange?.();
+                        this._setStatus(this._tr("Couldn't reach your data service."));
                     }).finally(() => {
-                        if (!_reachable)
-                            this._setStatus(this._tr("Couldn't reach your data service."));
                         this._onChange?.();
                     });
             },

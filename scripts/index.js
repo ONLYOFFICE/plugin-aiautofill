@@ -23,6 +23,7 @@
 
         _onSelect: null,
         _onChange: null,
+        _onDataTooLarge: null,
 
         _mountPanels(items) {
             const widget = document.getElementById('sourceWidget');
@@ -46,7 +47,8 @@
 
                 source.panel.mount(panelEl, {
                     tr,
-                    onChange: () => this._onChange?.()
+                    onChange: () => this._onChange?.(),
+                    onDataTooLarge: (error) => this._onDataTooLarge?.(error)
                 });
 
                 this._panels[item.id] = source;
@@ -107,9 +109,10 @@
             });
         },
 
-        init({ onSelect, onChange }) {
+        init({ onSelect, onChange, onDataTooLarge }) {
             this._onSelect = onSelect;
             this._onChange = onChange;
+            this._onDataTooLarge = onDataTooLarge;
 
             const datasources = window.Autofiller.DataSources;
 
@@ -166,10 +169,12 @@
             document.getElementById('cancelBtn')?.addEventListener('click', () => this._close());
             document.getElementById('retryBtnFields')?.addEventListener('click', () => this._handleRestart());
             document.getElementById('retryBtnEmpty')?.addEventListener('click', () => this._handleRestart());
+            document.getElementById('backToMainBtn')?.addEventListener('click', () => window.location.reload());
 
             SourceWidget.init({
                 onSelect: () => this._showAutofillError(''),
-                onChange: () => this._applyButtonState()
+                onChange: () => this._applyButtonState(),
+                onDataTooLarge: () => this._showTooLarge()
             });
 
             window.Asc.plugin.attachEvent('onThemeChanged', (theme) => this.onThemeChanged(theme));
@@ -230,7 +235,8 @@
                 empty: document.getElementById('emptyState'),
                 errorModel: document.getElementById('errorModel'),
                 errorFields: document.getElementById('errorFields'),
-                errorSigned: document.getElementById('errorSigned')
+                errorSigned: document.getElementById('errorSigned'),
+                errorTooLarge: document.getElementById('errorTooLarge')
             };
 
             Object.entries(views).forEach(([key, el]) => {
@@ -238,6 +244,13 @@
                 if (key === 'welcome') el.style.display = view === 'welcome' ? 'block' : 'none';
                 else el.classList.toggle('error--visible', view === key);
             });
+        },
+
+        _showTooLarge() {
+            if (this.loader)
+                this.loader.hide();
+
+            this._showView('errorTooLarge');
         },
 
         _handleRestart() {
@@ -286,6 +299,11 @@
                         'Data Fetching'
                     );
                 } catch (fetchError) {
+                    if (window.Autofiller.DataSourceContext.isDataLarge(fetchError)) {
+                        this._showTooLarge();
+                        return;
+                    }
+
                     this._failToWelcome(tr("Couldn't get data from this source. Try another source."));
                     return;
                 }
@@ -311,10 +329,17 @@
                 let aiResult;
                 try {
                     const dataKeys = window.Autofiller.DataMappingService.extractAllKeys(realData);
+                    window.Autofiller.DataMappingService.validateKeyCount(dataKeys);
+
                     const prompt = window.Autofiller.Prompts.getFieldMappingPrompt(dataKeys, formFields);
                     aiResult = await window.Autofiller.FormService.executeAI(prompt);
                 } catch (aiError) {
                     if (this.loader) this.loader.hide();
+                    if (window.Autofiller.DataSourceContext.isDataLarge(aiError)) {
+                        this._showTooLarge();
+                        return;
+                    }
+
                     this._showView(this._getErrorView(aiError));
                     return;
                 }
@@ -341,7 +366,10 @@
                 if (this.loader)
                     this.loader.hide();
 
-                this._showView(this._getErrorView(error));
+                if (window.Autofiller.DataSourceContext.isDataLarge(error))
+                    this._showView('errorTooLarge');
+                else
+                    this._showView(this._getErrorView(error));
             } finally {
                 if (!navigating)
                     this._setProcessing(false);

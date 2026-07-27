@@ -16,7 +16,10 @@
  *
  */
 (function (window, undefined) {
+    const MAX_KEYS = 500;
+
     const DataMappingService = {
+        MAX_KEYS,
         _extractResponseContent(aiResponse) {
             if (typeof aiResponse === 'object' && aiResponse?.choices?.[0])
                 return aiResponse.choices[0].message.content;
@@ -57,6 +60,14 @@
                 mapping: {},
                 reasoning: translator ? translator(reasoning) : reasoning
             };
+        },
+
+        validateKeyCount(keys) {
+            if (keys.length > MAX_KEYS) {
+                const error = new Error(`Data source has too many fields (${keys.length}) to map safely`);
+                error.tooLarge = true;
+                throw error;
+            }
         },
 
         extractAllKeys(data, prefix = '', maxDepth = 5, currentDepth = 0) {
