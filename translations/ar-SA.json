@@ -52,10 +52,14 @@
 	"Plugin unavailable now": "الإضافة غير متاحة الآن",
 	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "هذه الإضافة غير متاحة حاليًا لأنه لم يتم تكوين نموذج ذكاء اصطناعي. لتمكين هذه الميزة، افتح علامة تبويب الذكاء الاصطناعي، انتقل إلى الإعدادات، ثم اختر أو أضف نموذج ذكاء اصطناعي لفئة روبوت الدردشة.",
 
-	"Load JSON": "تحميل JSON",
-	"The selected file is not valid JSON.": "الملف المحدد ليس JSON صالحًا.",
-	"Data source": "مصدر البيانات",
-	"Select a data source": "اختر مصدر البيانات",
-	"File": "ملف",
-	"Endpoint": "نقطة النهاية"
+	"Upload file": "رفع ملف",
+	"Paste JSON": "لصق JSON",
+	"From server": "من الخادم",
+	"Drag your JSON file here": "اسحب ملف JSON هنا",
+	"or click to browse": "أو انقر للتصفح",
+	"Paste your JSON here": "الصق JSON هنا",
+	"Connected to your data service": "متصل بخدمة البيانات الخاصة بك",
+	"Couldn't reach your data service.": "تعذر الوصول إلى خدمة البيانات الخاصة بك.",
+	"Couldn't get data from this source. Try another source.": "تعذر الحصول على البيانات من هذا المصدر. جرّب مصدرًا آخر.",
+	"This source returned no data. Try another source.": "لم يُرجع هذا المصدر أي بيانات. جرّب مصدرًا آخر."
 }

@@ -52,10 +52,14 @@
 	"Plugin unavailable now": "Плагин сейчас недоступен",
 	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Плагин сейчас недоступен, потому что ИИ-модель не настроена. Чтобы включить эту функцию, откройте вкладку «ИИ», перейдите в «Настройки» и выберите или добавьте ИИ-модель для категории «Чат-бот».",
 
-	"Load JSON": "Загрузить JSON",
-	"The selected file is not valid JSON.": "Выбранный файл не является корректным JSON.",
-	"Data source": "Источник данных",
-	"Select a data source": "Выберите источник данных",
-	"File": "Файл",
-	"Endpoint": "Конечная точка"
+	"Upload file": "Загрузить файл",
+	"Paste JSON": "Вставить JSON",
+	"From server": "С сервера",
+	"Drag your JSON file here": "Перетащите сюда файл JSON",
+	"or click to browse": "или нажмите, чтобы выбрать файл",
+	"Paste your JSON here": "Вставьте JSON сюда",
+	"Connected to your data service": "Подключено к вашему сервису данных",
+	"Couldn't reach your data service.": "Не удалось подключиться к вашему сервису данных.",
+	"Couldn't get data from this source. Try another source.": "Не удалось получить данные из этого источника. Попробуйте другой источник.",
+	"This source returned no data. Try another source.": "Этот источник не вернул данные. Попробуйте другой источник."
 }
