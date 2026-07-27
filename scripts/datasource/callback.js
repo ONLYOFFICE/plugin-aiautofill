@@ -84,18 +84,63 @@
         }
     }
 
+    function getCallbackUrl() {
+        const ctx = window.Autofiller.DataSourceContext;
+        return ctx.getOptions().callback;
+    }
+
+    function prettyHost(url) {
+        try {
+            return new URL(url).host;
+        } catch (e) {
+            return url;
+        }
+    }
+
     const CallbackDataSource = {
         id: 'callback',
-        label: 'Endpoint',
+        label: 'From server',
+        kind: 'remote',
+        priority: 2,
 
-        isAvailable() {
+        isConfigured() {
             const ctx = window.Autofiller.DataSourceContext;
-            return ctx.isValidString(ctx.getOptions().callback);
+            return ctx.isValidString(getCallbackUrl());
+        },
+
+        hasData() {
+            return this.isConfigured();
+        },
+
+        status() {
+            if (!this.isConfigured())
+                return { state: 'empty' };
+            return { state: 'ready', title: prettyHost(getCallbackUrl()) };
+        },
+
+        async test() {
+            const ctx = window.Autofiller.DataSourceContext;
+            const url = getCallbackUrl();
+            if (!ctx.isValidString(url))
+                return { ok: false, detail: 'No endpoint configured' };
+
+            loadNextCode();
+            const code = _nextCode;
+            const address = code ? `${url}?code=${encodeURIComponent(code)}` : url;
+
+            try {
+                const result = await ctx.fetchJson(address);
+                validateResponse(result);
+                return { ok: true, detail: 'Connection successful' };
+            } catch (error) {
+                const suffix = error.status ? ` (${error.status})` : '';
+                return { ok: false, detail: `Connection failed${suffix}` };
+            }
         },
 
         async fetch() {
             const ctx = window.Autofiller.DataSourceContext;
-            const url = ctx.getOptions().callback;
+            const url = getCallbackUrl();
 
             loadNextCode();
             const code = _nextCode;

@@ -30,10 +30,21 @@
 
     const Registry = {
         register(source) {
-            if (source)
-                sources.push(source);
+            if (!source)
+                return source;
 
+            if (typeof source.test !== 'function')
+                throw new Error(`Data source "${source.id || 'unknown'}" must implement a test() method`);
+
+            sources.push(source);
             return source;
+        },
+
+        async test(id) {
+            const source = this.get(id);
+            if (!source)
+                return { ok: false, detail: 'Unknown data source' };
+            return source.test();
         },
 
         get(id) {
@@ -44,10 +55,37 @@
             return sources.slice();
         },
 
-        listSelectable() {
+        listOrdered() {
             return sources
-                .filter(source => source.requiresFile || (source.isAvailable && source.isAvailable()))
-                .map(source => ({ id: source.id, label: source.label || source.id, requiresFile: !!source.requiresFile }));
+                .filter(source => source.isConfigured && source.isConfigured())
+                .map(source => ({
+                    id: source.id,
+                    label: source.label || source.id,
+                    kind: source.kind || 'file',
+                    priority: source.priority ?? 0
+                }))
+                .sort((a, b) => b.priority - a.priority);
+        },
+
+        status(id) {
+            const source = this.get(id);
+            return source && source.status ? source.status() : { state: 'empty' };
+        },
+
+        autoSelect() {
+            const configured = this.listOrdered();
+            const currentId = this.getSelectedId();
+            if (currentId && configured.some(item => item.id === currentId))
+                return currentId;
+
+            const ready = configured.find(item => this.get(item.id)?.hasData());
+            if (ready)
+                return this.select(ready.id);
+
+            if (configured.length === 1)
+                return this.select(configured[0].id);
+
+            return this.select('');
         },
 
         select(id) {
@@ -125,14 +163,14 @@
             const id = this.getSelectedId();
             if (id) {
                 const selected = this.get(id);
-                if (selected && selected.isAvailable && selected.isAvailable())
+                if (selected && selected.hasData && selected.hasData())
                     return selected;
 
                 return null;
             }
 
             for (let i = 0; i < sources.length; i++)
-                if (sources[i].isAvailable && sources[i].isAvailable())
+                if (sources[i].hasData && sources[i].hasData())
                     return sources[i];
 
             return null;
