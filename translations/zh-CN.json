@@ -52,10 +52,14 @@
 	"Plugin unavailable now": "插件当前不可用",
 	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "由于未配置 AI 模型，此插件当前不可用。要启用该功能，请打开“AI”选项卡，进入“设置”，为“聊天机器人”类别选择或添加 AI 模型。",
 
-	"Load JSON": "加载 JSON",
-	"The selected file is not valid JSON.": "所选文件不是有效的 JSON。",
-	"Data source": "数据源",
-	"Select a data source": "选择数据源",
-	"File": "文件",
-	"Endpoint": "端点"
+	"Upload file": "上传文件",
+	"Paste JSON": "粘贴 JSON",
+	"From server": "来自服务器",
+	"Drag your JSON file here": "将 JSON 文件拖到此处",
+	"or click to browse": "或点击浏览",
+	"Paste your JSON here": "在此处粘贴 JSON",
+	"Connected to your data service": "已连接到您的数据服务",
+	"Couldn't reach your data service.": "无法连接到您的数据服务。",
+	"Couldn't get data from this source. Try another source.": "无法从此数据源获取数据。请尝试其他数据源。",
+	"This source returned no data. Try another source.": "此数据源未返回任何数据。请尝试其他数据源。"
 }

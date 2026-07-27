@@ -52,10 +52,14 @@
 	"Plugin unavailable now": "Plugin non disponibile ora",
 	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Questo plugin non è attualmente disponibile perché non è configurato alcun modello IA. Per abilitare questa funzione, apri la scheda IA, vai su Impostazioni e seleziona o aggiungi un modello IA per la categoria Chatbot.",
 
-	"Load JSON": "Carica JSON",
-	"The selected file is not valid JSON.": "Il file selezionato non è un JSON valido.",
-	"Data source": "Origine dati",
-	"Select a data source": "Seleziona un'origine dati",
-	"File": "File",
-	"Endpoint": "Endpoint"
+	"Upload file": "Carica file",
+	"Paste JSON": "Incolla JSON",
+	"From server": "Dal server",
+	"Drag your JSON file here": "Trascina qui il tuo file JSON",
+	"or click to browse": "oppure fai clic per sfogliare",
+	"Paste your JSON here": "Incolla qui il tuo JSON",
+	"Connected to your data service": "Connesso al tuo servizio dati",
+	"Couldn't reach your data service.": "Impossibile raggiungere il tuo servizio dati.",
+	"Couldn't get data from this source. Try another source.": "Impossibile ottenere i dati da questa fonte. Prova un'altra fonte.",
+	"This source returned no data. Try another source.": "Questa fonte non ha restituito dati. Prova un'altra fonte."
 }

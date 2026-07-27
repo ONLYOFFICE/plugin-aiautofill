@@ -52,10 +52,14 @@
 	"Plugin unavailable now": "Dodatak trenutno nije dostupan",
 	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Ovaj dodatak trenutno nije dostupan jer nije podešen AI model. Da biste omogućili ovu funkciju, otvorite karticu AI, idite u Podešavanja i izaberite ili dodajte AI model za kategoriju Chatbot.",
 
-	"Load JSON": "Učitaj JSON",
-	"The selected file is not valid JSON.": "Izabrana datoteka nije ispravan JSON.",
-	"Data source": "Izvor podataka",
-	"Select a data source": "Izaberite izvor podataka",
-	"File": "Datoteka",
-	"Endpoint": "Krajnja tačka"
+	"Upload file": "Otpremi datoteku",
+	"Paste JSON": "Nalepi JSON",
+	"From server": "Sa servera",
+	"Drag your JSON file here": "Prevucite JSON datoteku ovde",
+	"or click to browse": "ili kliknite da pregledate",
+	"Paste your JSON here": "Nalepite JSON ovde",
+	"Connected to your data service": "Povezano sa vašim servisom podataka",
+	"Couldn't reach your data service.": "Nije moguće povezati se sa vašim servisom podataka.",
+	"Couldn't get data from this source. Try another source.": "Nije moguće dobiti podatke iz ovog izvora. Probajte drugi izvor.",
+	"This source returned no data. Try another source.": "Ovaj izvor nije vratio podatke. Probajte drugi izvor."
 }

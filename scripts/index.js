@@ -142,8 +142,7 @@
             const items = window.Autofiller.DataSources.listOrdered();
             this._renderTabs(items);
 
-            const selected = this._panels[window.Autofiller.DataSources.getSelectedId()];
-            selected?.panel.translate?.();
+            Object.values(this._panels).forEach(source => source.panel.translate?.());
         },
     };
 

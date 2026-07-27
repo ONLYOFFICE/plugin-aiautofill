@@ -52,10 +52,14 @@
 	"Plugin unavailable now": "プラグインは現在ご利用いただけません",
 	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "AIモデルが設定されていないため、このプラグインは現在利用できません。この機能を有効にするには、［AI］タブを開き、［設定］でチャットボットカテゴリ用のAIモデルを選択または追加してください。",
 
-	"Load JSON": "JSON を読み込む",
-	"The selected file is not valid JSON.": "選択したファイルは有効な JSON ではありません。",
-	"Data source": "データソース",
-	"Select a data source": "データソースを選択",
-	"File": "ファイル",
-	"Endpoint": "エンドポイント"
+	"Upload file": "ファイルをアップロード",
+	"Paste JSON": "JSON を貼り付け",
+	"From server": "サーバーから",
+	"Drag your JSON file here": "ここに JSON ファイルをドラッグ",
+	"or click to browse": "またはクリックして参照",
+	"Paste your JSON here": "ここに JSON を貼り付けてください",
+	"Connected to your data service": "データサービスに接続されました",
+	"Couldn't reach your data service.": "データサービスに接続できませんでした。",
+	"Couldn't get data from this source. Try another source.": "このソースからデータを取得できませんでした。別のソースを試してください。",
+	"This source returned no data. Try another source.": "このソースはデータを返しませんでした。別のソースを試してください。"
 }
