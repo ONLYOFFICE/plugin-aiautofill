@@ -61,5 +61,9 @@
 	"Connected to your data service": "متصل بخدمة البيانات الخاصة بك",
 	"Couldn't reach your data service.": "تعذر الوصول إلى خدمة البيانات الخاصة بك.",
 	"Couldn't get data from this source. Try another source.": "تعذر الحصول على البيانات من هذا المصدر. جرّب مصدرًا آخر.",
-	"This source returned no data. Try another source.": "لم يُرجع هذا المصدر أي بيانات. جرّب مصدرًا آخر."
+	"This source returned no data. Try another source.": "لم يُرجع هذا المصدر أي بيانات. جرّب مصدرًا آخر.",
+	"Data source too large": "مصدر البيانات كبير جدًا",
+	"This data source is too large to process safely. Please use a smaller file or a more focused data set, then try again.": "مصدر البيانات هذا كبير جدًا لمعالجته بأمان. يُرجى استخدام ملف أصغر أو مجموعة بيانات أكثر تحديدًا، ثم المحاولة مرة أخرى.",
+	"Back to main": "العودة إلى الصفحة الرئيسية",
+	"Response is too large": "الاستجابة كبيرة جدًا"
 }

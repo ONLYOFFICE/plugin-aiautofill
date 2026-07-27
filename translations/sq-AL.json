@@ -61,5 +61,9 @@
 	"Connected to your data service": "I lidhur me shërbimin tënd të të dhënave",
 	"Couldn't reach your data service.": "Nuk u arrit të lidhet me shërbimin e të dhënave.",
 	"Couldn't get data from this source. Try another source.": "Nuk u morën të dhëna nga ky burim. Provo një burim tjetër.",
-	"This source returned no data. Try another source.": "Ky burim nuk ktheu të dhëna. Provo një burim tjetër."
+	"This source returned no data. Try another source.": "Ky burim nuk ktheu të dhëna. Provo një burim tjetër.",
+	"Data source too large": "Burimi i të dhënave është shumë i madh",
+	"This data source is too large to process safely. Please use a smaller file or a more focused data set, then try again.": "Ky burim të dhënash është shumë i madh për t'u përpunuar në mënyrë të sigurt. Përdor një skedar më të vogël ose një grup të dhënash më të fokusuar, pastaj provo përsëri.",
+	"Back to main": "Kthehu te faqja kryesore",
+	"Response is too large": "Përgjigja është shumë e madhe"
 }

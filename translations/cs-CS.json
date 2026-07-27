@@ -61,5 +61,9 @@
 	"Connected to your data service": "Připojeno k vaší datové službě",
 	"Couldn't reach your data service.": "Nepodařilo se připojit k vaší datové službě.",
 	"Couldn't get data from this source. Try another source.": "Nepodařilo se získat data z tohoto zdroje. Zkuste jiný zdroj.",
-	"This source returned no data. Try another source.": "Tento zdroj nevrátil žádná data. Zkuste jiný zdroj."
+	"This source returned no data. Try another source.": "Tento zdroj nevrátil žádná data. Zkuste jiný zdroj.",
+	"Data source too large": "Zdroj dat je příliš velký",
+	"This data source is too large to process safely. Please use a smaller file or a more focused data set, then try again.": "Tento zdroj dat je příliš velký pro bezpečné zpracování. Použijte menší soubor nebo cílenější sadu dat a zkuste to znovu.",
+	"Back to main": "Zpět na hlavní stránku",
+	"Response is too large": "Odpověď je příliš velká"
 }

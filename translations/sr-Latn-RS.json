@@ -61,5 +61,9 @@
 	"Connected to your data service": "Povezano sa vašim servisom podataka",
 	"Couldn't reach your data service.": "Nije moguće povezati se sa vašim servisom podataka.",
 	"Couldn't get data from this source. Try another source.": "Nije moguće dobiti podatke iz ovog izvora. Probajte drugi izvor.",
-	"This source returned no data. Try another source.": "Ovaj izvor nije vratio podatke. Probajte drugi izvor."
+	"This source returned no data. Try another source.": "Ovaj izvor nije vratio podatke. Probajte drugi izvor.",
+	"Data source too large": "Izvor podataka je prevelik",
+	"This data source is too large to process safely. Please use a smaller file or a more focused data set, then try again.": "Ovaj izvor podataka je prevelik da bi se bezbedno obradio. Koristite manju datoteku ili uže definisan skup podataka, pa pokušajte ponovo.",
+	"Back to main": "Nazad na glavnu stranicu",
+	"Response is too large": "Odgovor je prevelik"
 }

@@ -61,5 +61,9 @@
 	"Connected to your data service": "Подключено к вашему сервису данных",
 	"Couldn't reach your data service.": "Не удалось подключиться к вашему сервису данных.",
 	"Couldn't get data from this source. Try another source.": "Не удалось получить данные из этого источника. Попробуйте другой источник.",
-	"This source returned no data. Try another source.": "Этот источник не вернул данные. Попробуйте другой источник."
+	"This source returned no data. Try another source.": "Этот источник не вернул данные. Попробуйте другой источник.",
+	"Data source too large": "Источник данных слишком велик",
+	"This data source is too large to process safely. Please use a smaller file or a more focused data set, then try again.": "Этот источник данных слишком велик для безопасной обработки. Используйте файл меньшего размера или более узкий набор данных и попробуйте снова.",
+	"Back to main": "Назад на главную",
+	"Response is too large": "Ответ слишком большой"
 }
