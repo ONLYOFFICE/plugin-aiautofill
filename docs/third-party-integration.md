@@ -22,24 +22,29 @@ The AI Auto Fill plugin for ONLYOFFICE enables automated form filling using AI-p
 
 ## Quick Start
 
-The plugin reads form-filling data from one of two sources:
+The plugin reads form-filling data from one of three sources:
 
-1.  **File** — the user loads a local `.json` file from the plugin panel (no configuration required).
+1.  **Upload file** — the user drags in or browses to a local `.json` file (no configuration required).
 
-2.  **Endpoint** (`options.callback`) — implement an endpoint that returns composed data from a third-party API, with optional [code rotation](#code-rotation-security) security.
+2.  **Paste JSON** — the user pastes JSON directly into the panel (no configuration required).
+
+3.  **From server** (`options.callback`) — implement an endpoint that returns composed data from a third-party API, with optional [code rotation](#code-rotation-security) security.
 
 ## Data Sources
 
-The plugin's main panel shows a **Data source** selector. The user must pick a source before
-the **Autofill** button becomes enabled. The selector is populated dynamically:
+The plugin's main panel shows the available sources as tabs. When only one source is
+available the tabs are hidden and its panel is shown directly. A configured endpoint is
+preselected automatically, so the common case is a single click on **Autofill**.
 
-- **File** — always available; the user loads a local `.json` file.
-- **Endpoint** — shown only when `callback` is configured in the plugin options.
+Every data source implements a mandatory `test()` method (surfaced in the UI as
+**Test connection** for the endpoint, and as inline validation for file/paste), which
+resolves to `{ ok: boolean, detail: string }` without throwing for expected failures.
 
-| Source            | UI label            | Option     | Type          | Code rotation | Use case                                     |
-| ----------------- | ------------------- | ---------- | ------------- | ------------- | -------------------------------------------- |
-| JSON file         | `File`              | (UI only)  | user-selected | No            | User loads a JSON file from the plugin panel |
-| Callback endpoint | `Endpoint`          | `callback` | string (URL)  | Yes           | Dynamic data served by your backend          |
+| Source            | UI label       | Option     | Type          | Code rotation | Use case                                     |
+| ----------------- | -------------- | ---------- | ------------- | ------------- | -------------------------------------------- |
+| JSON file         | `Upload file`  | (UI only)  | user-selected | No            | User drags/browses a local JSON file         |
+| Pasted JSON       | `Paste JSON`   | (UI only)  | user-entered  | No            | User pastes JSON into the panel              |
+| Callback endpoint | `From server`  | `callback` | string (URL)  | Yes           | Dynamic data served by your backend          |
 
 ## Configuration
 
