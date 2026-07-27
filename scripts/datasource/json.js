@@ -88,13 +88,32 @@
             _dragDepth: 0,
 
             _onChange: null,
+            _onDataTooLarge: null,
+
+            onDataTooLarge(error) {
+                this._onDataTooLarge?.(error);
+            },
 
             async _handleFile(file) {
                 if (!file) return;
+
+                const ctx = window.Autofiller.DataSourceContext;
+                if (file.size > ctx.MAX_RAW_BYTES) {
+                    const error = new Error('File exceeds the size limit');
+                    error.tooLarge = true;
+                    this.onDataTooLarge(error);
+                    return;
+                }
+
                 try {
                     const text = await file.text();
                     JsonDataSource.load(text, file.name);
                 } catch (error) {
+                    if (ctx.isDataLarge(error)) {
+                        this.onDataTooLarge(error);
+                        return;
+                    }
+
                     JsonDataSource.clear();
                 } finally {
                     this._onChange?.();
@@ -163,8 +182,9 @@
                     this._dropzone.style.display = hasData ? 'none' : 'flex';
             },
 
-            mount(container, { onChange }) {
+            mount(container, { onChange, onDataTooLarge }) {
                 this._onChange = onChange;
+                this._onDataTooLarge = onDataTooLarge;
 
                 container.innerHTML = `
                     <input type="file" accept=".json,application/json" autocomplete="off" hidden>

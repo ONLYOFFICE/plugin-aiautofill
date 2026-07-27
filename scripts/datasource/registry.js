@@ -37,6 +37,8 @@
                 throw new Error(`Data source "${source.id || 'unknown'}" must implement a test() method`);
             if (typeof source.panel?.mount !== 'function')
                 throw new Error(`Data source "${source.id || 'unknown'}" must implement a panel.mount() method`);
+            if (typeof source.panel?.onDataTooLarge !== 'function')
+                throw new Error(`Data source "${source.id || 'unknown'}" must implement a panel.onDataTooLarge() method`);
 
             sources.push(source);
             return source;
@@ -204,7 +206,7 @@
 
                 return data;
             } catch (error) {
-                if (error.status)
+                if (error.status || error.tooLarge)
                     throw error;
                 throw new Error(`Failed to fetch data: ${error.message}`);
             }
