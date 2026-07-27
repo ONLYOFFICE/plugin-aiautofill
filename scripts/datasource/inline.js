@@ -17,13 +17,12 @@
  */
 (function (window, undefined) {
     let _data = null;
-    let _fileName = null;
 
-    const JsonDataSource = {
-        id: 'json',
-        label: 'Upload file',
-        kind: 'file',
-        priority: 1,
+    const InlineDataSource = {
+        id: 'inline',
+        label: 'Paste JSON',
+        kind: 'inline',
+        priority: 0,
         cacheable: true,
 
         isConfigured() {
@@ -37,12 +36,12 @@
         status() {
             if (!this.hasData())
                 return { state: 'empty' };
-            return { state: 'ready', title: _fileName || 'data.json', detail: 'Valid JSON' };
+            return { state: 'ready', title: 'Pasted JSON', detail: 'Valid JSON' };
         },
 
         async test() {
             if (!this.hasData())
-                return { ok: false, detail: 'No file loaded' };
+                return { ok: false, detail: 'No JSON pasted' };
 
             window.Autofiller.DataSourceContext.validateData(_data);
             return { ok: true, detail: 'Valid JSON' };
@@ -52,29 +51,22 @@
             return window.Autofiller.DataSourceContext.validateData(_data);
         },
 
-        load(text, fileName) {
+        load(text) {
             const ctx = window.Autofiller.DataSourceContext;
-            const parsed = ctx.parseJson(text, fileName || 'uploaded file');
+            const parsed = ctx.parseJson(text, 'pasted JSON');
             const data = ctx.validateData(ctx.unwrapData(parsed));
 
             _data = data;
-            _fileName = fileName || null;
-
             return data;
         },
 
         clear() {
             _data = null;
-            _fileName = null;
-        },
-
-        get fileName() {
-            return _fileName;
         }
     };
 
     window.Autofiller = window.Autofiller || {};
-    window.Autofiller.JsonDataSource = JsonDataSource;
+    window.Autofiller.InlineDataSource = InlineDataSource;
     if (window.Autofiller.DataSources)
-        window.Autofiller.DataSources.register(JsonDataSource);
+        window.Autofiller.DataSources.register(InlineDataSource);
 })(window, undefined);

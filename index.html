@@ -35,6 +35,7 @@
     <script src="scripts/datasource/registry.js"></script>
     <script src="scripts/datasource/context.js"></script>
     <script src="scripts/datasource/json.js"></script>
+    <script src="scripts/datasource/inline.js"></script>
     <script src="scripts/datasource/callback.js"></script>
     <script src="scripts/mapper.js"></script>
     <script src="scripts/fields/constraints.js"></script>
@@ -46,6 +47,7 @@
     <script src="scripts/fields/complex.js"></script>
     <script src="scripts/fields/detect.js"></script>
     <script src="scripts/form.js"></script>
+    <script src="scripts/index.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -211,13 +213,19 @@
             color: var(--color-button-secondary-text);
         }
 
-        .data-source {
+        .datasource {
             display: flex;
             flex-direction: column;
-            gap: 8px;
 
+            gap: 10px;
             margin-bottom: 16px;
-            padding: 10px;
+        }
+
+        .datasource__tabs {
+            display: flex;
+
+            gap: 4px;
+            padding: 3px;
 
             border: 1px solid var(--color-border);
             border-radius: var(--border-radius-button);
@@ -225,66 +233,153 @@
             background-color: var(--color-bg-secondary);
         }
 
-        .data-source__label {
+        .datasource__tab {
+            flex: 1;
+            min-height: 28px;
+
+            padding: 4px 8px;
+
+            border: none;
+            border-radius: calc(var(--border-radius-button) - 2px);
+
+            font-family: var(--font-family);
+            font-size: var(--font-size);
+
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+
+            background: none;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+        }
+
+        .datasource__tab:hover:not(.datasource__tab--active) {
+            color: var(--color-text);
+        }
+
+        .datasource__tab--active {
+            font-weight: 600;
+
+            color: var(--color-text);
+            background-color: var(--color-bg-primary);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+        }
+
+        .datasource__panel {
+            display: flex;
+            flex-direction: column;
+
+            gap: 8px;
+        }
+
+        .dropzone {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            gap: 4px;
+            padding: 20px 12px;
+
+            border: 1px dashed var(--color-border);
+            border-radius: var(--border-radius-button);
+
+            text-align: center;
+
+            cursor: pointer;
+            background-color: var(--color-bg-secondary);
+            color: var(--color-text-secondary);
+            transition: border-color 0.15s, background-color 0.15s;
+        }
+
+        .dropzone:hover,
+        .dropzone:focus-visible {
+            border-color: var(--color-button-primary-bg, var(--color-text-secondary));
+            outline: none;
+        }
+
+        .dropzone--disabled {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .dropzone--dragover {
+            border-style: solid;
+            border-color: var(--color-button-primary-bg, var(--color-text));
+
+            color: var(--color-text);
+            background-color: var(--color-bg-primary);
+        }
+
+        .dropzone__icon {
+            width: 24px;
+            height: 24px;
+
+            opacity: 0.8;
+        }
+
+        .dropzone__icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .dropzone__title {
             font-weight: 600;
 
             color: var(--color-text);
         }
 
-        .data-source__select {
-            box-sizing: border-box;
-            width: 100%;
-            min-height: var(--button-height);
+        .dropzone__hint {
+            font-size: var(--font-size);
 
-            padding: 6px 28px 6px 10px;
+            color: var(--color-text-secondary);
+        }
+
+        .datasource-chip {
+            display: flex;
+            align-items: center;
+
+            gap: 8px;
+            padding: 8px 8px 8px 10px;
 
             border: 1px solid var(--color-border);
             border-radius: var(--border-radius-button);
 
-            font-family: var(--font-family);
-            font-size: var(--font-size);
-            text-overflow: ellipsis;
-
-            background-color: var(--color-bg-primary);
-            color: var(--color-text);
-            cursor: pointer;
+            background-color: var(--color-bg-secondary);
         }
 
-        .data-source__file {
-            display: flex;
-            flex-direction: column;
-            
-            gap: 8px;
-        }
-
-        .file-source__info {
-            display: flex;
-            align-items: center;
-
-            gap: 4px;
-            padding: 4px 4px 4px 10px;
-
-            border-radius: var(--border-radius-button);
-
-            background-color: var(--color-bg-primary);
-        }
-
-        .file-source__name {
-            flex: 1;
-            min-width: 0;
-            overflow: hidden;
-
-            text-overflow: ellipsis;
-            white-space: nowrap;
-
-            color: var(--color-text);
-        }
-
-        .file-source__remove {
+        .datasource-chip__icon {
             flex-shrink: 0;
 
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
+
+            color: var(--color-text-secondary);
+        }
+
+        .datasource-chip__icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .datasource-chip__title {
+            flex: 1;
+            min-width: 0;
+
+            font-weight: 600;
+
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+
+            color: var(--color-text);
+        }
+
+        .datasource-chip__remove {
+            flex-shrink: 0;
+            width: 22px;
+            height: 22px;
 
             padding: 0;
 
@@ -294,18 +389,95 @@
             font-size: 16px;
             line-height: 1;
 
-            background: none;
             cursor: pointer;
+            background: none;
             color: var(--color-text-secondary);
         }
 
-        .file-source__remove:hover {
+        .datasource-chip__remove:hover {
             color: var(--color-text);
         }
 
-        .file-source__error {
+        .datasource__textarea {
+            box-sizing: border-box;
+            width: 100%;
+            min-height: 96px;
+
+            padding: 8px 10px;
+
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius-button);
+
+            font-family: monospace;
+            font-size: var(--font-size);
+            resize: vertical;
+
+            color: var(--color-text);
+            background-color: var(--color-bg-primary);
+        }
+
+        .datasource__textarea:focus-visible {
+            border-color: var(--color-button-primary-bg, var(--color-text-secondary));
+            outline: none;
+        }
+
+        .datasource-card {
+            display: flex;
+            flex-direction: column;
+
+            gap: 8px;
+            padding: 12px;
+
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius-button);
+
+            background-color: var(--color-bg-secondary);
+        }
+
+        .datasource-card__row {
+            display: flex;
+            align-items: center;
+
+            gap: 8px;
+        }
+
+        .datasource-card__icon {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+
+            color: var(--color-text-secondary);
+        }
+
+        .datasource-card__icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .datasource-card__title {
+            font-weight: 600;
+
+            color: var(--color-text);
+        }
+
+        .datasource-card__host {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            font-size: var(--font-size);
+
+            color: var(--color-text-secondary);
+        }
+
+        .datasource-status {
             margin: 0;
 
+            font-size: var(--font-size);
+
+            color: var(--color-text-secondary);
+        }
+
+        .datasource-status--error {
             color: var(--color-error-text, #cc3333);
         }
 
@@ -452,27 +624,59 @@
             <div class="text-content description i18n">
                 An attempt will be made to automatically fill in the form fields using AI inference. Do you want to start autofilling the forms?
             </div>
-            <div class="data-source">
-                <label class="data-source__label i18n" for="dataSourceSelect">Data source</label>
-                <select class="data-source__select" id="dataSourceSelect">
-                    <option value="" disabled selected class="i18n">Select a data source</option>
-                </select>
-                <div class="data-source__file" id="fileControl" style="display: none;">
+            <div class="datasource" id="sourceWidget">
+                <div class="datasource__tabs" id="sourceTabs" role="tablist" style="display: none;"></div>
+                <div class="datasource__panel" data-panel="json">
                     <input type="file" id="dataFileInput" accept=".json,application/json" hidden>
-                    <button type="button" class="btn btn-secondary i18n" id="loadFileBtn">Load JSON</button>
-                    <div class="file-source__info" id="fileInfo" style="display: none;">
-                        <span class="file-source__name" id="fileName"></span>
-                        <button type="button" class="file-source__remove" id="removeFileBtn" title="Remove" aria-label="Remove">&times;</button>
+                    <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload JSON file">
+                        <div class="dropzone__icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 16V4M12 4l-4 4M12 4l4 4"></path>
+                                <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"></path>
+                            </svg>
+                        </div>
+                        <div class="dropzone__title i18n">Drag your JSON file here</div>
+                        <div class="dropzone__hint i18n">or click to browse</div>
                     </div>
-                    <p class="file-source__error i18n" id="fileError" style="display: none;">The selected file is not valid JSON.</p>
+                    <div class="datasource-chip" id="fileChip" style="display: none;">
+                        <div class="datasource-chip__icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <path d="M14 2v6h6"></path>
+                            </svg>
+                        </div>
+                        <div class="datasource-chip__title" id="fileChipTitle"></div>
+                        <button type="button" class="datasource-chip__remove" id="removeFileBtn" title="Remove" aria-label="Remove">&times;</button>
+                    </div>
+                </div>
+
+                <div class="datasource__panel" data-panel="inline" style="display: none;">
+                    <textarea id="pasteInput" class="datasource__textarea" data-i18n-placeholder="Paste your JSON here" placeholder="Paste your JSON here" spellcheck="false"></textarea>
+                </div>
+
+                <div class="datasource__panel" data-panel="callback" style="display: none;">
+                    <div class="datasource-card">
+                        <div class="datasource-card__row">
+                            <div class="datasource-card__icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="9"></circle>
+                                    <path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"></path>
+                                </svg>
+                            </div>
+                            <span class="datasource-card__title i18n">Connected to your data service</span>
+                        </div>
+                        <div class="datasource-card__host" id="remoteHost"></div>
+                        <p class="datasource-status" id="remoteStatus" style="display: none;"></p>
+                    </div>
                 </div>
             </div>
+            <p class="datasource-status datasource-status--error" id="autofillError" style="display: none;"></p>
             <div class="button-group">
                 <button class="btn btn-primary i18n" id="autofillBtn">Autofill</button>
                 <button class="btn btn-secondary i18n" id="cancelBtn">Cancel</button>
             </div>
         </div>
-        
+
         <div id="errorModel" class="error">
             <div class="error__box">
                 <div class="error__header">
@@ -527,400 +731,5 @@
             </div>
         </div>
     </div>
-    <script>
-        let loader;
-
-        function sourceReady() {
-            const datasource = window.Autofiller.DataSources;
-            const id = datasource.getSelectedId();
-            if (!id)
-                return false;
-
-            const source = datasource.get(id);
-            return !!(source && source.isAvailable && source.isAvailable());
-        }
-
-        function setButtonsEnabled(enabled) {
-            const cancelBtn = document.getElementById('cancelBtn');
-            if (cancelBtn)
-                cancelBtn.disabled = !enabled;
-
-            const autofillBtn = document.getElementById('autofillBtn');
-            if (autofillBtn)
-                autofillBtn.disabled = !enabled || !sourceReady();
-        }
-
-        function setProcessing(processing) {
-            ['autofillBtn', 'cancelBtn', 'dataSourceSelect', 'loadFileBtn', 'removeFileBtn'].forEach(id => {
-                const element = document.getElementById(id);
-                if (element) element.disabled = processing;
-            });
-        }
-
-        function reinitializeFileSource() {
-            const fileInfo = document.getElementById('fileInfo');
-            const fileName = document.getElementById('fileName');
-            const loadFileBtn = document.getElementById('loadFileBtn');
-            const source = window.Autofiller.JsonDataSource;
-
-            if (source && source.hasData) {
-                if (fileName)
-                    fileName.textContent = source.fileName || 'data.json';
-                if (fileInfo)
-                    fileInfo.style.display = 'flex';
-                if (loadFileBtn)
-                    loadFileBtn.style.display = 'none';
-            } else {
-                if (fileInfo)
-                    fileInfo.style.display = 'none';
-                if (loadFileBtn)
-                    loadFileBtn.style.display = 'flex';
-            }
-        }
-
-        function reinitializeDataSource() {
-            const select = document.getElementById('dataSourceSelect');
-            if (select)
-                select.value = '';
-
-            window.Autofiller.DataSources.select('');
-            window.Autofiller.JsonDataSource?.clear();
-
-            const fileControl = document.getElementById('fileControl');
-            if (fileControl)
-                fileControl.style.display = 'none';
-
-            showFileError(false);
-            reinitializeFileSource();
-        }
-
-        function buildDataSourceOptions() {
-            const select = document.getElementById('dataSourceSelect');
-            if (!select)
-                return;
-
-            Array.from(select.querySelectorAll('option[data-dynamic]')).forEach(o => o.remove());
-            window.Autofiller.DataSources.listSelectable().forEach(item => {
-                const option = document.createElement('option');
-                option.value = item.id;
-                option.textContent = window.Asc?.plugin?.tr ? window.Asc.plugin.tr(item.label) : item.label;
-                option.setAttribute('data-dynamic', '');
-                select.appendChild(option);
-            });
-        }
-
-        function isFileSourceSelected() {
-            const select = document.getElementById('dataSourceSelect');
-            const meta = window.Autofiller.DataSources.listSelectable().find(item => item.id === select?.value);
-            return !!(meta && meta.requiresFile);
-        }
-
-        function handleSourceChange() {
-            const select = document.getElementById('dataSourceSelect');
-            const fileControl = document.getElementById('fileControl');
-            const id = select?.value || '';
-
-            window.Autofiller.DataSources.select(id);
-            const needsFile = isFileSourceSelected();
-            if (fileControl)
-                fileControl.style.display = needsFile ? 'flex' : 'none';
-
-            showFileError(false);
-            if (needsFile)
-                reinitializeFileSource();
-
-            setButtonsEnabled(true);
-        }
-
-        function showFileError(show) {
-            const fileError = document.getElementById('fileError');
-            if (fileError)
-                fileError.style.display = show ? 'block' : 'none';
-        }
-
-        async function handleFileSelected(event) {
-            const input = event.target;
-            const file = input.files && input.files[0];
-            if (!file) return;
-
-            showFileError(false);
-            try {
-                const text = await file.text();
-                window.Autofiller.JsonDataSource.load(text, file.name);
-                reinitializeFileSource();
-            } catch (error) {
-                console.error('Failed to load data file:', error);
-                window.Autofiller.JsonDataSource.clear();
-                reinitializeFileSource();
-                showFileError(true);
-            } finally {
-                input.value = '';
-                setButtonsEnabled(true);
-            }
-        }
-
-        function handleRemoveFile() {
-            window.Autofiller.JsonDataSource.clear();
-            showFileError(false);
-            reinitializeFileSource();
-            setButtonsEnabled(true);
-        }
-
-        function showView(view) {
-            const views = {
-                welcome: document.getElementById('welcomeContent'),
-                empty: document.getElementById('emptyState'),
-                errorModel: document.getElementById('errorModel'),
-                errorFields: document.getElementById('errorFields'),
-                errorSigned: document.getElementById('errorSigned')
-            };
-
-            Object.entries(views).forEach(([key, el]) => {
-                if (!el) return;
-                if (key === 'welcome') el.style.display = view === 'welcome' ? 'block' : 'none';
-                else el.classList.toggle('error--visible', view === key);
-            });
-        }
-
-        function handleRestart() {
-            window.Autofiller.FormDetectionService.detectAllForms().then(formFields => {
-                if (!formFields || formFields.length === 0)
-                    showView('errorFields');
-                else
-                    window.location.reload();
-            }).catch(error => {
-                console.error('Error checking form fields:', error);
-                showView('errorFields');
-            });
-        }
-
-        async function handleDetection() {
-            try {
-                setButtonsEnabled(false);
-                setProcessing(true);
-                if (loader)
-                    loader.show(window.Asc.plugin.tr('Analyzing form fields with AI'));
-
-                const allFormFields = await window.Autofiller.FormDetectionService.detectAllForms();
-                const formFields = window.Autofiller.Prompts.filterMeaningfulFields(allFormFields || []);
-                if (!formFields.length) {
-                    if (loader) loader.hide();
-                    showView('errorFields');
-                    return;
-                }
-                
-                if (loader)
-                    loader.updateMessage(window.Asc.plugin.tr('Fetching data'));
-
-                let realData;
-                try {
-                    realData = await window.Autofiller.Utils.withTimeout(
-                        window.Autofiller.DataSources.fetch(),
-                        5000,
-                        'Data Fetching'
-                    );
-                } catch (fetchError) {
-                    if (loader) loader.hide();
-                    showView('empty');
-                    return;
-                }
-
-                if (!realData || (typeof realData === 'object' && Object.keys(realData).length === 0)) {
-                    if (loader) loader.hide();
-                    showView('empty');
-                    return;
-                }
-
-                if (loader)
-                    loader.updateMessage(window.Asc.plugin.tr('Checking AI availability'));
-
-                const aiCheckResult = await checkAI(5000);
-                if (!aiCheckResult.available) {
-                    if (loader) loader.hide();
-                    showView(getErrorView(aiCheckResult.error));
-                    return;
-                }
-                
-                if (loader)
-                    loader.updateMessage(window.Asc.plugin.tr('Mapping fields with AI'));
-
-                let aiResult;
-                try {
-                    const dataKeys = window.Autofiller.DataMappingService.extractAllKeys(realData);
-                    const prompt = window.Autofiller.Prompts.getFieldMappingPrompt(dataKeys, formFields);
-                    aiResult = await window.Autofiller.FormService.executeAI(prompt);
-                } catch (aiError) {
-                    if (loader) loader.hide();
-                    showView(getErrorView(aiError));
-                    return;
-                }
-
-                const aiResponse = window.Autofiller.DataMappingService.parseAIResponse(aiResult.text);
-                const fieldsWithOptions = window.Autofiller.FormDetectionService.enrichFieldsWithOptions(formFields, aiResponse.mapping, realData);
-
-                if (!fieldsWithOptions || fieldsWithOptions.length === 0) {
-                    if (loader) loader.hide();
-                    showView('empty');
-                    return;
-                }
-
-                const storage = window.Autofiller.StorageManager('autofiller');
-                storage.set('form_fields', fieldsWithOptions);
-                window.Autofiller.DataSources.clearSession();
-                
-                if (loader)
-                    loader.updateMessage(window.Asc.plugin.tr('Loading form'));
-                
-                window.location.href = 'form.html' + (window.Autofiller.getThemeURLParams ? window.Autofiller.getThemeURLParams() : '');
-            } catch (error) {
-                console.error("Error detecting form fields", error);
-                if (loader) loader.hide();
-                showView(getErrorView(error));
-            }
-        }
-
-        function getErrorView(error) {
-            const s = (error?.message || error?.error || String(error || '')).toLowerCase();
-            if (error?.status || /http|fetch|network|404|500/.test(s))
-                return 'empty';
-            
-            return 'errorModel';
-        }
-
-        function close() {
-            window.Asc.plugin.executeCommand("close", "");
-        }
-
-        function checkAI(timeout = 5000) {
-            return new Promise((resolve) => {
-                const timer = setTimeout(() => resolve({ available: false, error: "AI check timed out" }), timeout);
-                
-                if (!window.Asc?.plugin?.executeMethod) {
-                    clearTimeout(timer);
-                    return resolve({ available: false, error: "Plugin API not available" });
-                }
-
-                try {
-                    window.Asc.plugin.executeMethod("AI", [{ type: "Actions" }], (data) => {
-                        clearTimeout(timer);
-                        const hasChat = data?.Actions?.some(a => a?.Chat);
-                        resolve(hasChat ? { available: true, data } : { available: false, error: "No AI model configured" });
-                    });
-                } catch (e) {
-                    clearTimeout(timer);
-                    resolve({ available: false, error: e.message });
-                }
-            });
-        }
-
-        async function startAICheck() {
-            const initialCheck = await checkAI(5000);
-            if (initialCheck.available) {
-                setButtonsEnabled(true);
-                showView('welcome');
-            } else {
-                setButtonsEnabled(false);
-                showView('errorModel');
-            }
-
-            let lastState = initialCheck.available;
-            setInterval(async () => {
-                if (!window.Asc?.plugin?.executeMethod) return;
-                try {
-                    const result = await checkAI(1000);
-                    const hasChat = result.available;
-                    if (hasChat !== lastState) {
-                        lastState = hasChat;
-                        if (hasChat) {
-                            setButtonsEnabled(true);
-                            showView('welcome');
-                        } else {
-                            setButtonsEnabled(false);
-                            showView('errorModel');
-                        }
-                    }
-                } catch (e) { console.error("AI check error:", e); }
-            }, 1000);
-        }
-
-        async function initializePlugin() {
-            try {
-                const signedPromise = new Promise((resolve) => {
-                    window.Asc.plugin.executeMethod("IsFormSigned", [], (result) => {
-                        resolve(result);
-                    });
-                });
-                const formFieldsPromise = window.Autofiller.FormDetectionService.detectAllForms();
-                const [signed, formFields] = await Promise.all([signedPromise, formFieldsPromise]);
-
-                document.documentElement.classList.add('theme-ready');
-
-                if (signed) {
-                    if (loader) loader.hide();
-                    showView('errorSigned');
-                    return;
-                }
-                
-                if (!formFields || formFields.length === 0) {
-                    if (loader) loader.hide();
-                    showView('errorFields');
-                    return;
-                }
-                
-                await startAICheck();
-            } catch (error) {
-                console.error('Error checking form fields on init:', error);
-                document.documentElement.classList.add('theme-ready');
-                await startAICheck();
-            }
-        }
-
-        function onThemeChanged(theme) {
-            window.Asc.plugin.onThemeChangedBase(theme);
-            updateBodyThemeClasses(theme.type, theme.name);
-            updateThemeVariables(theme);
-        }
-
-        window.Asc.plugin.onThemeChanged = onThemeChanged;
-
-        window.Asc.plugin.init = function() {
-            if (window.Asc.plugin.info.theme)
-                onThemeChanged(window.Asc.plugin.info.theme);
-            
-            if (typeof window.Autofiller.Loader !== 'undefined')
-                loader = new window.Autofiller.Loader('#loaderContainer', '#mainWindow', {
-                    translate: function(t) { return window.Asc && window.Asc.plugin && window.Asc.plugin.tr ? window.Asc.plugin.tr(t) : t; },
-                    defaultMessage: 'Loading...'
-                });
-
-            setButtonsEnabled(false);
-
-            document.getElementById('autofillBtn')?.addEventListener('click', handleDetection);
-            document.getElementById('cancelBtn')?.addEventListener('click', close);
-            document.getElementById('retryBtnFields')?.addEventListener('click', handleRestart);
-            document.getElementById('retryBtnEmpty')?.addEventListener('click', handleRestart);
-
-            buildDataSourceOptions();
-            reinitializeDataSource();
-
-            const select = document.getElementById('dataSourceSelect');
-            select?.addEventListener('change', handleSourceChange);
-            document.getElementById('loadFileBtn')?.addEventListener('click', () => document.getElementById('dataFileInput')?.click());
-            document.getElementById('dataFileInput')?.addEventListener('change', handleFileSelected);
-            document.getElementById('removeFileBtn')?.addEventListener('click', handleRemoveFile);
-
-            window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
-
-            initializePlugin();
-        };
-
-        window.Asc.plugin.onTranslate = function() {
-            let elements = document.querySelectorAll('.i18n');
-            elements.forEach(function(element) {
-                if (element.innerText) 
-                    element.innerText = window.Asc.plugin.tr(element.innerText.trim());
-            });
-        };
-    </script>
 </body>
 </html>
