@@ -9,7 +9,7 @@
 
 ## 1.1.0
 ### Added
-- Data source selector with JSON file upload and callback endpoint support.
+- Data source selector with JSON file upload, inline JSON and callback endpoint support.
 - Pluggable data source registry.
 - Dedicated handlers for text, boolean, radio, and complex form field types.
 - Field constraint validation for character limits and related rules.
