@@ -35,6 +35,8 @@
 
             if (typeof source.test !== 'function')
                 throw new Error(`Data source "${source.id || 'unknown'}" must implement a test() method`);
+            if (typeof source.panel?.mount !== 'function')
+                throw new Error(`Data source "${source.id || 'unknown'}" must implement a panel.mount() method`);
 
             sources.push(source);
             return source;
@@ -45,6 +47,13 @@
             if (!source)
                 return { ok: false, detail: 'Unknown data source' };
             return source.test();
+        },
+
+        isReady(id) {
+            const source = this.get(id);
+            if (!source)
+                return false;
+            return typeof source.isReady === 'function' ? source.isReady() : !!source.hasData?.();
         },
 
         get(id) {

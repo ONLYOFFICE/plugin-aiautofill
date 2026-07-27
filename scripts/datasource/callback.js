@@ -17,6 +17,7 @@
  */
 (function (window, undefined) {
     let _nextCode = null;
+    let _reachable = false;
     const REFRESH_CODE_KEY = 'refresh_code';
     const ORIGINAL_CODE_KEY = 'original_code';
 
@@ -118,6 +119,10 @@
             return { state: 'ready', title: prettyHost(getCallbackUrl()) };
         },
 
+        isReady() {
+            return _reachable;
+        },
+
         async test() {
             const ctx = window.Autofiller.DataSourceContext;
             const url = getCallbackUrl();
@@ -153,6 +158,79 @@
             saveNextCode(result.code);
 
             return result.data;
+        },
+
+        panel: {
+            _hostEl: null,
+            _statusEl: null,
+
+            _tr: (text) => text,
+            _onChange: null,
+
+            _renderHost() {
+                const info = window.Autofiller.DataSources.status('callback');
+                if (this._hostEl)
+                    this._hostEl.textContent = info.title ? info.title + (info.detail ? ' · ' + this._tr(info.detail) : '') : '';
+            },
+
+            _setStatus(message) {
+                if (!this._statusEl) return;
+                this._statusEl.className = 'datasource-status' + (message ? ' datasource-status--error' : '');
+                this._statusEl.textContent = message;
+                this._statusEl.style.display = message ? 'block' : 'none';
+            },
+
+            mount(container, { tr, onChange }) {
+                this._tr = tr;
+                this._onChange = onChange;
+
+                container.innerHTML = `
+                    <div class="datasource-card">
+                        <div class="datasource-card__row">
+                            <div class="datasource-card__icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="9"></circle>
+                                    <path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"></path>
+                                </svg>
+                            </div>
+                            <span class="datasource-card__title i18n">Connected to your data service</span>
+                        </div>
+                        <div class="datasource-card__host"></div>
+                        <p class="datasource-status" style="display: none;"></p>
+                    </div>
+                `;
+
+                this._hostEl = container.querySelector('.datasource-card__host');
+                this._statusEl = container.querySelector('.datasource-status');
+
+                this._renderHost();
+            },
+
+            activate() {
+                this._renderHost();
+
+                _reachable = false;
+
+                this._setStatus('');
+                this._onChange?.();
+
+                window.Autofiller.Utils.withTimeout(CallbackDataSource.test(), 5000, 'Endpoint test')
+                    .then(result => {
+                        _reachable = !!result?.ok;
+                        this._onChange?.();
+                    }).catch(() => {
+                        _reachable = false;
+                        this._onChange?.();
+                    }).finally(() => {
+                        if (!_reachable)
+                            this._setStatus(this._tr("Couldn't reach your data service."));
+                        this._onChange?.();
+                    });
+            },
+
+            translate() {
+                this._renderHost();
+            }
         }
     };
 

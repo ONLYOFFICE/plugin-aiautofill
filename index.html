@@ -626,49 +626,7 @@
             </div>
             <div class="datasource" id="sourceWidget">
                 <div class="datasource__tabs" id="sourceTabs" role="tablist" style="display: none;"></div>
-                <div class="datasource__panel" data-panel="json">
-                    <input type="file" id="dataFileInput" accept=".json,application/json" hidden>
-                    <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload JSON file">
-                        <div class="dropzone__icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 16V4M12 4l-4 4M12 4l4 4"></path>
-                                <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"></path>
-                            </svg>
-                        </div>
-                        <div class="dropzone__title i18n">Drag your JSON file here</div>
-                        <div class="dropzone__hint i18n">or click to browse</div>
-                    </div>
-                    <div class="datasource-chip" id="fileChip" style="display: none;">
-                        <div class="datasource-chip__icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                <path d="M14 2v6h6"></path>
-                            </svg>
-                        </div>
-                        <div class="datasource-chip__title" id="fileChipTitle"></div>
-                        <button type="button" class="datasource-chip__remove" id="removeFileBtn" title="Remove" aria-label="Remove">&times;</button>
-                    </div>
-                </div>
-
-                <div class="datasource__panel" data-panel="inline" style="display: none;">
-                    <textarea id="pasteInput" class="datasource__textarea" data-i18n-placeholder="Paste your JSON here" placeholder="Paste your JSON here" spellcheck="false"></textarea>
-                </div>
-
-                <div class="datasource__panel" data-panel="callback" style="display: none;">
-                    <div class="datasource-card">
-                        <div class="datasource-card__row">
-                            <div class="datasource-card__icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="9"></circle>
-                                    <path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"></path>
-                                </svg>
-                            </div>
-                            <span class="datasource-card__title i18n">Connected to your data service</span>
-                        </div>
-                        <div class="datasource-card__host" id="remoteHost"></div>
-                        <p class="datasource-status" id="remoteStatus" style="display: none;"></p>
-                    </div>
-                </div>
+                <!-- Per-source panels are mounted here at runtime mount() -->
             </div>
             <p class="datasource-status datasource-status--error" id="autofillError" style="display: none;"></p>
             <div class="button-group">
