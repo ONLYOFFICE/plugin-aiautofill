@@ -61,5 +61,9 @@
 	"Connected to your data service": "已连接到您的数据服务",
 	"Couldn't reach your data service.": "无法连接到您的数据服务。",
 	"Couldn't get data from this source. Try another source.": "无法从此数据源获取数据。请尝试其他数据源。",
-	"This source returned no data. Try another source.": "此数据源未返回任何数据。请尝试其他数据源。"
+	"This source returned no data. Try another source.": "此数据源未返回任何数据。请尝试其他数据源。",
+	"Data source too large": "数据源过大",
+	"This data source is too large to process safely. Please use a smaller file or a more focused data set, then try again.": "此数据源过大，无法安全处理。请使用较小的文件或更精简的数据集，然后重试。",
+	"Back to main": "返回主页",
+	"Response is too large": "响应内容过大"
 }

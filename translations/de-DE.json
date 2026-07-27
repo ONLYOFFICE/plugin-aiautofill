@@ -61,5 +61,9 @@
 	"Connected to your data service": "Mit Ihrem Datendienst verbunden",
 	"Couldn't reach your data service.": "Ihr Datendienst konnte nicht erreicht werden.",
 	"Couldn't get data from this source. Try another source.": "Daten konnten nicht von dieser Quelle abgerufen werden. Versuchen Sie eine andere Quelle.",
-	"This source returned no data. Try another source.": "Diese Quelle hat keine Daten zurückgegeben. Versuchen Sie eine andere Quelle."
+	"This source returned no data. Try another source.": "Diese Quelle hat keine Daten zurückgegeben. Versuchen Sie eine andere Quelle.",
+	"Data source too large": "Datenquelle zu groß",
+	"This data source is too large to process safely. Please use a smaller file or a more focused data set, then try again.": "Diese Datenquelle ist zu groß, um sicher verarbeitet zu werden. Verwenden Sie eine kleinere Datei oder einen gezielteren Datensatz und versuchen Sie es erneut.",
+	"Back to main": "Zurück zur Hauptseite",
+	"Response is too large": "Antwort ist zu groß"
 }

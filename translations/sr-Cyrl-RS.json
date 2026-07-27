@@ -61,5 +61,9 @@
 	"Connected to your data service": "Повезано са вашим сервисом података",
 	"Couldn't reach your data service.": "Није могуће повезати се са вашим сервисом података.",
 	"Couldn't get data from this source. Try another source.": "Није могуће добити податке из овог извора. Пробајте други извор.",
-	"This source returned no data. Try another source.": "Овај извор није вратио податке. Пробајте други извор."
+	"This source returned no data. Try another source.": "Овај извор није вратио податке. Пробајте други извор.",
+	"Data source too large": "Извор података је превелик",
+	"This data source is too large to process safely. Please use a smaller file or a more focused data set, then try again.": "Овај извор података је превелик да би се безбедно обрадио. Користите мању датотеку или уже дефинисан скуп података, па покушајте поново.",
+	"Back to main": "Назад на главну страницу",
+	"Response is too large": "Одговор је превелик"
 }

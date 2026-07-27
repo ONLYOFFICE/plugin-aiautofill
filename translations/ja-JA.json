@@ -61,5 +61,9 @@
 	"Connected to your data service": "データサービスに接続されました",
 	"Couldn't reach your data service.": "データサービスに接続できませんでした。",
 	"Couldn't get data from this source. Try another source.": "このソースからデータを取得できませんでした。別のソースを試してください。",
-	"This source returned no data. Try another source.": "このソースはデータを返しませんでした。別のソースを試してください。"
+	"This source returned no data. Try another source.": "このソースはデータを返しませんでした。別のソースを試してください。",
+	"Data source too large": "データソースが大きすぎます",
+	"This data source is too large to process safely. Please use a smaller file or a more focused data set, then try again.": "このデータソースは大きすぎるため、安全に処理できません。より小さいファイルや、より絞り込んだデータセットを使用して、もう一度お試しください。",
+	"Back to main": "メインページに戻る",
+	"Response is too large": "レスポンスが大きすぎます"
 }
