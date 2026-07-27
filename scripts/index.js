@@ -19,78 +19,45 @@
     const tr = (text) => (window.Asc?.plugin?.tr ? window.Asc.plugin.tr(text) : text);
 
     const SourceWidget = {
+        _panels: {},
+
         _onSelect: null,
         _onChange: null,
-        _pasteDebounce: null,
-        _remoteReady: false,
-        _dragDepth: 0,
 
-        _panelActivators: {
-            json: () => SourceWidget._refreshFilePanel(),
-            callback: () => SourceWidget._refreshRemotePanel()
-        },
-
-        _panelTranslators: {
-            callback: () => SourceWidget._renderRemoteHost()
-        },
-
-        init({ onSelect, onChange }) {
-            this._onSelect = onSelect;
-            this._onChange = onChange;
+        _mountPanels(items) {
+            const widget = document.getElementById('sourceWidget');
+            if (!widget)
+                return;
 
             const datasources = window.Autofiller.DataSources;
+            this._panels = {};
 
-            datasources.select('');
-            window.Autofiller.JsonDataSource?.clear();
-            window.Autofiller.InlineDataSource?.clear();
+            items.forEach(item => {
+                const source = datasources.get(item.id);
+                if (!source)
+                    return;
 
-            const paste = document.getElementById('pasteInput');
-            if (paste) paste.value = '';
+                const panelEl = document.createElement('div');
+                panelEl.className = 'datasource__panel';
+                panelEl.dataset.panel = item.id;
+                panelEl.style.display = 'none';
 
-            let selected = datasources.autoSelect();
-            if (!selected) {
-                const first = window.Autofiller.DataSources.listOrdered()[0];
-                selected = first ? datasources.select(first.id) : '';
-            }
+                widget.appendChild(panelEl);
 
-            this.translate();
-            this._activate(selected || '');
-            this._bindEvents();
-        },
+                source.panel.mount(panelEl, {
+                    tr,
+                    onChange: () => this._onChange?.()
+                });
 
-        isReady() {
-            const datasources = window.Autofiller.DataSources;
-            const source = datasources.get(datasources.getSelectedId());
-            if (!source?.hasData?.())
-                return false;
-
-            return source.kind === 'remote' ? this._remoteReady : true;
-        },
-
-        setProcessing(processing) {
-            ['removeFileBtn', 'pasteInput', 'dataFileInput'].forEach(id => {
-                const element = document.getElementById(id);
-                if (element) element.disabled = processing;
+                this._panels[item.id] = source;
             });
-
-            document.querySelectorAll('.datasource__tab').forEach(tab => { tab.disabled = processing; });
-            document.getElementById('dropzone')?.classList.toggle('dropzone--disabled', processing);
         },
 
-        translate() {
-            const paste = document.getElementById('pasteInput');
-            if (paste)
-                paste.placeholder = tr(paste.getAttribute('data-i18n-placeholder') || paste.placeholder);
-
-            this._renderTabs();
-            this._panelTranslators[window.Autofiller.DataSources.getSelectedId()]?.();
-        },
-
-        _renderTabs() {
+        _renderTabs(items) {
             const tabs = document.getElementById('sourceTabs');
-            if (!tabs) return;
+            if (!tabs)
+                return;
 
-            const items = window.Autofiller.DataSources.listOrdered();
             const selectedId = window.Autofiller.DataSources.getSelectedId();
 
             tabs.innerHTML = '';
@@ -108,6 +75,7 @@
                 button.setAttribute('role', 'tab');
                 button.dataset.sourceId = item.id;
                 button.addEventListener('click', () => this._activate(item.id));
+
                 tabs.appendChild(button);
             });
         },
@@ -124,149 +92,59 @@
                 panel.style.display = panel.dataset.panel === id ? 'flex' : 'none';
             });
 
-            this._panelActivators[id]?.();
+            this._panels[id]?.panel.activate?.();
 
             this._onChange?.();
         },
 
-        _refreshFilePanel() {
-            const source = window.Autofiller.JsonDataSource;
-            const chip = document.getElementById('fileChip');
-            const dropzone = document.getElementById('dropzone');
-            const hasData = !!source?.hasData?.();
-
-            document.getElementById('fileChipTitle').textContent = hasData ? (source.fileName || 'data.json') : '';
-
-            if (chip)
-                chip.style.display = hasData ? 'flex' : 'none';
-
-            if (dropzone)
-                dropzone.style.display = hasData ? 'none' : 'flex';
-        },
-
-        async _handleFile(file) {
-            if (!file) return;
-            try {
-                const text = await file.text();
-                window.Autofiller.JsonDataSource.load(text, file.name);
-            } catch (error) {
-                window.Autofiller.JsonDataSource.clear();
-            } finally {
-                this._refreshFilePanel();
-                this._onChange?.();
-            }
-        },
-
-        _handleRemoveFile() {
-            window.Autofiller.JsonDataSource.clear();
-            this._refreshFilePanel();
-            this._onChange?.();
-        },
-
-        _handlePasteInput() {
-            clearTimeout(this._pasteDebounce);
-            this._pasteDebounce = setTimeout(() => {
-                const input = document.getElementById('pasteInput');
-                const text = (input?.value || '').trim();
-                if (!text) {
-                    window.Autofiller.InlineDataSource.clear();
-                } else {
-                    try {
-                        window.Autofiller.InlineDataSource.load(input.value);
-                    } catch (error) {
-                        window.Autofiller.InlineDataSource.clear();
-                    }
-                }
-
-                this._onChange?.();
-            }, 250);
-        },
-
-        _setRemoteStatus(message) {
-            const status = document.getElementById('remoteStatus');
-            if (!status)
-                return;
-
-            status.className = 'datasource-status' + (message ? ' datasource-status--error' : '');
-            status.textContent = message;
-            status.style.display = message ? 'block' : 'none';
-        },
-
-        _renderRemoteHost() {
-            const info = window.Autofiller.DataSources.status('callback');
-            const host = document.getElementById('remoteHost');
-            if (host)
-                host.textContent = info.title ? info.title + (info.detail ? ' · ' + tr(info.detail) : '') : '';
-        },
-
-        _refreshRemotePanel() {
-            this._renderRemoteHost();
-
-            this._remoteReady = false;
-            this._setRemoteStatus('');
-            this._onChange?.();
-
-            const datasources = window.Autofiller.DataSources;
-            window.Autofiller.Utils.withTimeout(datasources.test('callback'), 5000, 'Endpoint test')
-                .then(result => { this._remoteReady = !!result?.ok; })
-                .catch(() => { this._remoteReady = false; })
-                .finally(() => {
-                    if (!this._remoteReady)
-                        this._setRemoteStatus(tr("Couldn't reach your data service."));
-                    this._onChange?.();
-                });
-        },
-
-        _bindEvents() {
-            const dropzone = document.getElementById('dropzone');
-            const fileInput = document.getElementById('dataFileInput');
-
-            dropzone?.addEventListener('click', () => fileInput?.click());
-            dropzone?.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput?.click(); }
-            });
-
+        _bindGlobalDragGuard() {
             ['dragenter', 'dragover', 'drop'].forEach(type => {
                 window.addEventListener(type, (e) => {
                     e.preventDefault();
-                    if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
+                    if (e.dataTransfer)
+                        e.dataTransfer.dropEffect = 'copy';
                 });
             });
+        },
 
-            dropzone?.addEventListener('dragenter', (e) => {
-                e.preventDefault();
-                this._dragDepth++;
-                dropzone.classList.add('dropzone--dragover');
-            });
+        init({ onSelect, onChange }) {
+            this._onSelect = onSelect;
+            this._onChange = onChange;
 
-            dropzone?.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dropzone.classList.add('dropzone--dragover');
-            });
+            const datasources = window.Autofiller.DataSources;
 
-            dropzone?.addEventListener('dragleave', () => {
-                this._dragDepth = Math.max(0, this._dragDepth - 1);
-                if (this._dragDepth === 0)
-                    dropzone.classList.remove('dropzone--dragover');
-            });
+            datasources.select('');
+            datasources.sources.forEach(source => source.clear?.());
 
-            dropzone?.addEventListener('drop', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                this._dragDepth = 0;
-                dropzone.classList.remove('dropzone--dragover');
-                const file = e.dataTransfer?.files?.[0];
-                if (file) this._handleFile(file);
-            });
+            const items = datasources.listOrdered();
+            this._mountPanels(items);
+            this._renderTabs(items);
 
-            fileInput?.addEventListener('change', (e) => {
-                this._handleFile(e.target.files && e.target.files[0]);
-                e.target.value = '';
-            });
-            
-            document.getElementById('removeFileBtn')?.addEventListener('click', () => this._handleRemoveFile());
-            document.getElementById('pasteInput')?.addEventListener('input', () => this._handlePasteInput());
-        }
+            let selected = datasources.autoSelect();
+            if (!selected)
+                selected = items[0] ? datasources.select(items[0].id) : '';
+
+            this._activate(selected || '');
+            this._bindGlobalDragGuard();
+        },
+
+        isReady() {
+            const datasources = window.Autofiller.DataSources;
+            return datasources.isReady(datasources.getSelectedId());
+        },
+
+        setProcessing(processing) {
+            document.querySelectorAll('.datasource__tab').forEach(tab => { tab.disabled = processing; });
+            Object.values(this._panels).forEach(source => source.panel.setProcessing?.(processing));
+        },
+
+        translate() {
+            const items = window.Autofiller.DataSources.listOrdered();
+            this._renderTabs(items);
+
+            const selected = this._panels[window.Autofiller.DataSources.getSelectedId()];
+            selected?.panel.translate?.();
+        },
     };
 
     const App = {

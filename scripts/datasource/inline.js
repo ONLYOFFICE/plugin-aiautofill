@@ -62,6 +62,53 @@
 
         clear() {
             _data = null;
+        },
+
+        panel: {
+            _textarea: null,
+            _debounce: null,
+
+            _tr: (text) => text,
+            _onChange: null,
+
+            mount(container, { tr, onChange }) {
+                this._tr = tr;
+                this._onChange = onChange;
+
+                container.innerHTML = `
+                    <textarea class="datasource__textarea" autocomplete="off" spellcheck="false"></textarea>
+                `;
+
+                this._textarea = container.querySelector('textarea');
+                this._textarea.placeholder = tr('Paste your JSON here');
+                this._textarea.addEventListener('input', () => this._handleInput());
+            },
+
+            translate() {
+                if (this._textarea)
+                    this._textarea.placeholder = this._tr('Paste your JSON here');
+            },
+
+            setProcessing(processing) {
+                if (this._textarea) this._textarea.disabled = processing;
+            },
+
+            _handleInput() {
+                clearTimeout(this._debounce);
+                this._debounce = setTimeout(() => {
+                    const text = (this._textarea?.value || '').trim();
+                    if (!text) {
+                        InlineDataSource.clear();
+                    } else {
+                        try {
+                            InlineDataSource.load(this._textarea.value);
+                        } catch (error) {
+                            InlineDataSource.clear();
+                        }
+                    }
+                    this._onChange?.();
+                }, 250);
+            }
         }
     };
 
