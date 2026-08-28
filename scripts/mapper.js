@@ -60,6 +60,7 @@
             const translator = window.Asc?.plugin?.tr;
             return {
                 mapping: {},
+                labels: {},
                 reasoning: translator ? translator(reasoning) : reasoning
             };
         },
@@ -95,6 +96,7 @@
                 try {
                     const parsed = typeof candidate === 'string' ? JSON.parse(candidate) : candidate;
                     if (parsed && parsed.mapping) {
+                        parsed.labels = (parsed.labels && typeof parsed.labels === 'object') ? parsed.labels : {};
                         return parsed;
                     }
                 } catch (error) { }

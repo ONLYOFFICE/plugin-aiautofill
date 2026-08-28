@@ -353,12 +353,14 @@
             };
         },
 
-        _enrichField(field, mapping, sourceData) {
+        _enrichField(field, mapping, sourceData, labels) {
             const dataKeys = mapping[field.identifier];
             const generatedOptions = window.Autofiller.FieldTypes.enrich(field, dataKeys, sourceData);
+            const displayName = labels && labels[field.identifier];
             return {
                 ...field,
                 mappedDataKey: dataKeys || null,
+                displayName: displayName ? String(displayName).trim() : null,
                 generatedOptions
             };
         },
@@ -421,9 +423,9 @@
             });
         },
 
-        enrichFieldsWithOptions(formFields, mapping, sourceData) {
+        enrichFieldsWithOptions(formFields, mapping, sourceData, labels) {
             return formFields
-                .map(field => this._enrichField(field, mapping, sourceData))
+                .map(field => this._enrichField(field, mapping, sourceData, labels))
                 .filter(field => this._hasValidOptions(field));
         },
     };
@@ -884,7 +886,7 @@
             const prompt = window.Autofiller.Prompts.getFieldMappingPrompt(dataKeys, formFields);
             const aiResult = await FormService.executeAI(prompt);
             const aiResponse = window.Autofiller.DataMappingService.parseAIResponse(aiResult.text);
-            const fieldsWithOptions = FormDetectionService.enrichFieldsWithOptions(formFields, aiResponse.mapping, realData);
+            const fieldsWithOptions = FormDetectionService.enrichFieldsWithOptions(formFields, aiResponse.mapping, realData, aiResponse.labels);
 
             if (!fieldsWithOptions || fieldsWithOptions.length === 0)
                 return this._saveAndReturnEmpty(storage);

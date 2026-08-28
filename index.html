@@ -513,7 +513,7 @@
                 }
 
                 const aiResponse = window.Autofiller.DataMappingService.parseAIResponse(aiResult.text);
-                const fieldsWithOptions = window.Autofiller.FormDetectionService.enrichFieldsWithOptions(formFields, aiResponse.mapping, realData);
+                const fieldsWithOptions = window.Autofiller.FormDetectionService.enrichFieldsWithOptions(formFields, aiResponse.mapping, realData, aiResponse.labels);
 
                 if (!fieldsWithOptions || fieldsWithOptions.length === 0) {
                     if (loader) loader.hide();
