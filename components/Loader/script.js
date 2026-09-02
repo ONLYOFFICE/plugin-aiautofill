@@ -15,11 +15,11 @@
  * limitations under the License.
  *
  */
-(function(window, undefined) {
+(function (window, undefined) {
     function Loader($loaderContainer, $mainWindow, options) {
-        this._init = function() {
+        this._init = function () {
             var defaults = {
-                translate: function(text) { return text; },
+                translate: function (text) { return text; },
                 defaultMessage: 'Loading...'
             };
 
@@ -30,30 +30,30 @@
             this.isVisible = false;
         };
 
-        this.show = function(message) {
+        this.show = function (message) {
             let loadingText = message || this.options.defaultMessage;
             loadingText = this.options.translate(loadingText);
 
             this.$loaderContainer.removeClass("hidden");
             this.$mainWindow.addClass("hidden");
-            
+
             if (this.loaderElement) {
                 this._removeLoader();
             }
-            
+
             this.$loaderContainer.html('<div class="loader"><span>' + loadingText + '</span></div>');
             this.isVisible = true;
         };
 
-        this.hide = function() {
+        this.hide = function () {
             this.$mainWindow.removeClass('hidden');
             this.$loaderContainer.addClass('hidden');
-            
+
             this._removeLoader();
             this.isVisible = false;
         };
 
-        this._removeLoader = function() {
+        this._removeLoader = function () {
             if (this.loaderElement) {
                 if (this.loaderElement.remove) {
                     this.loaderElement.remove();
@@ -65,11 +65,11 @@
             }
         };
 
-        this.isShowing = function() {
+        this.isShowing = function () {
             return this.isVisible;
         };
 
-        this.updateMessage = function(message) {
+        this.updateMessage = function (message) {
             if (this.isVisible) {
                 var loadingText = message || this.options.defaultMessage;
                 loadingText = this.options.translate(loadingText);

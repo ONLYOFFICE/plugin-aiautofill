@@ -15,15 +15,15 @@
  * limitations under the License.
  *
  */
-(function(window, undefined) {
+(function (window, undefined) {
     let _nextCode = null;
     const REFRESH_CODE_KEY = 'refresh_code';
     const ORIGINAL_CODE_KEY = 'original_code';
 
     const DataExtractor = {
         _isValidCallback() {
-            return window.Asc?.plugin?.info?.options?.callback && 
-                   typeof window.Asc.plugin.info.options.callback === 'string';
+            return window.Asc?.plugin?.info?.options?.callback &&
+                typeof window.Asc.plugin.info.options.callback === 'string';
         },
 
         _getStorage() {
@@ -86,11 +86,11 @@
             if (!result || typeof result !== 'object') {
                 throw new Error('Invalid API response: expected object with data and code');
             }
-            
+
             if (!result.hasOwnProperty('data')) {
                 throw new Error('Invalid API response: missing "data" property');
             }
-            
+
             if (!result.hasOwnProperty('code') || typeof result.code !== 'string') {
                 throw new Error('Invalid API response: missing or invalid "code" property');
             }
@@ -101,22 +101,22 @@
                 if (!this._isValidCallback()) {
                     throw new Error('Invalid or missing callback URL');
                 }
-                
+
                 const url = window.Asc.plugin.info.options.callback;
                 this._updateNextCode();
-                
+
                 const code = _nextCode;
                 _nextCode = null;
-                
+
                 const address = code ? `${url}?code=${encodeURIComponent(code)}` : url;
                 const response = await fetch(address);
-                
+
                 if (!response.ok) {
                     const error = new Error(`HTTP error! status: ${response.status}`);
                     error.status = response.status;
                     throw error;
                 }
-                
+
                 const result = await response.json();
                 this._validateResponse(result);
                 this._saveNextCode(result.code);

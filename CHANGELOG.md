@@ -1,5 +1,17 @@
 # Change Log
 
+## 1.1.0
+### Added
+- Dedicated handlers for text, boolean, radio, and complex form field types.
+- Field constraint validation for character limits and related rules.
+
+### Changed
+- Refined AI mapping prompt with a confidence threshold and clearer matching rules.
+- Excluded signature form fields from autofill processing.
+
+### Fixed
+- Form cleanup warning issues.
+
 ## 1.0.1
 - Added signature validation to forms
 - Removed image support from form filling

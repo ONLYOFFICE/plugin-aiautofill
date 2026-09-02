@@ -30,17 +30,17 @@ function isDarkTheme(themeName, themeType) {
 function buildThemeClasses(themeType, themeName) {
     var classes = [];
     var isDark = isDarkTheme(themeName, themeType);
-    
+
     if (themeName) {
         classes.push(themeName);
     } else if (themeType) {
         classes.push('theme-' + themeType);
     }
-    
+
     if (themeType) {
         classes.push('theme-type-' + themeType);
     }
-    
+
     if (!themeName) {
         classes.push(isDark ? 'theme-dark' : 'theme-light');
     }
@@ -51,18 +51,18 @@ function buildThemeClasses(themeType, themeName) {
 function updateBodyThemeClasses(themeType, themeName) {
     try {
         var themeClasses = buildThemeClasses(themeType, themeName);
-        
+
         window._currentTheme = { type: themeType, name: themeName };
-        
-        [document.documentElement, document.body].forEach(function(element) {
+
+        [document.documentElement, document.body].forEach(function (element) {
             if (!element) return;
-            
-            themeClasses.forEach(function(className) {
+
+            themeClasses.forEach(function (className) {
                 element.classList.add(className);
             });
-            
+
             var classes = element.className.split(' ');
-            classes.forEach(function(className) {
+            classes.forEach(function (className) {
                 if (className === 'theme-ready') return;
                 if (className.indexOf('theme-') !== -1 && themeClasses.indexOf(className) === -1) {
                     element.classList.remove(className);
@@ -88,28 +88,28 @@ function applyThemeFromURL() {
         var params = new URLSearchParams(window.location.search);
         var themeType = params.get('themeType');
         var themeName = params.get('themeName');
-        
+
         if (themeType || themeName) {
             var classes = buildThemeClasses(themeType, themeName);
-            classes.forEach(function(className) {
+            classes.forEach(function (className) {
                 document.documentElement.classList.add(className);
                 if (document.body) document.body.classList.add(className);
             });
             return true;
         }
-    } catch (e) {}
+    } catch (e) { }
     return false;
 }
 
 
 function updateThemeVariables(theme) {
     var colorRegex = /^(#([0-9a-f]{3}){1,2}|rgba?\([^\)]+\)|hsl\([^\)]+\))$/i;
-    
+
     var oldStyle = document.getElementById('theme-variables');
     if (oldStyle) {
         oldStyle.remove();
     }
-    
+
     var cssVariables = ':root {\n';
     for (var key in theme) {
         var value = theme[key];
@@ -118,9 +118,9 @@ function updateThemeVariables(theme) {
             cssVariables += '  ' + cssKey + ': ' + value + ';\n';
         }
     }
-    
+
     cssVariables += '}';
-    
+
     var style = document.createElement('style');
     style.id = 'theme-variables';
     style.textContent = cssVariables;

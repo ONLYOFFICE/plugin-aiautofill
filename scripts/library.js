@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-(function(window, undefined) {
+(function (window, undefined) {
     const Editor = {
         async callMethod(name, args) {
             return new Promise(resolve => {
@@ -46,7 +46,7 @@
                 .filter(f => f.identifier && f.identifier.trim())
                 .map(f => f.identifier);
 
-            return `You are an expert data mapping AI. Map EVERY form field below to the most relevant available data key(s). Prefer approximate matches over leaving a field empty — it is always better to suggest a candidate than to leave a field empty.
+            return `You are an expert data mapping AI. Map form fields to the best available data key(s) from the list below.
 ## INPUT DATA
 Form fields: ${fieldIdentifiers.join(', ')}
 Available keys: ${dataKeys.join('\n')}
@@ -57,6 +57,7 @@ Available keys: ${dataKeys.join('\n')}
 4. **Numbered Fields**: Fields ending in a number (e.g. JobTitle1, JobTitle2) represent repeated slots — map them all to the same data key(s) as the un-numbered equivalent.
 5. **Cardinality**: Output single strings or arrays for multiple matches ('"field": ["k1", "k2"]'). Reusing keys is allowed.
 6. **Type Match**: Prefer matching data types (e.g., date to date).
+7. **Confidence**: You confidence level for each mapping must be more than 80%.
 ## OUTPUT FORMAT
 Return raw, valid JSON only. No markdown, code blocks, explanations, comments, or // and /* */ inside JSON.
 {"mapping":{"form_field_name":"data_key_name","another_field":["key1","key2"]}}`;

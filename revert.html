@@ -340,12 +340,10 @@
                     loader.show(window.Asc.plugin.tr('Reverting changes...'));
                 }
 
-                for (const field of originalData) {
-                    try {
-                        await window.Autofiller.FormService.setFieldValue(field.fieldId, field.value);
-                    } catch (error) {
-                        console.error(`Error reverting field ${field.fieldId}:`, error);
-                    }
+                try {
+                    await window.Autofiller.FormService.restoreFields(originalData);
+                } catch (error) {
+                    console.error('Error reverting fields:', error);
                 }
 
                 storage.remove('original_data');
