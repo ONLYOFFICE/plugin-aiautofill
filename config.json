@@ -51,7 +51,15 @@
 
             "isUpdateOleOnResize" : true,
 
-            "size"                : [400, 600]
+            "size"                : [400, 600],
+
+            "store": {
+                "icons" : {
+                    "light" : "resources/light",
+                    "dark"  : "resources/dark"
+                },
+                "categories": ["work", "specAbilities"]
+            }
         }
     ]
 }
