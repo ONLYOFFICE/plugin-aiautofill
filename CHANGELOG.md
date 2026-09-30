@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.1.1
+### Added
+- icon references to config.json
+
+### Fixed
+- fixed 'x' button handling and modals closing issues
+
 ## 1.1.0
 ### Added
 - Dedicated handlers for text, boolean, radio, and complex form field types.
