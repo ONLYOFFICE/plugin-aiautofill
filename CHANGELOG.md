@@ -1,6 +1,6 @@
 # Change Log
 
-##
+## 1.1.1
 ### Added
 - icon references to config.json
 
