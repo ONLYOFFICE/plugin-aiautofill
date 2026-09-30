@@ -149,48 +149,6 @@
             if (data?.message)
                 setMessage(data.message);
         });
-
-        function handleConfirm() {
-            window.Autofiller.EventBus.sendAndClose({
-                source: 'rconfirm.html',
-                action: 'confirm',
-                eventName: 'onRevertConfirmAction',
-                beforeClose: cleanup
-            });
-        }
-
-        function handleCancel() {
-            window.Autofiller.EventBus.sendAndClose({
-                source: 'rconfirm.html',
-                action: 'cancel',
-                eventName: 'onRevertConfirmAction',
-                beforeClose: cleanup
-            });
-        }
-
-        const messageHandler = (action) => {
-            if (action === 'confirm') handleConfirm();
-            else if (action === 'cancel') handleCancel();
-        };
-        
-        const buttonHandler = ({ id }) => {
-            const isConfirm = [0, '0', 'ok'].includes(id);
-            if (isConfirm) handleConfirm();
-            else handleCancel();
-        };
-        
-        function cleanup() {
-            window.Autofiller.EventBus.off('message', messageHandler);
-            window.Autofiller.EventBus.off('button', buttonHandler);
-        }
-        
-        window.Autofiller.EventBus.on('message', messageHandler);
-        window.Autofiller.EventBus.on('button', buttonHandler);
-        
-        window.addEventListener('beforeunload', cleanup);
-        
-        window.Autofiller.handleConfirm = handleConfirm;
-        window.Autofiller.handleCancel = handleCancel;
     </script>
 </body>
 </html>

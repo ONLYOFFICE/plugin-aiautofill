@@ -374,15 +374,16 @@
         }
 
         window.Asc.plugin.button = function(id) {
-            if (id === -1) {
-                close();
-            } else if (id === 0 || id === '0') {
-                handleRevert();
-            } else {
-                if (revertModal) {
+            if (revertModal?.isShowing()) {
+                if (id === 0 || id === '0')
+                    handleRevert();
+                else
                     revertModal.close();
-                }
+                return;
             }
+
+            if (id === -1)
+                close();
         };
 
         function onThemeChanged(theme) {
