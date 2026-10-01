@@ -16,6 +16,144 @@
  *
  */
 (function (window, undefined) {
+    const AIService = {
+        UNAVAILABLE: 'AI_UNAVAILABLE',
+        FAILED: 'AI_FAILED',
+
+        _LOADING_RE: /no registered ai plugins|plugins manager does not initialized/i,
+        _NO_MODEL_RE: /no model|not configured/i,
+
+        _actionsRequest: null,
+        _chatRequest: null,
+
+        _buildError(code, message) {
+            const error = new Error(message);
+            error.code = code;
+            return error;
+        },
+
+        _requestActions() {
+            if (!this._actionsRequest) {
+                this._actionsRequest = new Promise((resolve) => {
+                    try {
+                        window.Asc.plugin.executeMethod('AI', [{ type: 'Actions' }], (data) => resolve({ data }));
+                    } catch (e) {
+                        resolve({ error: e.message });
+                    }
+                }).finally(() => {
+                    this._actionsRequest = null;
+                });
+            }
+
+            return this._actionsRequest;
+        },
+
+        check(timeout = 5000) {
+            if (!window.Asc?.plugin?.executeMethod)
+                return Promise.resolve({ available: false, error: 'Plugin API not available' });
+
+            return new Promise((resolve) => {
+                const timer = setTimeout(() => resolve({ available: false, pending: true, error: 'AI check timed out' }), timeout);
+
+                this._requestActions().then(({ data, error }) => {
+                    clearTimeout(timer);
+                    if (error)
+                        return resolve({ available: false, error });
+
+                    if (!Array.isArray(data?.Actions)) {
+                        const pending = !data?.error || this._LOADING_RE.test(data.error);
+                        return resolve({ available: false, pending, error: data?.error || 'Unexpected AI response' });
+                    }
+
+                    const hasChat = data.Actions.some(a => a?.Chat);
+                    resolve(hasChat ? { available: true, data } : { available: false, error: 'No AI model configured' });
+                });
+            });
+        },
+
+        async ensureAvailable(timeout = 5000) {
+            const result = await this.check(timeout);
+            if (result.available)
+                return;
+
+            const failed = result.pending && !this._LOADING_RE.test(result.error || '');
+            throw this._buildError(failed ? this.FAILED : this.UNAVAILABLE, result.error);
+        },
+
+        async chat(prompt) {
+            if (this._chatRequest)
+                throw this._buildError(this.FAILED, 'AI is still busy with a previous request');
+
+            const operation = new Promise((resolve, reject) => {
+                // TODO: When there is a flag to disable chain-of-thought, remove the system instruction. For now this solution might help bypass thinking for some models.
+                const systemInstruction = "[System: Respond directly. Do not use chain-of-thought, reasoning steps, or <think> tags. Output only the final answer.]\n\n";
+                const payload = systemInstruction + prompt;
+                window.Asc.plugin.executeMethod('AI', [{ type: 'Chat', data: payload }], (result) => {
+                    if (result?.error) {
+                        const code = this._NO_MODEL_RE.test(result.error) || this._LOADING_RE.test(result.error)
+                            ? this.UNAVAILABLE
+                            : this.FAILED;
+                        return reject(this._buildError(code, result.error));
+                    }
+
+                    if (!result?.text)
+                        return reject(this._buildError(this.FAILED, 'AI returned an empty response'));
+
+                    resolve(result);
+                });
+            });
+
+            this._chatRequest = operation;
+            operation.catch(() => {}).finally(() => {
+                if (this._chatRequest === operation)
+                    this._chatRequest = null;
+            });
+
+            try {
+                return await window.Autofiller.Utils.withTimeout(operation, 60000, 'AI Execution');
+            } catch (error) {
+                throw error?.code ? error : this._buildError(this.FAILED, error?.message || String(error));
+            }
+        },
+
+        watch(onChange, { interval = 1000, startupDeadline = 30000, isPaused = () => false } = {}) {
+            const startedAt = Date.now();
+            let lastState = null;
+            let stopped = false;
+            let timer = null;
+
+            const poll = async () => {
+                try {
+                    if (!isPaused()) {
+                        const result = this._actionsRequest
+                            ? { available: false, pending: true }
+                            : await this.check();
+                        let state = result.available;
+                        if (result.pending)
+                            state = lastState === null && Date.now() - startedAt >= startupDeadline ? false : lastState;
+
+                        if (!stopped && !isPaused() && state !== null && state !== lastState) {
+                            lastState = state;
+                            onChange(state);
+                        }
+                    }
+                } catch (e) {
+                    console.error('AI check error:', e);
+                }
+
+                if (!stopped)
+                    timer = setTimeout(poll, interval);
+            };
+
+            poll();
+
+            return () => {
+                stopped = true;
+                clearTimeout(timer);
+            };
+        },
+    };
+
     const FormService = {
         async setFieldValue(internalId, value) {
             return new Promise((resolve, reject) => {
@@ -100,19 +238,6 @@
                     reject(error);
                 }
             });
-        },
-
-        async executeAI(prompt) {
-            const operation = new Promise((resolve, reject) => {
-                // TODO: When there is a flag to disable chain-of-thought, remove the system instruction. For now this solution might help bypass thinking for some models.
-                const systemInstruction = "[System: Respond directly. Do not use chain-of-thought, reasoning steps, or <think> tags. Output only the final answer.]\n\n";
-                const payload = systemInstruction + prompt;
-                window.Asc.plugin.executeMethod('AI', [{ type: 'Chat', data: payload }], (result) => {
-                    result?.error ? reject(result.error) : resolve(result);
-                });
-            });
-
-            return window.Autofiller.Utils.withTimeout(operation, 60000, 'AI Execution');
         },
 
         async startBlockingAction(description) {
@@ -668,6 +793,8 @@
     };
 
     const FormInitializer = {
+        _stopFormWatch: null,
+
         _attachEventListeners() {
             const applyButton = document.getElementById('applyBtn');
             if (applyButton)
@@ -705,7 +832,6 @@
                         translate: FormService.translate
                     });
                     FormStateManager.formUI.populateFormFields();
-                    this._attachEventListeners();
                 }
 
                 this._toggleView(hasData);
@@ -721,9 +847,9 @@
                 console.error('Error restarting AI mapping:', error);
                 this._hideLoader();
 
-                const errorReason = (error?.message || error?.error || String(error)).toLowerCase();
-                if (errorReason.includes('ai is not available') || errorReason.includes('timed out') || errorReason.includes('no chat')) {
-                    this._showView('error');
+                if (error?.code === AIService.UNAVAILABLE) {
+                    this._showView('errorUnavailable');
+                    this._waitForForm();
                 } else {
                     FormOperationsController._setButtonsEnabled(true);
                     FormOperationsController._setCheckboxesEnabled(true);
@@ -731,11 +857,30 @@
             }
         },
 
+        _waitForForm() {
+            if (this._stopFormWatch)
+                return;
+
+            this._stopFormWatch = AIService.watch((available) => {
+                if (!available)
+                    return;
+
+                this._stopFormWatch();
+                this._stopFormWatch = null;
+
+                const hasData = FormStateManager.formFieldsData && FormStateManager.formFieldsData.length > 0;
+                this._toggleView(hasData);
+                FormOperationsController._setButtonsEnabled(true);
+                if (hasData)
+                    FormOperationsController._setCheckboxesEnabled(true);
+            });
+        },
+
         _showView(view) {
             const views = {
                 form: document.getElementById('formContent'),
                 empty: document.getElementById('emptyState'),
-                error: document.getElementById('errorModel')
+                errorUnavailable: document.getElementById('errorUnavailable')
             };
 
             Object.entries(views).forEach(([key, el]) => {
@@ -776,7 +921,13 @@
             const updateMsg = (msg) => FormStateManager.loader?.updateMessage(window.Asc.plugin.tr(msg));
 
             updateMsg('Detecting form fields...');
-            const formFields = await FormDetectionService.detectAllForms();
+
+            const formFields = await window.Autofiller.Utils.withTimeout(
+                FormDetectionService.detectAllForms(),
+                10000,
+                'Form detection'
+            );
+
             if (!formFields?.length) {
                 window.location.href = 'index.html' + (window.Autofiller.getThemeURLParams ? window.Autofiller.getThemeURLParams() : '');
                 return [];
@@ -799,15 +950,12 @@
 
             updateMsg('Checking AI availability...');
 
-            const aiCheckResult = await this._checkAI(5000);
-            if (!aiCheckResult.available) {
-                throw new Error(window.Asc.plugin.tr('AI is not available. Please ensure AI features are enabled.'));
-            }
+            await AIService.ensureAvailable(10000);
 
             updateMsg('Mapping fields with AI...');
             const dataKeys = window.Autofiller.DataMappingService.extractAllKeys(realData);
             const prompt = window.Autofiller.Prompts.getFieldMappingPrompt(dataKeys, formFields);
-            const aiResult = await FormService.executeAI(prompt);
+            const aiResult = await AIService.chat(prompt);
             const aiResponse = window.Autofiller.DataMappingService.parseAIResponse(aiResult.text);
             const fieldsWithOptions = FormDetectionService.enrichFieldsWithOptions(formFields, aiResponse.mapping, realData);
 
@@ -821,28 +969,6 @@
         _saveAndReturnEmpty(storage) {
             storage.set('form_fields', []);
             return [];
-        },
-
-        _checkAI(timeout = 5000) {
-            return new Promise((resolve) => {
-                const timer = setTimeout(() => resolve({ available: false, error: "AI check timed out" }), timeout);
-
-                if (!window.Asc?.plugin?.executeMethod) {
-                    clearTimeout(timer);
-                    return resolve({ available: false, error: "Plugin API not available" });
-                }
-
-                try {
-                    window.Asc.plugin.executeMethod("AI", [{ type: "Actions" }], (data) => {
-                        clearTimeout(timer);
-                        const hasChat = data?.Actions?.some(a => a?.Chat);
-                        resolve(hasChat ? { available: true, data } : { available: false, error: "No AI model configured" });
-                    });
-                } catch (e) {
-                    clearTimeout(timer);
-                    resolve({ available: false, error: e.message });
-                }
-            });
         },
 
         _toggleView(showForm) {
@@ -870,8 +996,9 @@
                     translate: FormService.translate
                 });
                 FormStateManager.formUI.populateFormFields();
-                this._attachEventListeners();
             }
+
+            this._attachEventListeners();
 
             const restartBtnEmpty = document.getElementById('restartBtnEmpty');
             if (restartBtnEmpty) {
@@ -890,6 +1017,7 @@
     };
 
     window.Autofiller = window.Autofiller || {};
+    window.Autofiller.AIService = AIService;
     window.Autofiller.FormService = FormService;
     window.Autofiller.FormDetectionService = FormDetectionService;
 
