@@ -219,8 +219,7 @@
                 let isGenericName = !fieldName ||
                     (window.Autofiller.Prompts && window.Autofiller.Prompts.isGenericIdentifier(fieldName));
                 let fieldLabel = displayName
-                    || (!isGenericName && fieldName)
-                    || hint || fieldName || 'Field ' + (index + 1);
+                    || ((!isGenericName && fieldName) ? fieldName : (hint || fieldName || 'Field ' + (index + 1)));
 
                 let optionsHTML = this._templates.options(options);
 

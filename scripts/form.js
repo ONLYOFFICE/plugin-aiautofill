@@ -677,24 +677,13 @@
         _buttonHandler: null,
 
         _handleMainWindowButton(buttonId) {
-            if (buttonId === 'applyBtn' || buttonId === 0)
+            if (buttonId === 'applyBtn')
                 return FormOperationsController.handleApplyRequest();
-            if (buttonId === 'restartBtn' || buttonId === 1)
+            if (buttonId === 'restartBtn')
                 return FormInitializer._handleRestart();
-            if (buttonId === 'closeBtn' || buttonId === -1)
+            if (buttonId === 'closeBtn' || buttonId === 0 || buttonId === -1)
                 return window.Autofiller.EventBus.closePlugin();
         },
-
-        _handleModalWindowButton(buttonId, windowId) {
-            const confirmWindow = FormStateManager.confirmModal?.getWindow();
-            if (confirmWindow && windowId === confirmWindow.id) {
-                this._handleConfirmModal(buttonId);
-                return;
-            }
-
-            this._closeUnknownWindow(windowId);
-        },
-
 
         _handleConfirmModal(buttonId) {
             const isConfirm = (buttonId === 0 || buttonId === '0');
@@ -714,16 +703,28 @@
                 window.Asc.plugin.executeMethod('CloseWindow', [windowId]);
         },
 
+        _getButtonSource(windowId) {
+            if (FormStateManager.confirmModal?.isShowing())
+                return 'confirm';
+
+            const plugin = window.Asc.plugin;
+            if (!windowId || windowId === plugin.windowID || (!!plugin.guid && windowId === 'iframe_' + plugin.guid))
+                return 'main';
+
+            return 'unknown';
+        },
+
         initialize() {
             if (!window.Autofiller?.Utils?.isPluginAvailable())
                 return;
 
             this._buttonHandler = ({ id, windowId }) => {
                 try {
-                    if (windowId === undefined)
-                        this._handleMainWindowButton(id);
-                    else
-                        this._handleModalWindowButton(id, windowId);
+                    switch (this._getButtonSource(windowId)) {
+                        case 'confirm': this._handleConfirmModal(id); break;
+                        case 'main': this._handleMainWindowButton(id); break;
+                        default: this._closeUnknownWindow(windowId);
+                    }
                 } catch (error) {
                     console.error('Error handling button action:', error);
                 }
