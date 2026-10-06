@@ -50,5 +50,7 @@
 	"The form is signed and cannot be filled automatically.": "Il modulo è firmato e non può essere compilato automaticamente.",
 
 	"Plugin unavailable now": "Plugin non disponibile ora",
-	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Questo plugin non è attualmente disponibile perché non è configurato alcun modello IA. Per abilitare questa funzione, apri la scheda IA, vai su Impostazioni e seleziona o aggiungi un modello IA per la categoria Chatbot."
+	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Questo plugin non è attualmente disponibile perché non è configurato alcun modello IA. Per abilitare questa funzione, apri la scheda IA, vai su Impostazioni e seleziona o aggiungi un modello IA per la categoria Chatbot.",
+	"AI request failed": "Richiesta IA non riuscita",
+	"The AI did not respond in time or returned no result. Please wait for the current AI request to finish and try again.": "L'IA non ha risposto in tempo o non ha restituito alcun risultato. Attendi il completamento della richiesta IA in corso e riprova."
 }

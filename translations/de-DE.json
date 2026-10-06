@@ -50,5 +50,7 @@
 	"The form is signed and cannot be filled automatically.": "Das Formular ist signiert und kann nicht automatisch ausgefüllt werden.",
 
 	"Plugin unavailable now": "Plugin derzeit nicht verfügbar",
-	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Dieses Plugin ist derzeit nicht verfügbar, da kein KI-Modell konfiguriert ist. Um diese Funktion zu aktivieren, öffnen Sie die Registerkarte „KI“, gehen Sie zu „Einstellungen“ und wählen oder fügen Sie ein KI-Modell für die Kategorie „Chatbot“ hinzu."
+	"This plugin is currently unavailable because no AI model is configured. To enable this feature, open the AI tab, go to Settings, and select or add an AI model for the Chatbot category.": "Dieses Plugin ist derzeit nicht verfügbar, da kein KI-Modell konfiguriert ist. Um diese Funktion zu aktivieren, öffnen Sie die Registerkarte „KI“, gehen Sie zu „Einstellungen“ und wählen oder fügen Sie ein KI-Modell für die Kategorie „Chatbot“ hinzu.",
+	"AI request failed": "KI-Anfrage fehlgeschlagen",
+	"The AI did not respond in time or returned no result. Please wait for the current AI request to finish and try again.": "Die KI hat nicht rechtzeitig geantwortet oder kein Ergebnis geliefert. Bitte warten Sie, bis die aktuelle KI-Anfrage abgeschlossen ist, und versuchen Sie es erneut."
 }
