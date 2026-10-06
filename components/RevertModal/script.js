@@ -1,3 +1,4 @@
+// @ts-nocheck - function-style constructor
 /**
  *
  * (c) Copyright Ascensio System SIA 2026

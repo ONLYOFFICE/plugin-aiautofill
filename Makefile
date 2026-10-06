@@ -1,65 +1,93 @@
-SRC_DIR = .
-BUILD_DIR = build
-SCRIPTS_DIR = $(SRC_DIR)/scripts
-COMPONENTS_DIR = $(SRC_DIR)/components
-VENDOR_DIR = $(SRC_DIR)/vendor
-TRANSLATIONS_DIR = $(SRC_DIR)/translations
-RESOURCES_DIR = $(SRC_DIR)/resources
-STYLES_DIR = $(SRC_DIR)/styles
+SHELL := /bin/bash
 
-TERSER = terser
-HTML_MINIFIER = html-minifier-terser
+.DEFAULT_GOAL := all
+.DELETE_ON_ERROR:
+.SUFFIXES:
 
-TERSER_AVAILABLE := $(shell command -v $(TERSER) 2> /dev/null)
-HTML_MINIFIER_AVAILABLE := $(shell command -v $(HTML_MINIFIER) 2> /dev/null)
+MAKEFLAGS += --no-builtin-rules --warn-undefined-variables
 
-JS_SCRIPTS = $(wildcard $(SCRIPTS_DIR)/*.js) $(wildcard $(SCRIPTS_DIR)/utils/*.js)
-JS_COMPONENTS = $(wildcard $(COMPONENTS_DIR)/*/script.js)
-JS_ALL = $(JS_SCRIPTS) $(JS_COMPONENTS)
+BUILD_DIR := build
+SOURCE_DIRS := scripts components vendor translations resources styles
+MINIFY_JS_DIRS := scripts components
+TYPES_DIR := types
+VENDOR_TYPES_DIR := $(TYPES_DIR)/vendor
 
-HTML_FILES = index.html form.html confirm.html revert.html rconfirm.html
+TERSER ?= terser
+HTML_MINIFIER ?= html-minifier-terser
+TYPESCRIPT_VERSION ?= 6.0.3
+TSC ?= npx --yes -p typescript@$(TYPESCRIPT_VERSION) tsc
+CURL ?= curl -fsSL --retry 3
 
-.PHONY: all build clean check-tools install-tools
+TERSER_FLAGS := --compress --mangle
+HTML_MINIFIER_FLAGS := --collapse-whitespace --remove-comments --minify-css true --minify-js true
 
-all: build
+ONLYOFFICE_TYPES_REF := 3d00385c19b85e81ccd1a0e0a72c11f18535cbe4
+ONLYOFFICE_TYPES_URL := https://raw.githubusercontent.com/ONLYOFFICE/doceditor-plugin-types/$(ONLYOFFICE_TYPES_REF)/artifacts/ambient/onlyoffice-doceditor-plugin-types.word.ambient.d.ts
+NPM_CDN := https://cdn.jsdelivr.net/npm
+JQUERY_TYPES := @types/jquery@3.5.34
+SIZZLE_TYPES := @types/sizzle@2.3.10
+SELECT2_TYPES := @types/select2@4.0.63
 
-install-tools:
-	@echo "Installing required build tools..."
-	@npm install -g terser
-	@npm install -g html-minifier-terser
-	@echo "Installation complete!"
+ONLYOFFICE_TYPE_FILE := $(TYPES_DIR)/onlyoffice.word.d.ts
+JQUERY_TYPE_FILES := $(addprefix $(VENDOR_TYPES_DIR)/jquery/,index.d.ts JQuery.d.ts JQueryStatic.d.ts legacy.d.ts misc.d.ts)
+SIZZLE_TYPE_FILE := $(VENDOR_TYPES_DIR)/sizzle/index.d.ts
+SELECT2_TYPE_FILE := $(VENDOR_TYPES_DIR)/select2/index.d.ts
+TYPE_FILES := $(ONLYOFFICE_TYPE_FILE) $(JQUERY_TYPE_FILES) $(SIZZLE_TYPE_FILE) $(SELECT2_TYPE_FILE)
 
-clean:
-	@echo "Cleaning build directory..."
-	@rm -rf $(BUILD_DIR)
+require = @command -v $(firstword $(1)) >/dev/null 2>&1 || { echo "error: '$(firstword $(1))' not found. $(2)" >&2; exit 1; }
 
-check-tools:
-	@echo "Checking for required build tools..."
-ifndef TERSER_AVAILABLE
-	@echo "Terser not found. Install with: npm install -g terser"
-	@exit 1
-else
-	@echo "Terser found at $(TERSER_AVAILABLE)"
-endif
-ifndef HTML_MINIFIER_AVAILABLE
-	@echo "Html-minifier-terser not found. Install with: npm install -g html-minifier-terser"
-	@exit 1
-else
-	@echo "Html-minifier-terser found at $(HTML_MINIFIER_AVAILABLE)"
-endif
-	@echo "All required tools are installed!"
+define download
+@mkdir -p $(dir $(2))
+@echo "Downloading $(2)"
+@$(CURL) -o $(2).tmp $(1) && mv $(2).tmp $(2) || { rm -f $(2).tmp; exit 1; }
+endef
 
-build: clean check-tools
+minify = @find $(1) -name '$(2)' -type f -exec sh -c 'for f; do $(3) || exit 1; done' sh {} +
+
+$(ONLYOFFICE_TYPE_FILE):
+	$(call download,$(ONLYOFFICE_TYPES_URL),$@)
+
+$(VENDOR_TYPES_DIR)/jquery/%.d.ts:
+	$(call download,$(NPM_CDN)/$(JQUERY_TYPES)/$*.d.ts,$@)
+
+$(SIZZLE_TYPE_FILE):
+	$(call download,$(NPM_CDN)/$(SIZZLE_TYPES)/index.d.ts,$@)
+
+$(SELECT2_TYPE_FILE):
+	$(call download,$(NPM_CDN)/$(SELECT2_TYPES)/index.d.ts,$@)
+
+.PHONY: all build clean check-tools install-tools types typecheck help
+
+help: ## Show this help
+	@awk 'BEGIN { FS = ":.*## " } /^[a-z-]+:.*## / { printf "  %-14s %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
+
+all: clean types typecheck build ## Build with all checks and cleanups
+
+build: check-tools ## Build the minified plugin into build/
 	@echo "Building the plugin..."
-	
+	@rm -rf $(BUILD_DIR)
 	@mkdir -p $(BUILD_DIR)
-	@cp -r $(SCRIPTS_DIR) $(COMPONENTS_DIR) $(VENDOR_DIR) $(TRANSLATIONS_DIR) $(RESOURCES_DIR) $(STYLES_DIR) $(BUILD_DIR)/
-	@cp *.html config.json $(BUILD_DIR)/
-	
+	@cp -r $(SOURCE_DIRS) *.html config.json $(BUILD_DIR)/
 	@echo "Minifying JavaScript files..."
-	@find $(BUILD_DIR)/$(SCRIPTS_DIR) $(BUILD_DIR)/$(COMPONENTS_DIR) -name "*.js" -type f -exec $(TERSER) {} --compress --mangle --output {} \;
-	
+	$(call minify,$(addprefix $(BUILD_DIR)/,$(MINIFY_JS_DIRS)),*.js,$(TERSER) "$$f" $(TERSER_FLAGS) --output "$$f")
 	@echo "Minifying HTML files..."
-	@find $(BUILD_DIR) -maxdepth 1 -name "*.html" -type f -exec $(HTML_MINIFIER) --collapse-whitespace --remove-comments --minify-css true --minify-js true {} -o {} \;
-	
+	$(call minify,$(BUILD_DIR) -maxdepth 1,*.html,$(HTML_MINIFIER) $(HTML_MINIFIER_FLAGS) "$$f" -o "$$f")
 	@echo "Build complete!"
+
+clean: ## Remove build/ and the downloaded type definitions
+	@rm -rf $(BUILD_DIR) $(ONLYOFFICE_TYPE_FILE) $(VENDOR_TYPES_DIR)
+
+check-tools: ## Check that the build tools are installed
+	$(call require,$(TERSER),Install with: make install-tools)
+	$(call require,$(HTML_MINIFIER),Install with: make install-tools)
+
+install-tools: ## Install the build tools globally with npm
+	@npm install -g terser html-minifier-terser
+
+types: ## Download the type definitions again
+	@rm -f $(TYPE_FILES)
+	@$(MAKE) --no-print-directory $(TYPE_FILES)
+
+typecheck: $(TYPE_FILES) ## Type-check scripts/ and components/ (downloads the types on first run)
+	$(call require,$(TSC),Install Node.js from https://nodejs.org)
+	@$(TSC) -p jsconfig.json

@@ -3,3 +3,6 @@ build/
 
 .vscode/
 .idea/
+
+types/onlyoffice.*.d.ts
+types/vendor/
