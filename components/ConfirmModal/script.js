@@ -1,4 +1,3 @@
-// @ts-nocheck - function-style constructor
 /**
  *
  * (c) Copyright Ascensio System SIA 2026
@@ -16,15 +15,19 @@
  * limitations under the License.
  *
  */
-(function (window, undefined) {
+(function (window) {
+    /**
+     * @this {ModalInstance}
+     * @param {ModalOptions} [options]
+     */
     function ConfirmModal(options) {
         this.messages = {
             confirmReplace: "All data in the document will be replaced with the settings you previously selected.\nAre you sure you want to proceed?"
         };
 
-        this._init = function () {
+        this._init = () => {
             const defaults = {
-                translate: function (text) { return text; },
+                translate: /** @param {string} text */ function (text) { return text; },
                 message: null
             };
             this.options = Object.assign({}, defaults, options);
@@ -33,7 +36,13 @@
             this.onCancel = null;
         };
 
-        this.show = function (onConfirm, onCancel, customMessage) {
+        /**
+         * @param {() => void} [onConfirm]
+         * @param {() => void} [onCancel]
+         * @param {string} [customMessage]
+         * @returns {PluginWindow | null}
+         */
+        this.show = (onConfirm, onCancel, customMessage) => {
             let me = this;
             this.onConfirm = onConfirm;
             this.onCancel = onCancel;
@@ -41,6 +50,7 @@
             const messageKey = customMessage || this.options.message || this.messages.confirmReplace;
             const message = this.options.translate(messageKey);
 
+            /** @param {MessageEvent} event */
             const handleMessage = (event) => {
                 try {
                     if (!event?.data || event.data.source !== 'confirm.html') return;
@@ -59,6 +69,7 @@
 
             if (!this.window) {
                 const themeParams = window.Autofiller.getThemeURLParams ? window.Autofiller.getThemeURLParams() : '';
+                /** @type {VariationConfig & { variation: { message: string } }} */
                 const variation = {
                     url: 'confirm.html' + themeParams,
                     description: this.options.translate('Note'),
@@ -79,7 +90,7 @@
 
                 this.window.attachEvent('onInit', () => {
                     window.Autofiller.Utils.safeExecute(
-                        () => this.window.sendEvent('onSetMessage', { message }),
+                        () => /** @type {PluginWindow & { sendEvent(name: string, data: unknown): void }} */ (this.window).sendEvent('onSetMessage', { message }),
                         'Error sending message to modal'
                     );
                 });
@@ -87,7 +98,7 @@
                 this.window.attachEvent('onClose', () => {
                     if (this.window) {
                         window.Autofiller.Utils.safeExecute(
-                            () => this.window.close(),
+                            () => /** @type {PluginWindow} */ (this.window).close(),
                             'Error closing modal window'
                         );
                     }
@@ -103,10 +114,10 @@
             return this.window;
         };
 
-        this.close = function () {
+        this.close = () => {
             if (this.window) {
                 window.Autofiller.Utils.safeExecute(
-                    () => this.window.close(),
+                    () => /** @type {PluginWindow} */ (this.window).close(),
                     'Error closing modal window'
                 );
 
@@ -114,17 +125,17 @@
             }
         };
 
-        this.getWindow = function () {
+        this.getWindow = () => {
             return this.window;
         };
 
-        this.isShowing = function () {
+        this.isShowing = () => {
             return this.window !== null;
         };
 
         this._init();
     }
 
-    window.Autofiller = window.Autofiller || {};
-    window.Autofiller.ConfirmModal = ConfirmModal;
-})(window, undefined);
+    window.Autofiller = window.Autofiller || /** @type {AutofillerNamespace} */ ({});
+    window.Autofiller.ConfirmModal = /** @type {ModalConstructor} */ (/** @type {unknown} */ (ConfirmModal));
+})(window);

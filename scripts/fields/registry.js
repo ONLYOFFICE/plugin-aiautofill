@@ -15,10 +15,13 @@
  * limitations under the License.
  *
  */
-(function (window, undefined) {
+(function (window) {
+    /** @type {FieldHandler[]} */
     const handlers = [];
+    /** @type {FieldHandler | null} */
     let defaultHandler = null;
 
+    /** @type {AutofillerFieldTypes} */
     const Registry = {
         register(handler) {
             if (handler && handler.isDefault)
@@ -30,9 +33,11 @@
         },
 
         resolve(field) {
-            for (let i = 0; i < handlers.length; i++)
-                if (handlers[i].match && handlers[i].match(field))
-                    return handlers[i];
+            for (let i = 0; i < handlers.length; i++) {
+                const handler = handlers[i];
+                if (handler.match && handler.match(field))
+                    return handler;
+            }
 
             return defaultHandler;
         },
@@ -77,6 +82,6 @@
         }
     };
 
-    window.Autofiller = window.Autofiller || {};
+    window.Autofiller = window.Autofiller || /** @type {AutofillerNamespace} */ ({});
     window.Autofiller.FieldTypes = Registry;
-})(window, undefined);
+})(window);

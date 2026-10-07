@@ -15,7 +15,8 @@
  * limitations under the License.
  *
  */
-(function (window, undefined) {
+(function (window) {
+    /** @type {FieldHandler} */
     const DateHandler = {
         id: 'date',
 
@@ -28,7 +29,7 @@
         }
     };
 
-    window.Autofiller = window.Autofiller || {};
+    window.Autofiller = window.Autofiller || /** @type {AutofillerNamespace} */ ({});
     if (window.Autofiller.FieldTypes)
         window.Autofiller.FieldTypes.register(DateHandler);
-})(window, undefined);
+})(window);

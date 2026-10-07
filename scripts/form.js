@@ -15,7 +15,8 @@
  * limitations under the License.
  *
  */
-(function (window, undefined) {
+(function (window) {
+    /** @type {AutofillerFormService} */
     const FormService = {
         async setFieldValue(internalId, value) {
             return new Promise((resolve, reject) => {
@@ -23,20 +24,20 @@
                     return reject(new Error('Plugin API not available'));
 
                 window.Asc.plugin.executeMethod('SetFormValue', [internalId, value], (result) => {
-                    result?.error
+                    /** @type {SetFormValueResult} */ (result)?.error
                         ? reject(new Error(`Failed to set form value for ${internalId}`))
-                        : resolve();
+                        : resolve(undefined);
                 });
             });
         },
 
         async setDateValue(internalId, value) {
             if (!internalId)
-                return;
+                return undefined;
 
             const date = window.Autofiller.ConstraintsValidator.parseDate(value);
             if (!date)
-                return;
+                return undefined;
 
             window.Asc.scope = window.Asc.scope || {};
             window.Asc.scope.autofillerDate = { id: String(internalId), ms: date.getTime() };
@@ -44,14 +45,16 @@
             return window.Autofiller.Editor.callCommand(function () {
                 var data = Asc.scope.autofillerDate;
 
+                /** @param {EditorForm} form */
                 function applyTo(form) {
                     if (!form || !form.GetInternalId || String(form.GetInternalId()) !== data.id)
                         return false;
 
-                    form.SetTime(data.ms);
+                    /** @type {Required<EditorForm>} */ (form).SetTime(data.ms);
                     return true;
                 }
 
+                /** @param {EditorForm} form */
                 function walk(form) {
                     if (applyTo(form))
                         return true;
@@ -64,7 +67,7 @@
                     return false;
                 }
 
-                var forms = Api.GetDocument().GetAllForms();
+                var forms = /** @type {EditorForm[]} */ (Api.GetDocument().GetAllForms());
                 for (var i = 0; i < forms.length; i++) {
                     if (walk(forms[i]))
                         return true;
@@ -81,14 +84,14 @@
                 if (!window.Autofiller?.Utils?.isPluginAvailable())
                     return reject(new Error('Plugin API not available'));
 
-                window.Asc.plugin.executeMethod('GetFormValue', [internalId], (result) => {
-                    if (result?.error)
+                window.Asc.plugin.executeMethod('GetFormValue', [internalId], (/** @type {GetFormValueResult} */ result) => {
+                    if (typeof result === 'object' && result?.error)
                         return reject(new Error(`Failed to get form value for ${internalId}`));
 
                     const value = (typeof result === 'object' && result !== null && 'value' in result)
                         ? result.value
                         : result;
-                    resolve(value ?? '');
+                    resolve(/** @type {string | boolean} */ (value ?? ''));
                 });
             });
         },
@@ -104,11 +107,16 @@
 
                 try {
                     window.Asc.plugin.callCommand(function () {
+                        /** @type {Record<string, string | boolean>} */
                         var ids = {};
-                        (Asc.scope.autofillerRestore || []).forEach(function (entry) {
+                        (Asc.scope.autofillerRestore || []).forEach(/** @param {{ id: string, value: string | boolean }} entry */ function (entry) {
                             ids[entry.id] = entry.value;
                         });
 
+                        /**
+                         * @param {EditorForm} form
+                         * @param {string | boolean} value
+                         */
                         function applyValue(form, value) {
                             if (value == null || (typeof value === 'string' && !value.trim()))
                                 return form.Clear && form.Clear();
@@ -119,12 +127,15 @@
                             var setters = ['SetValue', 'SetText'];
                             for (var s = 0; s < setters.length; s++) {
                                 try {
-                                    if (form[setters[s]])
-                                        return form[setters[s]](String(value));
+                                    var setter = /** @type {((text: string) => unknown) | undefined} */ (form[/** @type {'SetValue' | 'SetText'} */ (setters[s])]);
+                                    if (setter)
+                                        return setter.call(form, String(value));
                                 } catch (e) { }
                             }
+                            return undefined;
                         }
 
+                        /** @param {EditorForm} form */
                         function restore(form) {
                             if (!form)
                                 return;
@@ -139,7 +150,7 @@
                             } catch (e) { }
                         }
 
-                        Api.GetDocument().GetAllForms().forEach(restore);
+                        /** @type {EditorForm[]} */ (Api.GetDocument().GetAllForms()).forEach(restore);
                         return true;
                     }, false, true, resolve);
                 } catch (error) {
@@ -149,11 +160,12 @@
         },
 
         async executeAI(prompt) {
+            /** @type {Promise<AIResponse>} */
             const operation = new Promise((resolve, reject) => {
                 // TODO: When there is a flag to disable chain-of-thought, remove the system instruction. For now this solution might help bypass thinking for some models.
                 const systemInstruction = "[System: Respond directly. Do not use chain-of-thought, reasoning steps, or <think> tags. Output only the final answer.]\n\n";
                 const payload = systemInstruction + prompt;
-                window.Asc.plugin.executeMethod('AI', [{ type: 'Chat', data: payload }], (result) => {
+                /** @type {AscPlugin & AIMethod} */ (window.Asc.plugin).executeMethod('AI', [{ type: 'Chat', data: payload }], (result) => {
                     result?.error ? reject(result.error) : resolve(result);
                 });
             });
@@ -162,12 +174,12 @@
         },
 
         async startBlockingAction(description) {
-            if (window.Autofiller?.Editor?.callMethod)
+            if (typeof window.Autofiller?.Editor?.callMethod === 'function')
                 await window.Autofiller.Editor.callMethod('StartAction', ['Block', description]);
         },
 
         async endBlockingAction(description) {
-            if (window.Autofiller?.Editor?.callMethod)
+            if (typeof window.Autofiller?.Editor?.callMethod === 'function')
                 await window.Autofiller.Editor.callMethod('EndAction', ['Block', description]);
         },
 
@@ -179,11 +191,19 @@
     };
 
     const FormDetectionService = {
+        /** @type {Set<number> | null} */
+        _booleanEnumValues: null,
+
+        /** @param {FormMeta} formMeta */
         _isFieldLocked(formMeta) {
             const lockValue = typeof formMeta.Lock === 'number' ? formMeta.Lock : null;
             return lockValue === 0 || lockValue === 1; // FULLY_LOCKED or CONTENT_LOCKED
         },
 
+        /**
+         * @param {FormMeta} formMeta
+         * @returns {FormField}
+         */
         _mapFormField(formMeta) {
             const tag = formMeta.Tag || '';
             const key = formMeta.Key || null;
@@ -225,11 +245,17 @@
             };
         },
 
+        /**
+         * @param {unknown} data
+         * @param {string} dataKey
+         * @returns {unknown}
+         */
         _extractValueFromData(data, dataKey) {
             if (!dataKey || !data)
                 return null;
 
             const keys = dataKey.split('.');
+            /** @type {unknown} */
             let value = data;
 
             for (let i = 0; i < keys.length; i++) {
@@ -251,7 +277,7 @@
                 }
 
                 if (value && typeof value === 'object' && key in value)
-                    value = value[key];
+                    value = /** @type {Record<string, unknown>} */ (value)[key];
                 else
                     return null;
             }
@@ -259,17 +285,26 @@
             return value;
         },
 
+        /**
+         * @param {unknown} obj
+         * @param {string[]} keys
+         * @returns {unknown}
+         */
         _extractNestedValue(obj, keys) {
             let current = obj;
             for (const key of keys) {
                 if (current && typeof current === 'object' && key in current)
-                    current = current[key];
+                    current = /** @type {Record<string, unknown>} */ (current)[key];
                 else
                     return null;
             }
             return current;
         },
 
+        /**
+         * @param {string | number | null | undefined} fieldType
+         * @returns {boolean}
+         */
         _isBooleanField(fieldType) {
             if (fieldType == null) return false;
 
@@ -303,6 +338,11 @@
             return false;
         },
 
+        /**
+         * @param {unknown} value
+         * @param {FormField} field
+         * @returns {'true' | 'false' | null}
+         */
         _resolveBooleanValue(value, field) {
             if (typeof value === 'boolean')
                 return value ? 'true' : 'false';
@@ -329,7 +369,12 @@
             return null;
         },
 
-        _generateFieldOptions(value, fieldType) {
+        /**
+         * @param {unknown} value
+         * @param {string} _fieldType
+         * @returns {FieldOption[]}
+         */
+        _generateFieldOptions(value, _fieldType) {
             if (value === null || value === undefined)
                 return [];
 
@@ -344,6 +389,10 @@
             return [this._createOption(value)];
         },
 
+        /**
+         * @param {unknown} value
+         * @returns {FieldOption}
+         */
         _createOption(value) {
             const stringValue = String(value);
             return {
@@ -353,6 +402,12 @@
             };
         },
 
+        /**
+         * @param {FormField} field
+         * @param {FieldMapping} mapping
+         * @param {unknown} sourceData
+         * @returns {EnrichedFormField}
+         */
         _enrichField(field, mapping, sourceData) {
             const dataKeys = mapping[field.identifier];
             const generatedOptions = window.Autofiller.FieldTypes.enrich(field, dataKeys, sourceData);
@@ -363,8 +418,14 @@
             };
         },
 
+        /**
+         * @param {string[]} dataKeys
+         * @param {unknown} sourceData
+         * @param {string} fieldType
+         */
         _generateOptionsFromMultipleKeys(dataKeys, sourceData, fieldType) {
             const seenValues = new Set();
+            /** @type {FieldOption[]} */
             const options = [];
 
             dataKeys.forEach(dataKey => {
@@ -382,11 +443,17 @@
             return options;
         },
 
+        /**
+         * @param {string} dataKey
+         * @param {unknown} sourceData
+         * @param {string} fieldType
+         */
         _generateOptionsFromSingleKey(dataKey, sourceData, fieldType) {
             const value = this._extractValueFromData(sourceData, dataKey);
             return this._generateFieldOptions(value, fieldType);
         },
 
+        /** @param {EnrichedFormField} field */
         _hasValidOptions(field) {
             const options = field.generatedOptions || [];
             if (options.length === 0)
@@ -402,6 +469,7 @@
             return !(isEmpty || isNoMapping);
         },
 
+        /** @returns {Promise<FormField[]>} */
         async detectAllForms() {
             return new Promise((resolve, reject) => {
                 try {
@@ -421,6 +489,11 @@
             });
         },
 
+        /**
+         * @param {FormField[]} formFields
+         * @param {FieldMapping} mapping
+         * @param {unknown} sourceData
+         */
         enrichFieldsWithOptions(formFields, mapping, sourceData) {
             return formFields
                 .map(field => this._enrichField(field, mapping, sourceData))
@@ -429,6 +502,7 @@
     };
 
     const FormStateManager = {
+        /** @type {{ formFieldsData: EnrichedFormField[], originalFormValues: OriginalValue[], formUI: FormUI | null, confirmModal: Modal | null, loader: Loader | null }} */
         _state: {
             formFieldsData: [],
             originalFormValues: [],
@@ -495,9 +569,16 @@
     };
 
     const FormOperationsController = {
+        /** @param {SelectedField[]} selectedData */
         async _storeOriginalValues(selectedData) {
+            /** @type {OriginalValue[]} */
             const originalValues = [];
 
+            /**
+             * @param {string} fieldId
+             * @param {string} label
+             * @param {string} type
+             */
             const captureValue = async (fieldId, label, type) => {
                 try {
                     const currentValue = await window.Autofiller.Utils.withTimeout(
@@ -526,6 +607,7 @@
             storage.set('original_data', originalValues);
         },
 
+        /** @param {SelectedField[]} selectedData */
         async _setFormValues(selectedData) {
             for (const field of selectedData) {
                 if (field.type === 'dateForm')
@@ -538,6 +620,7 @@
             }
         },
 
+        /** @param {SelectedField[]} selectedData */
         async _setDateValues(selectedData) {
             for (const field of selectedData) {
                 if (field.type !== 'dateForm')
@@ -551,14 +634,14 @@
         },
 
         _showRevertModal() {
-            if (this.loader)
-                this.loader.show(window.Asc.plugin.tr('Loading...'));
+            if (FormStateManager.loader)
+                FormStateManager.loader.show(window.Asc.plugin.tr('Loading...'));
 
             window.location.href = 'revert.html' + (window.Autofiller.getThemeURLParams ? window.Autofiller.getThemeURLParams() : '');
         },
 
         async _showLoader() {
-            if (window.Autofiller?.Editor?.callMethod)
+            if (typeof window.Autofiller?.Editor?.callMethod === 'function')
                 await FormService.startBlockingAction(window.Asc.plugin.tr('Processing form data'));
             else if (FormStateManager.loader)
                 FormStateManager.loader.show(window.Asc.plugin.tr('Processing form data...'));
@@ -566,7 +649,7 @@
 
         async _hideLoader() {
             try {
-                if (window.Autofiller?.Editor?.callMethod)
+                if (typeof window.Autofiller?.Editor?.callMethod === 'function')
                     await FormService.endBlockingAction(window.Asc.plugin.tr('Processing form data'));
                 else if (FormStateManager.loader)
                     FormStateManager.loader.hide();
@@ -576,10 +659,11 @@
             }
         },
 
+        /** @param {boolean} enabled */
         _setButtonsEnabled(enabled) {
-            const applyButton = document.getElementById('applyBtn');
-            const restartButton = document.getElementById('restartBtn');
-            const restartBtnEmpty = document.getElementById('restartBtnEmpty');
+            const applyButton = /** @type {HTMLButtonElement | null} */ (document.getElementById('applyBtn'));
+            const restartButton = /** @type {HTMLButtonElement | null} */ (document.getElementById('restartBtn'));
+            const restartBtnEmpty = /** @type {HTMLButtonElement | null} */ (document.getElementById('restartBtnEmpty'));
 
             if (applyButton) {
                 if (enabled) {
@@ -596,11 +680,13 @@
                 restartBtnEmpty.disabled = !enabled;
         },
 
+        /** @param {boolean} enabled */
         _setCheckboxesEnabled(enabled) {
-            document.querySelectorAll('.form-fields input[type="checkbox"], #selectAll')
+            /** @type {NodeListOf<HTMLInputElement>} */ (document.querySelectorAll('.form-fields input[type="checkbox"], #selectAll'))
                 .forEach(checkbox => checkbox.disabled = !enabled);
         },
 
+        /** @param {SelectedField[]} selectedData */
         _showConfirmModal(selectedData) {
             const confirmModal = FormStateManager.confirmModal;
             if (!confirmModal)
@@ -612,6 +698,7 @@
             );
         },
 
+        /** @param {SelectedField[]} selectedData */
         _showBrowserConfirm(selectedData) {
             const confirmed = window.confirm(
                 'All data in the document will be replaced with the settings you previously selected.\n' +
@@ -624,6 +711,10 @@
                 this._setButtonsEnabled(true);
         },
 
+        /**
+         * @param {SelectedField[]} selectedData
+         * @param {boolean} [shouldStoreOriginal]
+         */
         async applyFormData(selectedData, shouldStoreOriginal = true) {
             try {
                 this._setCheckboxesEnabled(false);
@@ -655,7 +746,7 @@
 
         async handleApplyRequest() {
             try {
-                const selectedData = FormStateManager.formUI.collectSelectedData();
+                const selectedData = /** @type {FormUI} */ (FormStateManager.formUI).collectSelectedData();
                 const storage = window.Autofiller.StorageManager('autofiller');
                 storage.set('selected_data', selectedData);
 
@@ -672,8 +763,10 @@
     };
 
     const FormEventBusHandler = {
+        /** @type {ButtonHandler | null} */
         _buttonHandler: null,
 
+        /** @param {number | string} buttonId */
         _handleMainWindowButton(buttonId) {
             if (buttonId === 'applyBtn')
                 return FormOperationsController.handleApplyRequest();
@@ -681,26 +774,30 @@
                 return FormInitializer._handleRestart();
             if (buttonId === 'closeBtn' || buttonId === 0 || buttonId === -1)
                 return window.Autofiller.EventBus.closePlugin();
+            return undefined;
         },
 
+        /** @param {number | string} buttonId */
         _handleConfirmModal(buttonId) {
             const isConfirm = (buttonId === 0 || buttonId === '0');
 
             if (isConfirm) {
-                const selectedData = FormStateManager.formUI.collectSelectedData();
+                const selectedData = /** @type {FormUI} */ (FormStateManager.formUI).collectSelectedData();
                 FormOperationsController.applyFormData(selectedData);
             } else {
                 FormOperationsController._setButtonsEnabled(true);
             }
 
-            FormStateManager.confirmModal.close();
+            /** @type {Modal} */ (FormStateManager.confirmModal).close();
         },
 
+        /** @param {string} windowId */
         _closeUnknownWindow(windowId) {
             if (typeof window.Asc.plugin.executeMethod === 'function' && windowId)
-                window.Asc.plugin.executeMethod('CloseWindow', [windowId]);
+                /** @type {AscPlugin & CloseWindowMethod} */ (window.Asc.plugin).executeMethod('CloseWindow', [windowId]);
         },
 
+        /** @param {string} windowId */
         _getButtonSource(windowId) {
             if (FormStateManager.confirmModal?.isShowing())
                 return 'confirm';
@@ -728,7 +825,7 @@
                 }
             };
 
-            window.Autofiller.EventBus.on('button', this._buttonHandler);
+            window.Autofiller.EventBus.on('button', /** @type {ButtonHandler} */ (this._buttonHandler));
         },
 
         cleanup() {
@@ -772,11 +869,11 @@
                 if (hasData) {
                     FormStateManager.formUI = null;
                     FormStateManager.confirmModal = null;
-                    this._initializeFormUI();
+                    const formUI = this._initializeFormUI();
                     FormStateManager.confirmModal = new window.Autofiller.ConfirmModal({
                         translate: FormService.translate
                     });
-                    FormStateManager.formUI.populateFormFields();
+                    formUI.populateFormFields();
                     this._attachEventListeners();
                 }
 
@@ -793,7 +890,8 @@
                 console.error('Error restarting AI mapping:', error);
                 this._hideLoader();
 
-                const errorReason = (error?.message || error?.error || String(error)).toLowerCase();
+                const reason = /** @type {{ message?: string, error?: string }} */ (error);
+                const errorReason = (reason?.message || reason?.error || String(error)).toLowerCase();
                 if (errorReason.includes('ai is not available') || errorReason.includes('timed out') || errorReason.includes('no chat')) {
                     this._showView('error');
                 } else {
@@ -803,6 +901,7 @@
             }
         },
 
+        /** @param {'form' | 'empty' | 'error'} view */
         _showView(view) {
             const views = {
                 form: document.getElementById('formContent'),
@@ -817,20 +916,22 @@
             });
         },
 
+        /** @param {string} message */
         _showLoader(message) {
             if (FormStateManager.loader)
                 FormStateManager.loader.show(window.Asc.plugin.tr(message));
-            else if (window.Autofiller?.Editor?.callMethod)
+            else if (typeof window.Autofiller?.Editor?.callMethod === 'function')
                 FormService.startBlockingAction(window.Asc.plugin.tr(message));
         },
 
         _hideLoader() {
             if (FormStateManager.loader)
                 FormStateManager.loader.hide();
-            else if (window.Autofiller?.Editor?.callMethod)
+            else if (typeof window.Autofiller?.Editor?.callMethod === 'function')
                 FormService.endBlockingAction(window.Asc.plugin.tr('Restarting AI mapping'));
         },
 
+        /** @returns {FormUI} */
         _initializeFormUI() {
             if (!FormStateManager.formUI) {
                 FormStateManager.formUI = new window.Autofiller.Form(
@@ -841,10 +942,13 @@
                     }
                 );
             }
+            return FormStateManager.formUI;
         },
 
+        /** @returns {Promise<EnrichedFormField[]>} */
         async _redetectAndMapForms() {
             const storage = window.Autofiller.StorageManager('autofiller');
+            /** @param {string} msg */
             const updateMsg = (msg) => FormStateManager.loader?.updateMessage(window.Asc.plugin.tr(msg));
 
             updateMsg('Detecting form fields...');
@@ -859,6 +963,7 @@
                 return this._saveAndReturnEmpty(storage);
 
             updateMsg('Fetching data...');
+            /** @type {unknown} */
             let realData;
             try {
                 realData = await window.Autofiller.Utils.withTimeout(
@@ -894,11 +999,19 @@
             return fieldsWithOptions;
         },
 
+        /**
+         * @param {AutofillerStorage} storage
+         * @returns {EnrichedFormField[]}
+         */
         _saveAndReturnEmpty(storage) {
             storage.set('form_fields', []);
             return [];
         },
 
+        /**
+         * @param {number} [timeout]
+         * @returns {Promise<{ available: boolean, error?: string, data?: AIResponse }>}
+         */
         _checkAI(timeout = 5000) {
             return new Promise((resolve) => {
                 const timer = setTimeout(() => resolve({ available: false, error: "AI check timed out" }), timeout);
@@ -909,18 +1022,19 @@
                 }
 
                 try {
-                    window.Asc.plugin.executeMethod("AI", [{ type: "Actions" }], (data) => {
+                    /** @type {AscPlugin & AIMethod} */ (window.Asc.plugin).executeMethod("AI", [{ type: "Actions" }], (data) => {
                         clearTimeout(timer);
                         const hasChat = data?.Actions?.some(a => a?.Chat);
                         resolve(hasChat ? { available: true, data } : { available: false, error: "No AI model configured" });
                     });
                 } catch (e) {
                     clearTimeout(timer);
-                    resolve({ available: false, error: e.message });
+                    resolve({ available: false, error: /** @type {Error} */ (e).message });
                 }
             });
         },
 
+        /** @param {boolean} showForm */
         _toggleView(showForm) {
             this._showView(showForm ? 'form' : 'empty');
         },
@@ -941,11 +1055,11 @@
             const hasData = FormStateManager.formFieldsData && FormStateManager.formFieldsData.length > 0;
 
             if (hasData) {
-                this._initializeFormUI();
+                const formUI = this._initializeFormUI();
                 FormStateManager.confirmModal = new window.Autofiller.ConfirmModal({
                     translate: FormService.translate
                 });
-                FormStateManager.formUI.populateFormFields();
+                formUI.populateFormFields();
                 this._attachEventListeners();
             }
 
@@ -965,7 +1079,7 @@
         },
     };
 
-    window.Autofiller = window.Autofiller || {};
+    window.Autofiller = window.Autofiller || /** @type {AutofillerNamespace} */ ({});
     window.Autofiller.FormService = FormService;
     window.Autofiller.FormDetectionService = FormDetectionService;
 
@@ -987,7 +1101,7 @@
 
             document.documentElement.classList.add('theme-ready');
 
-            window.Asc.plugin.attachEvent("onThemeChanged", window.Asc.plugin.onThemeChanged);
+            window.Asc.plugin.attachEvent("onThemeChanged", /** @type {(...args: unknown[]) => void} */ (window.Asc.plugin.onThemeChanged));
         };
     }
 
@@ -998,4 +1112,4 @@
             FormInitializer.initialize();
         }
     }
-})(window, undefined);
+})(window);

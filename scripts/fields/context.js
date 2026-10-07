@@ -15,7 +15,8 @@
  * limitations under the License.
  *
  */
-(function (window, undefined) {
+(function (window) {
+    /** @type {AutofillerFieldTypeContext} */
     const FieldTypeContext = {
         extractValue(data, key) {
             return window.Autofiller.FormDetectionService._extractValueFromData(data, key);
@@ -65,6 +66,6 @@
         }
     };
 
-    window.Autofiller = window.Autofiller || {};
+    window.Autofiller = window.Autofiller || /** @type {AutofillerNamespace} */ ({});
     window.Autofiller.FieldTypeContext = FieldTypeContext;
-})(window, undefined);
+})(window);

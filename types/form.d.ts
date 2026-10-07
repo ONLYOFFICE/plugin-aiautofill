@@ -1,3 +1,48 @@
+interface EditorForm {
+    GetFormType?(): string;
+    GetInternalId?(): string;
+    GetFormKey?(): string;
+    GetTag?(): string;
+    GetTipText?(): string;
+    GetPlaceholderText?(): string;
+    GetLabel?(): string;
+    GetText?(): string | null;
+    IsFixed?(): boolean;
+    IsRadioButton?(): boolean;
+    GetRadioGroup?(): string;
+    GetChoiceName?(): string;
+    GetGroupValue?(): string;
+    GetSubForms?(): EditorForm[];
+    GetFormat?(): string | { type: string; value?: string };
+    GetCharactersLimit?(): number;
+    GetAllowedSymbols?(): string;
+    IsComb?(): boolean;
+    GetListValues?(): string[];
+    IsEditable?(): boolean;
+    SetTime?(ms: number): unknown;
+    SetChecked?(checked: boolean): unknown;
+    SetValue?(text: string): unknown;
+    SetText?(text: string): unknown;
+    Clear?(): unknown;
+}
+
+interface RadioGroupMeta {
+    Key: string;
+    Tag: string;
+    Label: string;
+    Placeholder: string;
+    Tip: string;
+    Lock: number | null;
+    Selected: string;
+    Choices: Array<{ Choice: string; InternalId: string }>;
+}
+
+interface SubFormMeta {
+    InternalId: string;
+    Type: string;
+    Constraints: FormConstraints;
+}
+
 interface FormMeta {
     InternalId: string;
     Key: string | null;
@@ -6,11 +51,11 @@ interface FormMeta {
     Placeholder: string;
     Tip: string;
     Type: string;
-    Text: string | boolean;
+    Text: string | null;
     Lock: number | null;
     Constraints: FormConstraints;
     IsComplex?: boolean;
-    SubFields?: Array<{ InternalId: string; Type: string; Constraints: FormConstraints }>;
+    SubFields?: SubFormMeta[];
     IsRadioGroup?: boolean;
     Choices?: Array<{ Choice: string; InternalId: string }>;
     GroupValue?: string;
@@ -81,4 +126,5 @@ interface OriginalValue {
 interface FieldTarget {
     internalId: string;
     type?: string;
+    charactersLimit?: number;
 }

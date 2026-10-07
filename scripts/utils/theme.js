@@ -15,6 +15,10 @@
  * limitations under the License.
  *
  */
+/**
+ * @param {string | null} themeName
+ * @param {string | null} themeType
+ */
 function isDarkTheme(themeName, themeType) {
     if (themeName && (themeName.indexOf('dark') !== -1 || themeName.indexOf('night') !== -1)) {
         return true;
@@ -27,6 +31,10 @@ function isDarkTheme(themeName, themeType) {
     return false;
 }
 
+/**
+ * @param {string | null} themeType
+ * @param {string | null} themeName
+ */
 function buildThemeClasses(themeType, themeName) {
     var classes = [];
     var isDark = isDarkTheme(themeName, themeType);
@@ -48,6 +56,10 @@ function buildThemeClasses(themeType, themeName) {
     return classes;
 }
 
+/**
+ * @param {string} themeType
+ * @param {string} themeName
+ */
 function updateBodyThemeClasses(themeType, themeName) {
     try {
         var themeClasses = buildThemeClasses(themeType, themeName);
@@ -102,7 +114,9 @@ function applyThemeFromURL() {
 }
 
 
+/** @param {AscTheme} theme */
 function updateThemeVariables(theme) {
+    var values = /** @type {Record<string, unknown>} */ (/** @type {unknown} */ (theme));
     var colorRegex = /^(#([0-9a-f]{3}){1,2}|rgba?\([^\)]+\)|hsl\([^\)]+\))$/i;
 
     var oldStyle = document.getElementById('theme-variables');
@@ -112,8 +126,8 @@ function updateThemeVariables(theme) {
 
     var cssVariables = ':root {\n';
     for (var key in theme) {
-        var value = theme[key];
-        if (colorRegex.test(value)) {
+        var value = values[key];
+        if (colorRegex.test(String(value))) {
             var cssKey = '--' + key.replace(/([A-Z])/g, '-$1').toLowerCase();
             cssVariables += '  ' + cssKey + ': ' + value + ';\n';
         }
@@ -129,5 +143,5 @@ function updateThemeVariables(theme) {
 
 applyThemeFromURL();
 
-window.Autofiller = window.Autofiller || {};
+window.Autofiller = window.Autofiller || /** @type {AutofillerNamespace} */ ({});
 window.Autofiller.getThemeURLParams = getThemeURLParams;

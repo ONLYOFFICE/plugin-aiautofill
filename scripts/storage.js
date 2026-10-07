@@ -15,13 +15,15 @@
  * limitations under the License.
  *
  */
-(function (window, undefined) {
+(function (window) {
+    /** @type {AutofillerStorageManager} */
     const StorageManager = (namespace = 'autofiller', storageEngine = null) => {
         const storage = storageEngine || (typeof window !== 'undefined' && window.localStorage) || null;
 
         if (!storage)
             console.warn('Storage not available, operations will be no-ops');
 
+        /** @param {string} key */
         const _getKey = (key) => {
             return `${namespace}_${key}`;
         };
@@ -137,7 +139,7 @@
 
                     return keys;
                 } catch (error) {
-                    console.error('Error getting storage keys:', error.message);
+                    console.error('Error getting storage keys:', /** @type {Error} */ (error).message);
                     return [];
                 }
             },
@@ -153,8 +155,9 @@
             },
 
             getAll() {
+                /** @type {Record<string, unknown>} */
                 const items = {};
-                const keys = this.keys();
+                const keys = /** @type {(keyof StoredValues)[]} */ (this.keys());
 
                 keys.forEach(key => {
                     items[key] = this.get(key);
@@ -170,7 +173,7 @@
 
                 let success = true;
                 Object.entries(items).forEach(([key, value]) => {
-                    if (!this.set(key, value)) {
+                    if (!this.set(/** @type {keyof StoredValues} */ (key), value)) {
                         success = false;
                     }
                 });
@@ -184,6 +187,6 @@
         };
     };
 
-    window.Autofiller = window.Autofiller || {};
+    window.Autofiller = window.Autofiller || /** @type {AutofillerNamespace} */ ({});
     window.Autofiller.StorageManager = StorageManager;
-})(window, undefined);
+})(window);

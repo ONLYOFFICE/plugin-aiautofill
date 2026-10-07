@@ -15,15 +15,21 @@
  * limitations under the License.
  *
  */
-(function (window, undefined) {
+(function (window) {
+    /** @type {string | null} */
     let _nextCode = null;
     const REFRESH_CODE_KEY = 'refresh_code';
     const ORIGINAL_CODE_KEY = 'original_code';
 
+    /** @returns {PluginLaunchOptions | undefined} */
+    function _getOptions() {
+        return /** @type {PluginLaunchOptions | undefined} */ (window.Asc?.plugin?.info?.options);
+    }
+
     const DataExtractor = {
         _isValidCallback() {
-            return window.Asc?.plugin?.info?.options?.callback &&
-                typeof window.Asc.plugin.info.options.callback === 'string';
+            const callback = _getOptions()?.callback;
+            return typeof callback === 'string' && callback !== '';
         },
 
         _getStorage() {
@@ -37,7 +43,7 @@
                 return _nextCode;
 
             const storage = this._getStorage();
-            const optionsCode = window.Asc?.plugin?.info?.options?.code;
+            const optionsCode = _getOptions()?.code;
 
             if (!storage) {
                 if (optionsCode)
@@ -71,6 +77,7 @@
             return _nextCode;
         },
 
+        /** @param {string} code */
         _saveNextCode(code) {
             _nextCode = code;
             const storage = this._getStorage();
@@ -82,6 +89,7 @@
             this._loadNextCode();
         },
 
+        /** @param {{ data?: unknown, code?: unknown } | null} result */
         _validateResponse(result) {
             if (!result || typeof result !== 'object') {
                 throw new Error('Invalid API response: expected object with data and code');
@@ -102,7 +110,7 @@
                     throw new Error('Invalid or missing callback URL');
                 }
 
-                const url = window.Asc.plugin.info.options.callback;
+                const url = /** @type {string} */ (_getOptions()?.callback);
                 this._updateNextCode();
 
                 const code = _nextCode;
@@ -112,7 +120,7 @@
                 const response = await fetch(address);
 
                 if (!response.ok) {
-                    const error = new Error(`HTTP error! status: ${response.status}`);
+                    const error = /** @type {Error & { status?: number }} */ (new Error(`HTTP error! status: ${response.status}`));
                     error.status = response.status;
                     throw error;
                 }
@@ -122,7 +130,8 @@
                 this._saveNextCode(result.code);
 
                 return result.data;
-            } catch (error) {
+            } catch (e) {
+                const error = /** @type {Error & { status?: number }} */ (e);
                 if (error.status)
                     throw error;
                 throw new Error(`Failed to fetch data: ${error.message}`);
@@ -130,6 +139,6 @@
         }
     };
 
-    window.Autofiller = window.Autofiller || {};
+    window.Autofiller = window.Autofiller || /** @type {AutofillerNamespace} */ ({});
     window.Autofiller.DataExtractor = DataExtractor;
-})(window, undefined);
+})(window);

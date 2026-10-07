@@ -15,7 +15,8 @@
  * limitations under the License.
  *
  */
-(function (window, undefined) {
+(function (window) {
+    /** @type {FieldHandler} */
     const ChoiceHandler = {
         id: 'choice',
 
@@ -34,6 +35,7 @@
 
         enrich(field, dataKeys, sourceData) {
             const ctx = window.Autofiller.FieldTypeContext;
+            /** @type {FieldOption[]} */
             let options = [];
             if (dataKeys)
                 options = ctx.generateOptions(dataKeys, sourceData, field.type);
@@ -56,7 +58,7 @@
         }
     };
 
-    window.Autofiller = window.Autofiller || {};
+    window.Autofiller = window.Autofiller || /** @type {AutofillerNamespace} */ ({});
     if (window.Autofiller.FieldTypes)
         window.Autofiller.FieldTypes.register(ChoiceHandler);
-})(window, undefined);
+})(window);

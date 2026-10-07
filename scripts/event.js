@@ -15,11 +15,14 @@
  * limitations under the License.
  *
  */
-(function (window, undefined) {
+(function (window) {
+    /** @type {ButtonHandler[]} */
     const _buttonHandlers = [];
+    /** @type {MessageHandler[]} */
     const _messageHandlers = [];
     let _pluginButtonInitialized = false;
 
+    /** @type {AutofillerEventBus} */
     const EventBus = {
         sendPluginEvent(eventName, data) {
             if (!window.Autofiller?.Utils?.isPluginAvailable()) return false;
@@ -78,9 +81,13 @@
             ) || false;
         },
 
+        /**
+         * @param {'button' | 'message'} eventType
+         * @param {ButtonHandler | MessageHandler} handler
+         */
         on(eventType, handler) {
             if (eventType === 'button') {
-                _buttonHandlers.push(handler);
+                _buttonHandlers.push(/** @type {ButtonHandler} */ (handler));
 
                 if (!_pluginButtonInitialized && window.Autofiller?.Utils?.isPluginAvailable()) {
                     window.Asc.plugin.button = (id, windowId) => {
@@ -95,7 +102,7 @@
             }
 
             if (eventType === 'message') {
-                _messageHandlers.push(handler);
+                _messageHandlers.push(/** @type {MessageHandler} */ (handler));
 
                 if (_messageHandlers.length === 1) {
                     window.addEventListener('message', (event) => {
@@ -113,9 +120,13 @@
             return false;
         },
 
+        /**
+         * @param {'button' | 'message'} eventType
+         * @param {ButtonHandler | MessageHandler} handler
+         */
         off(eventType, handler) {
             if (eventType === 'button') {
-                const index = _buttonHandlers.indexOf(handler);
+                const index = _buttonHandlers.indexOf(/** @type {ButtonHandler} */ (handler));
                 if (index > -1) {
                     _buttonHandlers.splice(index, 1);
                     return true;
@@ -123,7 +134,7 @@
             }
 
             if (eventType === 'message') {
-                const index = _messageHandlers.indexOf(handler);
+                const index = _messageHandlers.indexOf(/** @type {MessageHandler} */ (handler));
                 if (index > -1) {
                     _messageHandlers.splice(index, 1);
                     return true;
@@ -180,6 +191,6 @@
         }
     };
 
-    window.Autofiller = window.Autofiller || {};
+    window.Autofiller = window.Autofiller || /** @type {AutofillerNamespace} */ ({});
     window.Autofiller.EventBus = EventBus;
-})(window, undefined);
+})(window);

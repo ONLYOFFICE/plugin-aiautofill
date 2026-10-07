@@ -15,8 +15,9 @@
  * limitations under the License.
  *
  */
-(function (window, undefined) {
+(function (window) {
     const ConstraintsValidator = {
+        /** @param {string} mask */
         toRegExp(mask) {
             let pattern = '^';
             for (let i = 0; i < mask.length; i++) {
@@ -30,10 +31,16 @@
             return new RegExp(pattern + '$');
         },
 
+        /** @param {unknown} value */
         _normalizeListText(value) {
             return String(value).toLowerCase().replace(/[\s\-_.,;:!?()[\]'"\/\\]+/g, ' ').trim();
         },
 
+        /**
+         * @param {unknown} value
+         * @param {string[]} listValues
+         * @returns {string | null}
+         */
         toListItem(value, listValues) {
             const target = this._normalizeListText(value);
             if (!target)
@@ -54,6 +61,10 @@
             return candidates.length === 1 ? String(candidates[0]) : null;
         },
 
+        /**
+         * @param {unknown} value
+         * @returns {Date | null}
+         */
         parseDate(value) {
             const string = String(value == null ? '' : value).trim();
             if (!string)
@@ -83,6 +94,11 @@
             return new Date(ms);
         },
 
+        /**
+         * @param {unknown} rawValue
+         * @param {FormField} field
+         * @returns {string | null}
+         */
         resolveValueForField(rawValue, field) {
             if (rawValue === null || rawValue === undefined)
                 return null;
@@ -95,6 +111,7 @@
             if (Array.isArray(constraints.listValues) && constraints.listValues.length > 0 && constraints.isEditable !== true)
                 return this.toListItem(string, constraints.listValues);
 
+            /** @type {{ type?: string, value?: string }} */
             const format = constraints.format || {};
             if (format.type === 'mask' && format.value) {
                 try { if (!this.toRegExp(format.value).test(string)) return null; } catch (e) { return null; }
@@ -125,6 +142,11 @@
             return string;
         },
 
+        /**
+         * @param {unknown} value
+         * @param {number[]} limits
+         * @returns {string[] | null}
+         */
         splitValueAcrossBoxes(value, limits) {
             const digits = String(value == null ? '' : value).replace(/\D+/g, '');
             const capacity = limits.reduce((sum, limit) => sum + (limit > 0 ? limit : 0), 0);
@@ -143,8 +165,14 @@
             return result;
         },
 
+        /**
+         * @param {FieldOption[]} options
+         * @param {FormField} field
+         * @returns {FieldOption[]}
+         */
         applyFieldConstraints(options, field) {
             const seen = new Set();
+            /** @type {FieldOption[]} */
             const result = [];
 
             (options || []).forEach(option => {
@@ -167,6 +195,6 @@
         }
     };
 
-    window.Autofiller = window.Autofiller || {};
+    window.Autofiller = window.Autofiller || /** @type {AutofillerNamespace} */ ({});
     window.Autofiller.ConstraintsValidator = ConstraintsValidator;
-})(window, undefined);
+})(window);

@@ -15,18 +15,24 @@
  * limitations under the License.
  *
  */
-(function (window, undefined) {
+(function (window) {
     const ComplexHandler = {
         id: 'complex',
 
+        /** @param {FieldLike} field */
         match(field) {
             return !!field.isComplex;
         },
 
+        /**
+         * @param {FormField | SelectedField} field
+         * @returns {SubField[]}
+         */
         getTargets(field) {
             return (field.subFields || []).filter(subField => subField && subField.internalId);
         },
 
+        /** @param {SelectedField} field */
         async apply(field) {
             const ctx = window.Autofiller.FieldTypeContext;
             const targets = this.getTargets(field);
@@ -48,7 +54,7 @@
         }
     };
 
-    window.Autofiller = window.Autofiller || {};
+    window.Autofiller = window.Autofiller || /** @type {AutofillerNamespace} */ ({});
     if (window.Autofiller.FieldTypes)
         window.Autofiller.FieldTypes.register(ComplexHandler);
-})(window, undefined);
+})(window);

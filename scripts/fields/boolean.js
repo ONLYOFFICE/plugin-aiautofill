@@ -15,10 +15,14 @@
  * limitations under the License.
  *
  */
-(function (window, undefined) {
+(function (window) {
     const BooleanHandler = {
         id: 'boolean',
 
+        /**
+         * @param {unknown} value
+         * @returns {boolean | null}
+         */
         _toBoolean(value) {
             if (typeof value === 'boolean')
                 return value;
@@ -33,6 +37,7 @@
             return null;
         },
 
+        /** @param {FormField} field */
         match(field) {
             return window.Autofiller.FieldTypeContext.isBooleanField(field.type);
         },
@@ -41,6 +46,12 @@
             return true;
         },
 
+        /**
+         * @param {FormField} field
+         * @param {string | string[] | null} dataKeys
+         * @param {unknown} sourceData
+         * @returns {FieldOption[]}
+         */
         enrich(field, dataKeys, sourceData) {
             const ctx = window.Autofiller.FieldTypeContext;
             const keys = dataKeys ? (Array.isArray(dataKeys) ? dataKeys : [dataKeys]) : [];
@@ -61,6 +72,7 @@
             ];
         },
 
+        /** @param {EnrichedFormField} field */
         normalizeStored(field) {
             field.generatedOptions = (field.generatedOptions || [])
                 .filter(opt => /^(true|false)$/.test(String(opt.value || '').trim().toLowerCase()))
@@ -72,6 +84,7 @@
             return field.generatedOptions.length > 0;
         },
 
+        /** @param {SelectedField} field */
         async apply(field) {
             const boolValue = this._toBoolean(field.value);
             if (boolValue === null)
@@ -81,7 +94,7 @@
         }
     };
 
-    window.Autofiller = window.Autofiller || {};
+    window.Autofiller = window.Autofiller || /** @type {AutofillerNamespace} */ ({});
     if (window.Autofiller.FieldTypes)
         window.Autofiller.FieldTypes.register(BooleanHandler);
-})(window, undefined);
+})(window);

@@ -15,24 +15,31 @@
  * limitations under the License.
  *
  */
-(function (window, undefined) {
+(function (window) {
     const DataMappingService = {
+        /** @param {AIContent} aiResponse */
         _extractResponseContent(aiResponse) {
             if (typeof aiResponse === 'object' && aiResponse?.choices?.[0])
                 return aiResponse.choices[0].message.content;
             return aiResponse;
         },
 
+        /** @param {string} jsonString */
         _removeComments(jsonString) {
             return jsonString
                 .replace(/\/\/[^\n]*/g, '')
                 .replace(/\/\*[\s\S]*?\*\//g, '');
         },
 
+        /** @param {string} content */
         _wrapInMappingObject(content) {
             return `{"mapping":${content}}`;
         },
 
+        /**
+         * @param {unknown} content
+         * @returns {unknown[]}
+         */
         _extractJSONCandidates(content) {
             if (typeof content !== 'string')
                 return [content];
@@ -56,6 +63,7 @@
             return candidates;
         },
 
+        /** @param {string} reasoning */
         _createEmptyMapping(reasoning) {
             const translator = window.Asc?.plugin?.tr;
             return {
@@ -64,7 +72,15 @@
             };
         },
 
+        /**
+         * @param {unknown} data
+         * @param {string} [prefix]
+         * @param {number} [maxDepth]
+         * @param {number} [currentDepth]
+         * @returns {string[]}
+         */
         extractAllKeys(data, prefix = '', maxDepth = 5, currentDepth = 0) {
+            /** @type {string[]} */
             const keys = [];
 
             if (!data || typeof data !== 'object' || Array.isArray(data) || currentDepth >= maxDepth)
@@ -74,7 +90,7 @@
                 if (!data.hasOwnProperty(key)) continue;
 
                 const fullKey = prefix ? `${prefix}.${key}` : key;
-                const value = data[key];
+                const value = /** @type {Record<string, unknown>} */ (data)[key];
 
                 if (value && typeof value === 'object' && !Array.isArray(value))
                     keys.push(...this.extractAllKeys(value, fullKey, maxDepth, currentDepth + 1));
@@ -88,6 +104,10 @@
             return [...new Set(keys)];
         },
 
+        /**
+         * @param {AIContent} aiResponse
+         * @returns {{ mapping: FieldMapping, reasoning?: string }}
+         */
         parseAIResponse(aiResponse) {
             const content = this._extractResponseContent(aiResponse);
             const candidates = this._extractJSONCandidates(content);
@@ -104,6 +124,6 @@
         },
     };
 
-    window.Autofiller = window.Autofiller || {};
+    window.Autofiller = window.Autofiller || /** @type {AutofillerNamespace} */ ({});
     window.Autofiller.DataMappingService = DataMappingService;
-})(window, undefined);
+})(window);

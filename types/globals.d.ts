@@ -23,6 +23,10 @@ interface AIMethod {
     executeMethod(name: 'AI', args: [AIRequest], callback: (result: AIResponse) => void): void;
 }
 
+interface CloseWindowMethod {
+    executeMethod(name: 'CloseWindow', args: [windowId: string]): void;
+}
+
 type SetFormValueResult = { error?: string } | undefined;
 
 type GetFormValueResult = string | boolean | null | { value?: string | boolean; error?: string };

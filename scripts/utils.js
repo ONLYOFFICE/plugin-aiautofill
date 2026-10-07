@@ -15,8 +15,14 @@
  * limitations under the License.
  *
  */
-(function (window, undefined) {
+(function (window) {
     const Utils = {
+        /**
+         * @template T
+         * @param {() => T} fn
+         * @param {string} errorMsg
+         * @returns {T | null}
+         */
         safeExecute(fn, errorMsg) {
             try {
                 return fn();
@@ -30,12 +36,20 @@
             return window.Asc?.plugin;
         },
 
+        /** @param {string} param */
         getDecodedURLParam(param) {
             const params = new URLSearchParams(window.location.search);
             const value = params.get(param);
             return value ? decodeURIComponent(value) : null;
         },
 
+        /**
+         * @template T
+         * @param {Promise<T>} promise
+         * @param {number} timeoutMs
+         * @param {string} [operationName]
+         * @returns {Promise<T>}
+         */
         withTimeout(promise, timeoutMs, operationName = 'Operation') {
             return Promise.race([
                 promise,
@@ -46,6 +60,6 @@
         },
     };
 
-    window.Autofiller = window.Autofiller || {};
+    window.Autofiller = window.Autofiller || /** @type {AutofillerNamespace} */ ({});
     window.Autofiller.Utils = Utils;
-})(window, undefined);
+})(window);

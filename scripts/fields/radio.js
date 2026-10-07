@@ -15,7 +15,8 @@
  * limitations under the License.
  *
  */
-(function (window, undefined) {
+(function (window) {
+    /** @type {FieldHandler} */
     const RadioHandler = {
         id: 'radio',
 
@@ -29,6 +30,7 @@
 
         enrich(field, dataKeys, sourceData) {
             const ctx = window.Autofiller.FieldTypeContext;
+            /** @type {FieldOption[]} */
             let options = [];
             if (dataKeys)
                 options = ctx.generateOptions(dataKeys, sourceData, field.type);
@@ -67,7 +69,7 @@
         }
     };
 
-    window.Autofiller = window.Autofiller || {};
+    window.Autofiller = window.Autofiller || /** @type {AutofillerNamespace} */ ({});
     if (window.Autofiller.FieldTypes)
         window.Autofiller.FieldTypes.register(RadioHandler);
-})(window, undefined);
+})(window);

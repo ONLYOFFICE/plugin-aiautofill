@@ -15,40 +15,51 @@
  * limitations under the License.
  *
  */
-(function (window, undefined) {
+(function (window) {
     function collectForms() {
         const doc = Api.GetDocument();
-        const forms = doc.GetAllForms();
+        const forms = /** @type {EditorForm[]} */ (doc.GetAllForms());
         const processedIds = new Set();
+        /** @type {FormMeta[]} */
         const formData = [];
+        /** @type {Record<string, RadioGroupMeta>} */
         const radioGroups = {};
 
+        /** @param {EditorForm} form */
         function isImageField(form) {
             const type = form.GetFormType ? form.GetFormType() : 'unknown';
             return ['pictureForm', 'signatureForm'].indexOf(type) !== -1;
         }
 
+        /** @param {EditorForm} form */
         function getTip(form) {
             if (form.GetTipText) return form.GetTipText() || '';
             return '';
         }
 
+        /** @param {EditorForm} form */
         function getPlaceholder(form) {
             if (form.GetPlaceholderText) return form.GetPlaceholderText() || '';
             return '';
         }
 
+        /** @param {EditorForm} form */
         function getLabel(form) {
             if (form.GetLabel) return form.GetLabel() || '';
             return '';
         }
 
+        /**
+         * @param {EditorForm} form
+         * @param {string} type
+         */
         function getFormConstraints(form, type) {
+            /** @type {FormConstraints} */
             var constraints = {};
             try {
                 if (type === 'textForm') {
                     if (form.GetFormat) {
-                        const fmt = form.GetFormat();
+                        const fmt = /** @type {{ type: string, value?: string } | null} */ (form.GetFormat());
                         if (fmt && fmt.type)
                             constraints.format = { type: fmt.type, value: fmt.value != null ? fmt.value : '' };
                     }
@@ -76,6 +87,7 @@
             return constraints;
         }
 
+        /** @param {EditorForm} form */
         function addRadioButton(form) {
             const groupKey = (form.GetRadioGroup && form.GetRadioGroup())
                 || (form.GetFormKey && form.GetFormKey()) || '';
@@ -102,6 +114,10 @@
             });
         }
 
+        /**
+         * @param {EditorForm} form
+         * @param {string | null} [parentKey]
+         */
         function populateFormData(form, parentKey = null) {
             const formId = form.GetInternalId ? form.GetInternalId() : null;
             if (!formId || processedIds.has(formId))
@@ -134,6 +150,7 @@
             });
         }
 
+        /** @param {EditorForm} form */
         function processSubForms(form) {
             let hasSubForms = false;
             const parentKey = form.GetFormKey ? form.GetFormKey() : null;
@@ -181,10 +198,15 @@
             });
         }
 
+        /**
+         * @param {EditorForm} form
+         * @param {EditorForm[]} leaves
+         */
         function collectLeafSubforms(form, leaves) {
             if (!form.GetSubForms)
                 return;
 
+            /** @type {EditorForm[]} */
             let subForms;
             try {
                 subForms = form.GetSubForms() || [];
@@ -212,12 +234,14 @@
             });
         }
 
+        /** @param {EditorForm} form */
         function handleComplexField(form) {
             const parentId = form.GetInternalId ? form.GetInternalId() : null;
             if (!parentId || processedIds.has(parentId))
                 return;
 
             const parentKey = form.GetFormKey ? form.GetFormKey() : null;
+            /** @type {EditorForm[]} */
             const leaves = [];
 
             collectLeafSubforms(form, leaves);
@@ -233,9 +257,10 @@
                         Constraints: getFormConstraints(subField, subFieldType)
                     };
                 })
-                .filter(function (subField) { return subField.InternalId; });
+                .filter(/** @returns {subField is SubFormMeta} */ function (subField) { return !!subField.InternalId; });
 
             const isThousandsGroup = subFields.length >= 2 && subFields.every(function (subField) {
+                /** @type {FormConstraints} */
                 const constraints = subField.Constraints || {};
                 return constraints.format && constraints.format.type === 'digit'
                     && typeof constraints.charactersLimit === 'number'
@@ -256,7 +281,7 @@
             });
 
             const totalLimit = subFields.reduce(function (sum, subField) {
-                return sum + subField.Constraints.charactersLimit;
+                return sum + (subField.Constraints.charactersLimit || 0);
             }, 0);
 
             formData.push({
@@ -295,6 +320,6 @@
         return formData;
     }
 
-    window.Autofiller = window.Autofiller || {};
+    window.Autofiller = window.Autofiller || /** @type {AutofillerNamespace} */ ({});
     window.Autofiller.FieldDetection = { collectForms };
-})(window, undefined);
+})(window);

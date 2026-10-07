@@ -15,16 +15,26 @@
  * limitations under the License.
  *
  */
-(function (window, undefined) {
+(function (window) {
     const Editor = {
+        /**
+         * @template {WordMethodName} T
+         * @param {T} name
+         * @param {WordMethodArgs[T]} [args]
+         * @returns {Promise<WordMethodReturn<T>>}
+         */
         async callMethod(name, args) {
             return new Promise(resolve => {
-                window.Asc.plugin.executeMethod(name, args || [], (returnValue) => {
+                window.Asc.plugin.executeMethod(name, args || /** @type {WordMethodArgs[T]} */ ([]), (returnValue) => {
                     resolve(returnValue);
                 });
             });
         },
 
+        /**
+         * @param {() => unknown} func
+         * @returns {Promise<unknown>}
+         */
         async callCommand(func) {
             return new Promise(resolve => {
                 window.Asc.plugin.callCommand(func, false, true, (returnValue) => {
@@ -36,15 +46,18 @@
 
     const DEFAULT_RE = /^(?:text|field|input|value|column|col|row|item|data|node|element|cell|label|name|key|var|prop|attr|check(?:box)?|drop(?:down)?|combo(?:box)?|list(?:box)?|radio|choice|option|select|date|pic(?:ture)?)[a-z]{0,6}\d+$/i;
 
+    /** @param {unknown} value */
     function _cleanText(value) {
         return String(value || '').replace(/\s+/g, ' ').trim();
     }
 
     const Prompts = {
+        /** @param {string} name */
         isGenericIdentifier(name) {
             return DEFAULT_RE.test(_cleanText(name));
         },
 
+        /** @param {FormField} field */
         hasMappingContext(field) {
             const identifier = field.identifier && field.identifier.trim();
             if (!identifier)
@@ -55,6 +68,7 @@
                 || _cleanText(field.label) || _cleanText(field.tag));
         },
 
+        /** @param {FormField[]} formFields */
         filterMeaningfulFields(formFields) {
             return formFields.filter(f => {
                 if (window.Autofiller.FieldTypes && window.Autofiller.FieldTypes.isSelfSufficient(f))
@@ -64,8 +78,13 @@
             });
         },
 
+        /**
+         * @param {string[]} dataKeys
+         * @param {FormField[]} formFields
+         */
         getFieldMappingPrompt(dataKeys, formFields) {
             const seenLines = new Set();
+            /** @type {string[]} */
             const fieldLines = [];
             formFields
                 .filter(f => this.hasMappingContext(f))
@@ -106,7 +125,7 @@ Return raw, valid JSON only. No markdown, code blocks, explanations, comments, o
         }
     };
 
-    window.Autofiller = window.Autofiller || {};
+    window.Autofiller = window.Autofiller || /** @type {AutofillerNamespace} */ ({});
     window.Autofiller.Editor = Editor;
     window.Autofiller.Prompts = Prompts;
-})(window, undefined);
+})(window);

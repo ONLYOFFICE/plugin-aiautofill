@@ -1,4 +1,3 @@
-// @ts-nocheck - function-style constructor
 /**
  *
  * (c) Copyright Ascensio System SIA 2026
@@ -16,11 +15,17 @@
  * limitations under the License.
  *
  */
-(function (window, undefined) {
+(function (window) {
+    /**
+     * @this {LoaderInstance}
+     * @param {string} $loaderContainer
+     * @param {string} $mainWindow
+     * @param {LoaderOptions} [options]
+     */
     function Loader($loaderContainer, $mainWindow, options) {
-        this._init = function () {
+        this._init = () => {
             var defaults = {
-                translate: function (text) { return text; },
+                translate: /** @param {string} text */ function (text) { return text; },
                 defaultMessage: 'Loading...'
             };
 
@@ -31,7 +36,8 @@
             this.isVisible = false;
         };
 
-        this.show = function (message) {
+        /** @param {string} [message] */
+        this.show = (message) => {
             let loadingText = message || this.options.defaultMessage;
             loadingText = this.options.translate(loadingText);
 
@@ -46,7 +52,7 @@
             this.isVisible = true;
         };
 
-        this.hide = function () {
+        this.hide = () => {
             this.$mainWindow.removeClass('hidden');
             this.$loaderContainer.addClass('hidden');
 
@@ -54,7 +60,7 @@
             this.isVisible = false;
         };
 
-        this._removeLoader = function () {
+        this._removeLoader = () => {
             if (this.loaderElement) {
                 if (this.loaderElement.remove) {
                     this.loaderElement.remove();
@@ -66,11 +72,12 @@
             }
         };
 
-        this.isShowing = function () {
+        this.isShowing = () => {
             return this.isVisible;
         };
 
-        this.updateMessage = function (message) {
+        /** @param {string} [message] */
+        this.updateMessage = (message) => {
             if (this.isVisible) {
                 var loadingText = message || this.options.defaultMessage;
                 loadingText = this.options.translate(loadingText);
@@ -81,6 +88,6 @@
         this._init();
     }
 
-    window.Autofiller = window.Autofiller || {};
-    window.Autofiller.Loader = Loader;
-})(window, undefined);
+    window.Autofiller = window.Autofiller || /** @type {AutofillerNamespace} */ ({});
+    window.Autofiller.Loader = /** @type {LoaderConstructor} */ (/** @type {unknown} */ (Loader));
+})(window);

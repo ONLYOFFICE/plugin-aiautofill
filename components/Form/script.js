@@ -1,4 +1,3 @@
-// @ts-nocheck - function-style constructor
 /**
  *
  * (c) Copyright Ascensio System SIA 2026
@@ -16,7 +15,12 @@
  * limitations under the License.
  *
  */
-(function (window, undefined) {
+(function (window) {
+    /**
+     * @this {FormUIInstance}
+     * @param {EnrichedFormField[]} formFields
+     * @param {FormOptions} [options]
+     */
     function Form(formFields, options) {
         this._templates = {
             option: function (option) {
@@ -37,7 +41,8 @@
             },
 
             field: function (field, fieldLabel, optionsHTML) {
-                var tr = (window.Asc && window.Asc.plugin && window.Asc.plugin.tr) ? window.Asc.plugin.tr : function (t) { return t; };
+                var tr = (window.Asc && window.Asc.plugin && window.Asc.plugin.tr) ? window.Asc.plugin.tr : /** @param {string} t */ function (t) { return t; };
+                /** @param {unknown} s */
                 var esc = function (s) {
                     return String(s).replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
                 };
@@ -61,7 +66,7 @@
             }
         };
 
-        this._init = function () {
+        this._init = () => {
             const defaults = {
                 containerSelector: '#formFields',
                 selectAllSelector: '#selectAll'
@@ -72,7 +77,7 @@
             this.$selectAll = $(this._options.selectAllSelector);
         };
 
-        this._initializeSelect = function () {
+        this._initializeSelect = () => {
             $('.field-input').select2({
                 minimumResultsForSearch: Infinity,
                 width: '100%',
@@ -104,7 +109,7 @@
             });
         };
 
-        this._updateApplyButtonState = function () {
+        this._updateApplyButtonState = () => {
             let $allCheckboxes = $('.field-checkbox');
             let checkedCount = $allCheckboxes.filter(':checked').length;
             let $applyBtn = $('#applyBtn');
@@ -112,7 +117,7 @@
             if ($applyBtn.length) $applyBtn.prop('disabled', checkedCount === 0);
         };
 
-        this._attachEventListeners = function () {
+        this._attachEventListeners = () => {
             let me = this;
 
             if (this.$selectAll.length) {
@@ -141,7 +146,7 @@
 
             $('.field-icon').off('click').on('click', function () {
                 let fieldId = $(this).attr('data-field-id');
-                if (fieldId && window.Asc && window.Asc.plugin && window.Asc.plugin.executeCommand) {
+                if (fieldId && window.Asc && window.Asc.plugin && typeof window.Asc.plugin.executeCommand === 'function') {
                     window.Asc.plugin.executeMethod("SelectContentControl", [fieldId]);
                 }
             });
@@ -150,7 +155,7 @@
                 const rect = this.getBoundingClientRect();
                 const tooltipTop = rect.top;
 
-                const tooltipText = $(this).attr('data-tooltip');
+                const tooltipText = /** @type {string} */ ($(this).attr('data-tooltip'));
                 const approxTooltipWidth = tooltipText.length * 6 + 16;
 
                 let tooltipLeft = rect.left + (rect.width / 2);
@@ -170,7 +175,8 @@
             });
         };
 
-        this._isBooleanFieldType = function (fieldType) {
+        /** @param {unknown} fieldType */
+        this._isBooleanFieldType = (fieldType) => {
             if (fieldType === null || fieldType === undefined) return false;
             const normalizedType = String(fieldType)
                 .toLowerCase()
@@ -182,7 +188,8 @@
             return normalizedType.includes('checkbox') || normalizedType.includes('radio');
         };
 
-        this._validateBooleanFieldOptions = function (options) {
+        /** @param {SelectOptionObject[]} options */
+        this._validateBooleanFieldOptions = (options) => {
             const validOptions = options.filter(function (option) {
                 const value = String(option.value || option).trim().toLowerCase();
                 return value === 'true' || value === 'false';
@@ -198,7 +205,7 @@
             return [];
         };
 
-        this.populateFormFields = function () {
+        this.populateFormFields = () => {
             if (!this.$container.length || !this._formFields.length) {
                 return;
             }
@@ -206,6 +213,7 @@
             this.$container.empty();
 
             this._formFields.forEach((field, index) => {
+                /** @type {SelectOptionObject[]} */
                 let options = field.generatedOptions || [];
                 if (field.isBoolean || this._isBooleanFieldType(field.type)) {
                     options = this._validateBooleanFieldOptions(options);
@@ -234,7 +242,8 @@
             this._updateApplyButtonState();
         };
 
-        this.collectSelectedData = function () {
+        this.collectSelectedData = () => {
+            /** @type {SelectedField[]} */
             let selectedData = [];
             let me = this;
 
@@ -250,9 +259,9 @@
                     });
 
                     selectedData.push({
-                        fieldId: fieldId,
+                        fieldId: /** @type {string} */ (fieldId),
                         label: $label.text().trim(),
-                        value: $select.val().trim(),
+                        value: /** @type {string} */ ($select.val()).trim(),
                         type: field ? field.type : 'text',
                         isComplex: field ? !!field.isComplex : false,
                         subFields: field && field.subFields ? field.subFields : null,
@@ -268,6 +277,6 @@
         this._init();
     }
 
-    window.Autofiller = window.Autofiller || {};
-    window.Autofiller.Form = Form;
-})(window, undefined);
+    window.Autofiller = window.Autofiller || /** @type {AutofillerNamespace} */ ({});
+    window.Autofiller.Form = /** @type {FormUIConstructor} */ (/** @type {unknown} */ (Form));
+})(window);
