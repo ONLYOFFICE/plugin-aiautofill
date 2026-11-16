@@ -19,7 +19,7 @@ JS_ALL = $(JS_SCRIPTS) $(JS_COMPONENTS)
 
 HTML_FILES = index.html form.html confirm.html revert.html rconfirm.html
 
-.PHONY: all build clean check-tools install-tools
+.PHONY: all build clean check-tools install-tools test
 
 all: build
 
@@ -28,6 +28,9 @@ install-tools:
 	@npm install -g terser
 	@npm install -g html-minifier-terser
 	@echo "Installation complete!"
+
+test:
+	@node --test tests/*.test.js
 
 clean:
 	@echo "Cleaning build directory..."
